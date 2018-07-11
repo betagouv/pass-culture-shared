@@ -1,6 +1,7 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 
 import { failData, successData } from '../reducers/data'
+import { newErrorForm } from '../reducers/form'
 import { assignErrors } from '../reducers/errors'
 import { fetchData } from '../utils/request'
 
@@ -33,6 +34,9 @@ function* fromWatchRequestDataActions(action) {
 
     // SUCCESS OR FAIL
     if (result.data) {
+      if (formName) {
+        yield put(newErrorForm(formName, result.errors))
+      }
       yield put(successData(method, path, result.data, config))
 
     } else {
