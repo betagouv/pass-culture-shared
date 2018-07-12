@@ -15,6 +15,7 @@ function* fromWatchRequestDataActions(action) {
   const {
     body,
     encode,
+    formName,
     type
   } = (config || {})
 
@@ -40,12 +41,12 @@ function* fromWatchRequestDataActions(action) {
       yield put(successData(method, path, result.data, config))
 
     } else {
-      console.warn(result.errors)
+      console.error(result.errors)
       yield put(failData(method, path, result.errors, config))
     }
 
   } catch (error) {
-    console.warn('error', error)
+    console.error('error', error)
     yield put(failData(method, path, [{
       //global: String(error)
       global: "Erreur serveur. Tentez de rafraîchir la page."
