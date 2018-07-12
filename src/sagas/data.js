@@ -35,12 +35,12 @@ function* fromWatchRequestDataActions(action) {
 
     // SUCCESS OR FAIL
     if (result.data) {
-      if (formName) {
-        yield put(newErrorForm(formName, result.errors))
-      }
       yield put(successData(method, path, result.data, config))
 
     } else {
+      if (formName) {
+        yield put(newErrorForm(formName, result.errors))
+      }
       console.error(result.errors)
       yield put(failData(method, path, result.errors, config))
     }
