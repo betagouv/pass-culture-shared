@@ -17,6 +17,7 @@
   "private": true,
   "scripts": {
     "compile": "babel --presets latest,react -d lib/ src/",
+    "postinstall": "npm run compile",
     "watch": "nodemon --watch src --exec \"npm run compile\""
   },
   "version": "0.0.0"
