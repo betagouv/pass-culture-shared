@@ -1,12 +1,9 @@
-// ACTIONS
 const ASSIGN_ERRORS = 'ASSIGN_ERRORS'
 const REMOVE_ERRORS = 'REMOVE_ERRORS'
 const RESET_ERRORS = 'RESET_ERRRORS'
 
-// INITIAL STATE
 const initialState = {}
 
-// REDUCER
 export const errors = (state = initialState, action) => {
   switch (action.type) {
     case ASSIGN_ERRORS:
@@ -22,7 +19,6 @@ export const errors = (state = initialState, action) => {
   }
 }
 
-// ACTION CREATORS
 export const assignErrors = patch => ({
   patch,
   type: ASSIGN_ERRORS,

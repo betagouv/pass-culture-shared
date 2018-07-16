@@ -1,10 +1,8 @@
 import { getNextState } from '../utils/data'
 
-// ACTION
 const ASSIGN_DATA = 'ASSIGN_DATA'
 const RESET_DATA = 'RESET_DATA'
 
-// INITIAL STATE
 const initialState = {
   events: [],
   eventOccurences: [],
@@ -19,7 +17,6 @@ const initialState = {
   venueProviders: []
 }
 
-// REDUCER
 export const data = (state = initialState, action) => {
   if (action.type === ASSIGN_DATA) {
     return Object.assign({}, state, action.patch)
@@ -57,7 +54,6 @@ export const data = (state = initialState, action) => {
   return state
 }
 
-// ACTION CREATORS
 export const assignData = patch => ({
   patch,
   type: ASSIGN_DATA,

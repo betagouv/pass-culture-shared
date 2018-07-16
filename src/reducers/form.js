@@ -4,10 +4,8 @@ import { DELETE, NEW } from '../utils/config'
 
 import {deepMerge} from '../utils/object'
 
-// INITIAL STATE
 const initialState = {}
 
-// ACTIONS
 const MERGE_FORM = 'MERGE_FORM'
 const NEW_MERGE_FORM = 'NEW_MERGE_FORM'
 const REMOVE_FORM = 'REMOVE_FORM'
