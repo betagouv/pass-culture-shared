@@ -1,0 +1,18 @@
+import classnames from 'classnames'
+import React from 'react'
+
+import { BasicInput } from './BasicInput'
+
+export const CheckboxInput = props => {
+
+  const onInputChange = e => props.onChange(e.target.checked)
+
+  return <label
+    className={`${classnames({required: props.required})}`}
+    htmlFor={props.id}
+  >
+    <BasicInput {...props} type='checkbox' className='input' onChange={onInputChange}  />
+    {props.label}
+  </label>
+
+}
