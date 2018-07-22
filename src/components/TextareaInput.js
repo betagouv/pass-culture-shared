@@ -1,7 +1,7 @@
 import React from 'react'
 import Textarea from 'react-autosize-textarea'
 
-export const TextareaInput = props => {
+const TextareaInput = props => {
 
   const onChange = e => props.onChange(e.target.value)
 
@@ -18,3 +18,5 @@ export const TextareaInput = props => {
     readOnly={props.readOnly}
   />
 }
+
+export default TextareaInput

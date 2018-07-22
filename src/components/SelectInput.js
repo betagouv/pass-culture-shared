@@ -1,10 +1,10 @@
 import classnames from 'classnames'
 import get from 'lodash.get'
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
 import { optionify } from '../utils/form'
 
-export class SelectInput extends Component {
+class SelectInput extends Component {
 
   componentDidMount() {
     this.handleUniqueSelectOption()
@@ -56,3 +56,5 @@ SelectInput.defaultProps = {
   optionValue: 'id',
   optionLabel: 'name',
 }
+
+export default SelectInput

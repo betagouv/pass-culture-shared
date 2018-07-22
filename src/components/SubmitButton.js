@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export class SubmitButton extends Component {
+class SubmitButton extends Component {
 
   static defaultProps = {
     requiredFields: [],
@@ -24,3 +24,5 @@ export class SubmitButton extends Component {
     )
   }
 }
+
+export default SubmitButton

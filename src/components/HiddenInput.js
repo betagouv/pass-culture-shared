@@ -1,7 +1,9 @@
 import React from 'react'
 
-import { BasicInput } from './BasicInput'
+import BasicInput from './BasicInput'
 
-export const HiddenInput = props => {
+const HiddenInput = props => {
   return <BasicInput {...props} type='hidden'/>
 }
+
+export default HiddenInput

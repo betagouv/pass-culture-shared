@@ -2,9 +2,9 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import { Icon } from './Icon'
+import Icon from './Icon'
 
-export class Field extends Component {
+class Field extends Component {
 
   constructor(props) {
     super(props)
@@ -63,7 +63,7 @@ export class Field extends Component {
 
     const InputComponent = this.props.InputComponent
 
-    return <InputComponent {...inputProps} />
+    return InputComponent && <InputComponent {...inputProps} />
   }
 
   renderLayout() {
@@ -93,7 +93,7 @@ export class Field extends Component {
                 {$input}
               </div>
               {
-                errors.map((e, i) => (
+                errors && errors.map((e, i) => (
                   <p className='help is-danger columns' id={`${id}-error`} key={i}>
                     <Icon className='column is-1' svg="picto-warning" alt="Warning" />
                     <span className='column'> {e} </span>
@@ -123,7 +123,7 @@ export class Field extends Component {
             </div>
             <ul className="help is-danger" id={`${id}-error`}>
               {
-                errors.map((e, i) => (
+                errors && errors.map((e, i) => (
                   <li className="columns" key={i}>
                     <Icon className="column is-1" svg="picto-warning" alt="Warning" />
                     <p className="column"> {e} </p>
@@ -143,3 +143,5 @@ export class Field extends Component {
     return this.renderLayout()
   }
 }
+
+export default Field

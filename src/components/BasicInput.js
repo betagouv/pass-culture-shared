@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const BasicInput = props => {
+const BasicInput = props => {
 
   return <input
     aria-describedby={props['aria-describedby']}
@@ -15,3 +15,5 @@ export const BasicInput = props => {
     value={props.value}
   />
 }
+
+export default BasicInput

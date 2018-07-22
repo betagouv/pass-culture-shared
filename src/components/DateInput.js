@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker'
 
 import Icon from './Icon'
 
-export const DateInput = props => {
+const DateInput = props => {
 
   const onChange = date => {
     props.onChange(date.toISOString())
@@ -40,3 +40,5 @@ export const DateInput = props => {
 DateInput.defaultProps = {
   dateFormat: 'DD/MM/YYYY',
 }
+
+export default DateInput

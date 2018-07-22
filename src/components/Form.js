@@ -4,44 +4,20 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { CheckboxInput } from './CheckboxInput'
-import { DateInput } from './DateInput'
-import { HiddenInput } from './HiddenInput'
-import { NumberInput } from './NumberInput'
-import { PasswordInput } from './PasswordInput'
-import { SelectInput } from './SelectInput'
-import { TextareaInput } from './TextareaInput'
-import { TextInput } from './TextInput'
-import { TimeInput } from './TimeInput'
-import { mergeFormData, removeFormError } from '../reducers/form'
 import { requestData } from '../reducers/data'
+import { mergeFormData, removeFormError } from '../reducers/form'
 import { showNotification } from '../reducers/notification'
 import { recursiveMap } from '../utils/react'
 import { pluralize } from '../utils/string'
 
-const inputByTypes = {
-  date: DateInput,
-  email: TextInput,
-  hidden: HiddenInput,
-  number: NumberInput,
-  password: PasswordInput,
-  select: SelectInput,
-  siren: SirenInput,
-  siret: SirenInput,
-  checkbox: CheckboxInput,
-  text: TextInput,
-  textarea: TextareaInput,
-  time: TimeInput,
-}
-
-
-class _Form extends Component {
+class Form extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
       patch: {},
     }
+
     this.onDebouncedMergeForm = debounce(
       this.onMergeForm,
       props.debounceTimeout
@@ -145,13 +121,24 @@ class _Form extends Component {
     } = this.props
     let requiredFields = []
 
+    recursiveMap(children, c => {
+      if (c.type.displayName === 'Field') {
+        const dataKey = c.props.dataKey || c.props.name // name is unique, dataKey may not
+        const formValue = get(formData, dataKey)
+        const storeValue = get(storeData, dataKey)
+        const type = c.props.type || Form.guessInputType(c.props.name) || 'text'
+        console.log(type)
+      }
+    })
+
     return recursiveMap(children, c => {
       if (c.type.displayName === 'Field') {
         const dataKey = c.props.dataKey || c.props.name // name is unique, dataKey may not
         const formValue = get(formData, dataKey)
         const storeValue = get(storeData, dataKey)
         const type = c.props.type || Form.guessInputType(c.props.name) || 'text'
-        const InputComponent = inputByTypes[type]
+
+        const InputComponent = Form.inputByTypes[type]
         if (!InputComponent) console.error('Component not found for type:', type)
 
         const onChange = value => {
@@ -228,7 +215,7 @@ class _Form extends Component {
 
 }
 
-export const Form = connect(
+export default connect(
   (state, ownProps) => ({
     formData: get(state, `form.${ownProps.name}.data`),
     formErrors: get(state, `form.${ownProps.name}.errors`),
@@ -239,4 +226,4 @@ export const Form = connect(
     requestData,
     showNotification
   }
-)(_Form)
+)(Form)

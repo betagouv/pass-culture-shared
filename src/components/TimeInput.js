@@ -1,9 +1,9 @@
 import moment from 'moment'
 import React, { Component } from 'react'
 
-import { BasicInput } from './BasicInput'
+import BasicInput from './BasicInput'
 
-export class TimeInput extends Component {
+class TimeInput extends Component {
 
   onInputChange = e => {
     const { onChange, value } = this.props
@@ -32,3 +32,5 @@ export class TimeInput extends Component {
     )
   }
 }
+
+export default TimeInput

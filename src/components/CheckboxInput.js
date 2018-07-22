@@ -1,9 +1,9 @@
 import classnames from 'classnames'
 import React from 'react'
 
-import { BasicInput } from './BasicInput'
+import BasicInput from './BasicInput'
 
-export const CheckboxInput = props => {
+const CheckboxInput = props => {
 
   const onInputChange = e => props.onChange(e.target.checked)
 
@@ -16,3 +16,5 @@ export const CheckboxInput = props => {
   </label>
 
 }
+
+export default CheckboxInput

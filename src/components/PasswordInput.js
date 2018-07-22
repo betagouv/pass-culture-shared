@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
-import { BasicInput } from './BasicInput'
-import { Icon } from './Icon'
+import BasicInput from './BasicInput'
+import Icon from './Icon'
 
 
 class PasswordInput extends Component {
@@ -47,3 +47,5 @@ class PasswordInput extends Component {
     )
   }
 }
+
+export default PasswordInput

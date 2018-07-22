@@ -3,7 +3,7 @@ import React from 'react'
 
 import { ROOT_PATH } from '../utils/config'
 
-export const Icon = ({ svg, ...imgProps }) => {
+const Icon = ({ svg, ...imgProps }) => {
   if (svg) {
     return <img src={`${ROOT_PATH}/icons/${svg}.svg`} alt={svg} {...imgProps} />
   } else {
@@ -12,3 +12,5 @@ export const Icon = ({ svg, ...imgProps }) => {
     return reactIconPack[iconName]()
   }
 }
+
+export default Icon
