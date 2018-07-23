@@ -4,6 +4,7 @@ const ASSIGN_DATA = 'ASSIGN_DATA'
 const RESET_DATA = 'RESET_DATA'
 
 const initialState = {
+  bookings: [],
   events: [],
   eventOccurences: [],
   mediations: [],
