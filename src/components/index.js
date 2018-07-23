@@ -14,13 +14,13 @@ import TextInput from './TextInput'
 import TimeInput from './TimeInput'
 
 Form.inputByTypes = {
+  checkbox: CheckboxInput,
   date: DateInput,
   email: TextInput,
   hidden: HiddenInput,
   number: NumberInput,
   password: PasswordInput,
   select: SelectInput,
-  checkbox: CheckboxInput,
   text: TextInput,
   textarea: TextareaInput,
   time: TimeInput,
