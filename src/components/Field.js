@@ -85,9 +85,17 @@ class Field extends Component {
       case 'horizontal':
         return (
           <div className='field is-horizontal'>
-            {label && <div className={`field-label is-${size}`}>
-              <label htmlFor={id} className='label'><span className={`subtitle ${classnames({required, readOnly})}`}>{label} :</span></label>
-            </div>}
+            {
+              label && (
+                <div className={`field-label is-${size}`}>
+                  <label htmlFor={id} className='label'>
+                    <span className={`subtitle ${classnames({required, readOnly})}`}>
+                      {label} :
+                    </span>
+                  </label>
+                </div>
+              )
+            }
             <div className='field-body'>
               <div className={`field ${classnames({'is-expanded': isExpanded})}`}>
                 {$input}
