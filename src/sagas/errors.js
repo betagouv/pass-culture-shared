@@ -5,7 +5,14 @@ import { mergeErrors } from '../reducers/errors'
 
 function* fromWatchFailDataActions(action) {
   const name = get(action, 'config.name') || action.path
-  yield put(mergeErrors(name, action.errors, action.config))
+  let patch = action.errors
+  if (Array.isArray(action.errors)) {
+    patch = {}
+    for (let error of action.errors) {
+      Object.assign(patch, error)
+    }
+  }
+  yield put(mergeErrors(name, patch, action.config))
 }
 
 export function* watchErrorsActions() {
