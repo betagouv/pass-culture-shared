@@ -152,4 +152,8 @@ class Field extends Component {
   }
 }
 
+// NEEDED FOR MINIFY BUILD TIME
+// BECAUCE c.type.displayName DISAPPEAR OTHERWISE
+Field.displayName = "Field"
+
 export default Field

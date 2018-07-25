@@ -218,7 +218,7 @@ class Form extends Component {
 export default connect(
   (state, ownProps) => ({
     formData: get(state, `form.${ownProps.name}.data`),
-    formErrors: get(state, `form.${ownProps.name}.errors`),
+    formErrors: get(state, `errors.${ownProps.name}`),
   }),
   {
     mergeFormData,
