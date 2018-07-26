@@ -5,7 +5,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { requestData } from '../reducers/data'
-import { mergeFormData, removeFormError } from '../reducers/form'
+import { removeErrors } from '../reducers/errors'
+import { mergeFormData } from '../reducers/form'
 import { showNotification } from '../reducers/notification'
 import { recursiveMap } from '../utils/react'
 import { pluralize } from '../utils/string'
@@ -38,6 +39,8 @@ class Form extends Component {
     data: PropTypes.object,
   }
 
+  static inputsByType = {}
+
   static guessInputType(name) {
     switch(name) {
       case 'email':
@@ -65,11 +68,29 @@ class Form extends Component {
   }
 
   onMergeForm = () => {
-    this.props.removeFormError(this.props.name)
-    this.props.mergeFormData(this.props.name, this.state.patch)
-    this.setState({
-      patch: {},
+    const {
+      formData,
+      mergeFormData,
+      name,
+      removeErrors
+    } = this.props
+    const { patch } = this.state
+
+    this.setState({ patch: {} })
+
+    // no need to go further if patch is actually equal to formDate
+    Object.keys(patch).forEach(key => {
+      if (formData[key] === patch[key]) {
+        delete patch[key]
+      }
     })
+    if (Object.keys(patch).length === 0) {
+      return
+    }
+
+    removeErrors(name)
+    mergeFormData(name, patch)
+
   }
 
   onSubmit = e => {
@@ -119,17 +140,10 @@ class Form extends Component {
       readOnly,
       size,
     } = this.props
-    let requiredFields = []
+    const { isEditing } = this.state
 
-    recursiveMap(children, c => {
-      if (c.type.displayName === 'Field') {
-        const dataKey = c.props.dataKey || c.props.name // name is unique, dataKey may not
-        const formValue = get(formData, dataKey)
-        const storeValue = get(storeData, dataKey)
-        const type = c.props.type || Form.guessInputType(c.props.name) || 'text'
-        console.log(type)
-      }
-    })
+    let notHiddenFields = []
+    let requiredFields = []
 
     return recursiveMap(children, c => {
       if (c.type.displayName === 'Field') {
@@ -137,12 +151,13 @@ class Form extends Component {
         const formValue = get(formData, dataKey)
         const storeValue = get(storeData, dataKey)
         const type = c.props.type || Form.guessInputType(c.props.name) || 'text'
-
-        const InputComponent = Form.inputByTypes[type]
+        const InputComponent = Form.inputsByType[type]
         if (!InputComponent) console.error('Component not found for type:', type)
 
         const onChange = value => {
-          const newPatch = typeof value === 'object' ? value : {[dataKey]: value}
+          const newPatch = typeof value === 'object'
+            ? value
+            : {[dataKey]: value}
           this.setState({
             patch: Object.assign(this.state.patch, newPatch)
           })
@@ -150,21 +165,32 @@ class Form extends Component {
           this.onMergeForm()
         }
 
-        const newChild =  React.cloneElement(c, Object.assign({
-          id: `${name}-${c.props.name}`,
-          dataKey,
-          onChange,
-          value: formValue || storeValue || '',
-          errors: [].concat(formErrors).filter(e => get(e, c.props.name)).map(e => get(e, c.props.name)),
-          readOnly: c.props.readOnly || readOnly,
-          layout,
-          size,
-          type,
-          InputComponent,
-        }, get(InputComponent, 'extraFormData', []).reduce((result, k) => Object.assign(result, {[k]: get(formData, k)}), {})))
+        const newChild =  React.cloneElement(c,
+          Object.assign({
+            id: `${name}-${c.props.name}`,
+            dataKey,
+            onChange,
+            value: formValue || storeValue || '',
+            errors: [].concat(formErrors)
+              .filter(e => get(e, c.props.name))
+              .map(e => get(e, c.props.name)),
+            readOnly: c.props.readOnly || readOnly,
+            layout,
+            size,
+            type,
+            InputComponent,
+          },
+          get(InputComponent, 'extraFormData', [])
+            .reduce((result, k) =>
+              Object.assign(result, {[k]: get(formData, k)}), {}))
+        )
 
         if (newChild.props.required) {
           requiredFields = requiredFields.concat(newChild)
+        }
+
+        if (newChild.props.type !== 'hidden') {
+          notHiddenFields = notHiddenFields.concat(newChild)
         }
 
         return newChild
@@ -172,11 +198,18 @@ class Form extends Component {
         return React.cloneElement(c, Object.assign({
           name,
           getDisabled: () => {
-            const missingFields = requiredFields.filter(f => !get(formData, f.props.dataKey))
+            if (isEditing) {
+              const oneEditedField = notHiddenFields.find(f =>
+                get(formData, f.props.dataKey))
+              return !oneEditedField
+            }
+            const missingFields = requiredFields.filter(f =>
+              !get(formData, f.props.dataKey))
             return missingFields.length > 0
           },
           getTitle: () => {
-            const missingFields = requiredFields.filter(f => !get(formData, f.props.dataKey))
+            const missingFields = requiredFields.filter(f =>
+              !get(formData, f.props.dataKey))
             if (missingFields.length === 0) return
             return `Champs ${pluralize('non-valide', missingFields.length)} : ${missingFields.map(f => (f.props.label || f.props.title || '').toLowerCase()).join(', ')}`
           }
@@ -206,13 +239,11 @@ class Form extends Component {
         className={className}
         id={name}
         method={method}
-        onSubmit={this.onSubmit}
-      >
+        onSubmit={this.onSubmit}>
         {this.childrenWithProps()}
       </TagName>
     )
   }
-
 }
 
 export default connect(
@@ -222,7 +253,7 @@ export default connect(
   }),
   {
     mergeFormData,
-    removeFormError,
+    removeErrors,
     requestData,
     showNotification
   }

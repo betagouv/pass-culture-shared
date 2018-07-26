@@ -1,12 +1,25 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import BasicInput from './BasicInput'
 
-const NumberInput = props => {
+class NumberInput extends Component {
 
-  const onChange = e => props.onChange(parseInt(e.target.value, 10))
+  onChange = e => {
+    this.props.onChange(
+      e.target.value
+        ? parseInt(e.target.value, 10)
+        : 0
+    )
+  }
 
-  return <BasicInput {...props} type='number' onChange={onChange} min={props.min || 0} value={props.value || 0}/>
+  render () {
+    return (
+      <BasicInput {...this.props}
+        onChange={this.onChange}
+        type='number'
+      />
+    )
+  }
 }
 
 export default NumberInput

@@ -5,30 +5,32 @@ import BasicInput from './BasicInput'
 
 class TimeInput extends Component {
 
+  static displayValue = (value, props) => {
+    return value && moment(value).tz(props.tz)
+  }
+
   onInputChange = e => {
-    const { onChange, value } = this.props
+    const { onChange, value, tz } = this.props
     if (onChange && value) {
       const [hour, minutes] = e.target.value.split(':')
-      onChange(
-        moment(value)
-          .hours(hour)
-          .minutes(minutes)
-          .toISOString()
-      )
+      const date = moment(value)
+        .hours(hour)
+        .minutes(minutes)
+      onChange(date && date.toISOString())
     }
   }
 
   render () {
-    const { value, tz } = this.props
+    const { value } = this.props
+
     return (
       <BasicInput {...this.props}
         onChange={this.onInputChange}
         value={
-          value && moment(value).tz(tz)
-            ? moment(value).tz(tz).format('HH:mm')
+          value
+            ? moment(value).format('HH:mm')
             : ''
-        }
-      />
+        }/>
     )
   }
 }

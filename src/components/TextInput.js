@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BasicInput } from './BasicInput'
+import BasicInput from './BasicInput'
 
 const TextInput = props => {
   const onInputChange = e => props.onChange(e.target.value)
@@ -13,8 +13,7 @@ const TextInput = props => {
     <BasicInput
       {...props}
       onChange={onInputChange}
-      autoComplete={guessAutoComplete()}
-    />
+      autoComplete={guessAutoComplete()} />
   )
 }
 

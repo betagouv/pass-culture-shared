@@ -12,8 +12,7 @@ const BasicInput = props => {
     required={props.required}
     readOnly={props.readOnly}
     type={props.type}
-    value={props.value}
-  />
+    value={props.value} />
 }
 
 export default BasicInput
