@@ -1,3 +1,5 @@
+export * from './hocs'
+
 import BasicInput from './BasicInput'
 import CheckboxInput from './CheckboxInput'
 import DateInput from './DateInput'
