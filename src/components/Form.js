@@ -3,6 +3,8 @@ import get from 'lodash.get'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
+import { compose } from 'redux'
 
 import { requestData } from '../reducers/data'
 import { removeErrors } from '../reducers/errors'
@@ -118,6 +120,7 @@ class Form extends Component {
       children,
       formPatch,
       errorsPatch,
+      history,
       layout,
       name,
       patch: storePatch,
@@ -126,7 +129,6 @@ class Form extends Component {
     } = this.props
     const { isEditing } = this.state
 
-    let notHiddenFields = []
     let requiredFields = []
 
     return recursiveMap(children, c => {
@@ -173,19 +175,13 @@ class Form extends Component {
           requiredFields = requiredFields.concat(newChild)
         }
 
-        if (newChild.props.type !== 'hidden') {
-          notHiddenFields = notHiddenFields.concat(newChild)
-        }
-
         return newChild
       } else if (c.type.displayName === 'SubmitButton') {
         return React.cloneElement(c, Object.assign({
           name,
           getDisabled: () => {
             if (isEditing) {
-              const oneEditedField = notHiddenFields.find(f =>
-                get(formPatch, f.props.patchKey))
-              return !oneEditedField
+              return false
             }
             const missingFields = requiredFields.filter(f =>
               !get(formPatch, f.props.patchKey))
@@ -202,9 +198,28 @@ class Form extends Component {
           onClick: this.onSubmit,
           type: 'button',
         } : {}))
+      } else if (c.type.displayName === 'CancelButton') {
+        return React.cloneElement(c, {
+          onClick: () => {
+            const { to } = c.props
+            to && history.push(to)
+            this.resetPatch()
+          },
+          type: 'button' })
       }
       return c
     })
+  }
+
+  resetPatch = () => {
+    const {
+      name,
+      patch,
+      mergeForm,
+      removeErrors
+    } = this.props
+    removeErrors(name)
+    mergeForm(name, patch)
   }
 
   render() {
@@ -233,15 +248,18 @@ class Form extends Component {
   }
 }
 
-export default connect(
-  (state, ownProps) => ({
-    formPatch: get(state, `form.${ownProps.name}`),
-    errorsPatch: get(state, `errors.${ownProps.name}`),
-  }),
-  {
-    mergeForm,
-    removeErrors,
-    requestData,
-    showNotification
-  }
+export default compose(
+  withRouter,
+  connect(
+    (state, ownProps) => ({
+      formPatch: get(state, `form.${ownProps.name}`),
+      errorsPatch: get(state, `errors.${ownProps.name}`),
+    }),
+    {
+      mergeForm,
+      removeErrors,
+      requestData,
+      showNotification
+    }
+  )
 )(Form)

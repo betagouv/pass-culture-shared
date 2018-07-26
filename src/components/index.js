@@ -1,6 +1,7 @@
 export * from './hocs'
 
 import BasicInput from './BasicInput'
+import CancelButton from './CancelButton'
 import CheckboxInput from './CheckboxInput'
 import DateInput from './DateInput'
 import Field from './Field'
@@ -30,6 +31,7 @@ Form.WrappedComponent.inputsByType = {
 
 export {
   BasicInput,
+  CancelButton,
   CheckboxInput,
   DateInput,
   Field,
