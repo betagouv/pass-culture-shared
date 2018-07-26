@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 import { requestData } from '../reducers/data'
 import { removeErrors } from '../reducers/errors'
-import { mergeFormData } from '../reducers/form'
+import { mergeForm } from '../reducers/form'
 import { showNotification } from '../reducers/notification'
 import { recursiveMap } from '../utils/react'
 import { pluralize } from '../utils/string'
@@ -16,6 +16,8 @@ class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      isEditing: false,
+      method: null,
       patch: {},
     }
 
@@ -26,51 +28,33 @@ class Form extends Component {
   }
 
   static defaultProps = {
-    TagName: 'form',
-    formData: {},
-    formErrors: {},
     debounceTimeout: 300,
-    formatData: data => data,
+    errorsPatch: {},
+    formatPatch: data => data,
+    formPatch: {},
+    TagName: 'form',
   }
 
   static propTypes = {
     name: PropTypes.string.isRequired,
     action : PropTypes.string.isRequired,
-    data: PropTypes.object,
+    patch: PropTypes.object,
   }
 
   static inputsByType = {}
 
-  static guessInputType(name) {
-    switch(name) {
-      case 'email':
-        return 'email'
-      case 'password':
-        return 'password'
-      case 'time':
-        return 'time'
-      case 'date':
-        return 'date'
-      case 'siret':
-      case 'siren':
-        return 'siren'
-      case 'price':
-        return 'number'
-      default:
-        return 'text'
-    }
-  }
-
   static getDerivedStateFromProps = (props, prevState) => {
+    const isEditing = typeof get(props, 'patch.id') !== 'undefined'
     return {
-      method: props.method || (get(props, 'data.id') ? 'PATCH' : 'POST'),
+      isEditing,
+      method: props.method || (isEditing ? 'PATCH' : 'POST'),
     }
   }
 
   onMergeForm = () => {
     const {
-      formData,
-      mergeFormData,
+      formPatch,
+      mergeForm,
       name,
       removeErrors
     } = this.props
@@ -78,9 +62,9 @@ class Form extends Component {
 
     this.setState({ patch: {} })
 
-    // no need to go further if patch is actually equal to formDate
+    // no need to go further if patch is actually equal to formPatch
     Object.keys(patch).forEach(key => {
-      if (formData[key] === patch[key]) {
+      if (formPatch[key] === patch[key]) {
         delete patch[key]
       }
     })
@@ -89,7 +73,7 @@ class Form extends Component {
     }
 
     removeErrors(name)
-    mergeFormData(name, patch)
+    mergeForm(name, patch)
 
   }
 
@@ -97,8 +81,8 @@ class Form extends Component {
     e.preventDefault()
     const {
       action,
-      formData,
-      formatData,
+      formPatch,
+      formatPatch,
       handleSuccess,
       name,
       requestData,
@@ -108,12 +92,12 @@ class Form extends Component {
     requestData(
       this.state.method,
       action.replace(/^\//g, ''), {
-      body: formatData(formData),
-      formName: name,
+      body: formatPatch(formPatch),
+      encode: formPatch instanceof FormData ? 'multipart/form-data' : null,
       handleFail: this.handleFail,
       handleSuccess,
       key: storePath, // key is a reserved prop name
-      encode: formData instanceof FormData ? 'multipart/form-data' : null,
+      name,
     })
   }
 
@@ -132,11 +116,11 @@ class Form extends Component {
   childrenWithProps = () => {
     const {
       children,
-      formData,
-      formErrors,
-      data: storeData,
+      formPatch,
+      errorsPatch,
       layout,
       name,
+      patch: storePatch,
       readOnly,
       size,
     } = this.props
@@ -147,17 +131,17 @@ class Form extends Component {
 
     return recursiveMap(children, c => {
       if (c.type.displayName === 'Field') {
-        const dataKey = c.props.dataKey || c.props.name // name is unique, dataKey may not
-        const formValue = get(formData, dataKey)
-        const storeValue = get(storeData, dataKey)
-        const type = c.props.type || Form.guessInputType(c.props.name) || 'text'
+        const patchKey = c.props.patchKey || c.props.name // name is unique, patchKey may not
+        const formValue = get(formPatch, patchKey)
+        const storeValue = get(storePatch, patchKey)
+        const type = c.props.type || 'text'
         const InputComponent = Form.inputsByType[type]
         if (!InputComponent) console.error('Component not found for type:', type)
 
         const onChange = value => {
           const newPatch = typeof value === 'object'
             ? value
-            : {[dataKey]: value}
+            : {[patchKey]: value}
           this.setState({
             patch: Object.assign(this.state.patch, newPatch)
           })
@@ -167,22 +151,22 @@ class Form extends Component {
 
         const newChild =  React.cloneElement(c,
           Object.assign({
-            id: `${name}-${c.props.name}`,
-            dataKey,
-            onChange,
-            value: formValue || storeValue || '',
-            errors: [].concat(formErrors)
+            errors: [].concat(errorsPatch)
               .filter(e => get(e, c.props.name))
               .map(e => get(e, c.props.name)),
-            readOnly: c.props.readOnly || readOnly,
+            id: `${name}-${c.props.name}`,
+            InputComponent,
             layout,
+            onChange,
+            patchKey,
+            readOnly: c.props.readOnly || readOnly,
             size,
             type,
-            InputComponent,
+            value: formValue || storeValue || '',
           },
-          get(InputComponent, 'extraFormData', [])
+          get(InputComponent, 'extraFormPatch', [])
             .reduce((result, k) =>
-              Object.assign(result, {[k]: get(formData, k)}), {}))
+              Object.assign(result, {[k]: get(formPatch, k)}), {}))
         )
 
         if (newChild.props.required) {
@@ -200,16 +184,16 @@ class Form extends Component {
           getDisabled: () => {
             if (isEditing) {
               const oneEditedField = notHiddenFields.find(f =>
-                get(formData, f.props.dataKey))
+                get(formPatch, f.props.patchKey))
               return !oneEditedField
             }
             const missingFields = requiredFields.filter(f =>
-              !get(formData, f.props.dataKey))
+              !get(formPatch, f.props.patchKey))
             return missingFields.length > 0
           },
           getTitle: () => {
             const missingFields = requiredFields.filter(f =>
-              !get(formData, f.props.dataKey))
+              !get(formPatch, f.props.patchKey))
             if (missingFields.length === 0) return
             return `Champs ${pluralize('non-valide', missingFields.length)} : ${missingFields.map(f => (f.props.label || f.props.title || '').toLowerCase()).join(', ')}`
           }
@@ -251,11 +235,11 @@ class Form extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    formData: get(state, `form.${ownProps.name}.data`),
-    formErrors: get(state, `errors.${ownProps.name}`),
+    formPatch: get(state, `form.${ownProps.name}`),
+    errorsPatch: get(state, `errors.${ownProps.name}`),
   }),
   {
-    mergeFormData,
+    mergeForm,
     removeErrors,
     requestData,
     showNotification

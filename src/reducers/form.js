@@ -1,29 +1,24 @@
-import get from 'lodash.get'
-
 const initialState = {}
 
-export const MERGE_FORM_DATA = 'MERGE_FORM_DATA'
+export const MERGE_FORM = 'MERGE_FORM'
 export const RESET_FORM = 'RESET_FORM'
 
 export const form = (state = initialState, action) => {
   switch (action.type) {
-    case MERGE_FORM_DATA:
-      const nextData = Object.assign({}, get(state, `${action.name}.data`))
-      for (let key of Object.keys(action.data)) {
-        const nextValue = action.data[key]
+    case MERGE_FORM:
+      const nextPatch = Object.assign({}, state[action.name])
+      for (let key of Object.keys(action.patch)) {
+        const nextValue = action.patch[key]
         if (nextValue === '' || Number.isNaN(nextValue)) {
-          if (nextData[key]) {
-            delete nextData[key]
-
+          if (nextPatch[key]) {
+            delete nextPatch[key]
           }
           continue
         }
-        nextData[key] = nextValue
+        nextPatch[key] = nextValue
       }
       return Object.assign({}, state, {
-        [action.name]: Object.assign({}, state[action.name], {
-          data: nextData
-        })
+        [action.name]: nextPatch
       })
     case RESET_FORM:
       return initialState
@@ -32,10 +27,10 @@ export const form = (state = initialState, action) => {
   }
 }
 
-export const mergeFormData = (name, data, config) => ({
-  type: MERGE_FORM_DATA,
+export const mergeForm = (name, patch, config) => ({
+  type: MERGE_FORM,
   name,
-  data,
+  patch,
   config
 })
 
