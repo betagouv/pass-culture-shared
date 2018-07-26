@@ -233,6 +233,9 @@ class Form extends Component {
     const {
       method
     } = this.state
+    if (!TagName) {
+      return this.childrenWithProps()
+    }
     return (
       <TagName
         action={action}

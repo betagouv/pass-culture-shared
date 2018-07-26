@@ -6,7 +6,8 @@ import BasicInput from './BasicInput'
 class TimeInput extends Component {
 
   static displayValue = (value, props) => {
-    return value && moment(value).tz(props.tz)
+    const { tz } = (props || {})
+    return value && tz && moment(value).tz(tz)
   }
 
   onInputChange = e => {
