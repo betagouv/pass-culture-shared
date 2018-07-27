@@ -1,18 +1,33 @@
 import React from 'react'
 
 const BasicInput = props => {
+  const {
+    autoComplete,
+    checked,
+    disabled,
+    id,
+    name,
+    onChange,
+    readOnly,
+    required,
+    type,
+    size,
+    value
+  } = props
 
   return <input
     aria-describedby={props['aria-describedby']}
-    autoComplete={props.autoComplete}
-    className={`input is-${props.size}`}
+    autoComplete={autoComplete}
+    checked={checked}
+    className={`input is-${size}`}
+    disabled={disabled}
     id={props.id}
-    name={props.name}
-    onChange={props.onChange}
-    required={props.required}
-    readOnly={props.readOnly}
-    type={props.type}
-    value={props.value} />
+    name={name}
+    onChange={onChange}
+    required={required}
+    readOnly={readOnly}
+    type={type}
+    value={value} />
 }
 
 export default BasicInput

@@ -53,7 +53,7 @@ class Form extends Component {
     }
   }
 
-  onMergeForm = () => {
+  onMergeForm = (config) => {
     const {
       formPatch,
       mergeForm,
@@ -75,7 +75,7 @@ class Form extends Component {
     }
 
     removeErrors(name)
-    mergeForm(name, patch)
+    mergeForm(name, patch, config)
 
   }
 
@@ -93,14 +93,16 @@ class Form extends Component {
 
     requestData(
       this.state.method,
-      action.replace(/^\//g, ''), {
-      body: formatPatch(formPatch),
-      encode: formPatch instanceof FormData ? 'multipart/form-data' : null,
-      handleFail: this.handleFail,
-      handleSuccess,
-      key: storePath, // key is a reserved prop name
-      name,
-    })
+      action.replace(/^\//g, ''),
+      {
+        body: formatPatch(formPatch),
+        encode: formPatch instanceof FormData ? 'multipart/form-data' : null,
+        handleFail: this.handleFail,
+        handleSuccess,
+        key: storePath, // key is a reserved prop name
+        name,
+      }
+    )
   }
 
   handleFail = () => {
@@ -140,7 +142,7 @@ class Form extends Component {
         const InputComponent = Form.inputsByType[type]
         if (!InputComponent) console.error('Component not found for type:', type)
 
-        const onChange = value => {
+        const onChange = (value, config) => {
           const newPatch = typeof value === 'object'
             ? value
             : {[patchKey]: value}
@@ -148,7 +150,7 @@ class Form extends Component {
             patch: Object.assign(this.state.patch, newPatch)
           })
           // this.onDebouncedMergeForm() // Not working for now, concurrency issue ...
-          this.onMergeForm()
+          this.onMergeForm(config)
         }
 
         const newChild =  React.cloneElement(c,

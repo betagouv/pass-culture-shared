@@ -26,5 +26,5 @@
     "postinstall": "npm run compile",
     "watch": "nodemon --watch src --exec \"npm run compile\""
   },
-  "version": "0.0.1"
+  "version": "0.0.2"
 }

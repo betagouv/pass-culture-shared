@@ -8,10 +8,13 @@ const CheckboxInput = props => {
   const onInputChange = e => props.onChange(e.target.checked)
 
   return (
-    <BasicInput {...props}
-      className='input'
-      onChange={onInputChange}
-      type='checkbox' />
+    <label
+      className={`${classnames({required: props.required})}`}
+      htmlFor={props.id}
+    >
+      <BasicInput {...props} type='checkbox' className='input' onChange={onInputChange}  />
+      {props.label}
+    </label>
   )
 
 }

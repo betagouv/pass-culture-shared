@@ -1,24 +1,9 @@
 import { getNextState } from '../utils/data'
 
-const ASSIGN_DATA = 'ASSIGN_DATA'
-const RESET_DATA = 'RESET_DATA'
+export const ASSIGN_DATA = 'ASSIGN_DATA'
+export const RESET_DATA = 'RESET_DATA'
 
-const initialState = {
-  bookings: [],
-  events: [],
-  eventOccurences: [],
-  mediations: [],
-  occasions: [],
-  offers: [],
-  offerers: [],
-  providers: [],
-  things: [],
-  types: [],
-  venues: [],
-  venueProviders: []
-}
-
-export const data = (state = initialState, action) => {
+export const createData = (initialState = {}) => (state = initialState, action) => {
   if (action.type === ASSIGN_DATA) {
     return Object.assign({}, state, action.patch)
 

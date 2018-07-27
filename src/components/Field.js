@@ -31,25 +31,35 @@ class Field extends Component {
   }
 
   componentDidMount() {
-    this.props.value && this.onChange(this.props.value)
+    const {
+      value,
+    } = this.props
+    value && this.onChange(value)
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value) {
-      this.onChange(this.props.value)
+    const { value } = this.props
+    if (prevProps.value !== value) {
+      this.onChange(value)
     }
   }
 
-  onChange = (value) => {
-    // if (value === this.props.value) return
+  onChange = value => {
 
-    const displayValue = this.props.InputComponent.displayValue || this.props.displayValue
-    const storeValue = this.props.InputComponent.storeValue || this.props.storeValue
+    const {
+      InputComponent,
+      onChange,
+      type
+    } = this.props
+
+    const displayValue = InputComponent.displayValue || this.props.displayValue
+    const storeValue = InputComponent.storeValue || this.props.storeValue
 
     this.setState({
       value: displayValue(value),
     })
-    this.props.onChange(storeValue(value))
+
+    onChange(storeValue(value), { type })
   }
 
   renderInput = () => {
@@ -97,7 +107,10 @@ class Field extends Component {
               )
             }
             <div className='field-body'>
-              <div className={`field ${classnames({'is-expanded': isExpanded})}`}>
+              <div className={classnames('field', {
+                'checkbox': type==='checkbox',
+                'is-expanded': isExpanded
+              })}>
                 {$input}
               </div>
               {
