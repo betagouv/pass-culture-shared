@@ -32,8 +32,10 @@ class Form extends Component {
   static defaultProps = {
     debounceTimeout: 300,
     errorsPatch: {},
+    failNotification: 'Formulaire non validé',
     formatPatch: data => data,
     formPatch: {},
+    successNotification: 'Formulaire non validé',
     TagName: 'form',
   }
 
@@ -98,7 +100,7 @@ class Form extends Component {
         body: formatPatch(formPatch),
         encode: formPatch instanceof FormData ? 'multipart/form-data' : null,
         handleFail: this.handleFail,
-        handleSuccess,
+        handleSuccess: this.handleSuccess,
         key: storePath, // key is a reserved prop name
         name,
       }
@@ -107,14 +109,41 @@ class Form extends Component {
 
   handleFail = () => {
     const {
+      failNotification,
+      failRedirect,
       handleFail,
+      history,
       showNotification
     } = this.props
-    showNotification({
-      text: 'Formulaire non validé',
+    if (handleFail) {
+      handleFail()
+      return
+    }
+    failNotification && showNotification({
+      text: failNotification,
       type: 'danger'
     })
-    handleFail && handleFail()
+    failRedirect && history.push(failRedirect)
+  }
+
+  handleSuccess = () => {
+    const {
+      handleSuccess,
+      history,
+      successNotification,
+      successRedirect,
+      showNotification
+    } = this.props
+    if (handleSuccess) {
+      handleSuccess()
+      return
+    }
+    successNotification && showNotification({
+      text: successNotification,
+      type: 'success'
+    })
+    successRedirect && history.push(successRedirect)
+
   }
 
   childrenWithProps = () => {

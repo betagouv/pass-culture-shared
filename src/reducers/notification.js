@@ -3,11 +3,9 @@ import { scrollIt } from '../utils/dom'
 export const CLOSE_NOTIFICATION = 'CLOSE_NOTIFICATION'
 export const SHOW_NOTIFICATION = 'SHOW_NOTIFICATION'
 
-// INITIAL STATE
 const initialState = null
 
-// REDUCER
-function notification(state = initialState, action) {
+export function notification(state = initialState, action) {
 
   switch (action.type) {
     case CLOSE_NOTIFICATION:
@@ -20,7 +18,6 @@ function notification(state = initialState, action) {
   }
 }
 
-// ACTION CREATORS
 export function closeNotification() {
   return {
     type: CLOSE_NOTIFICATION
@@ -33,6 +30,3 @@ export function showNotification(notification) {
     notification,
   }
 }
-
-// default
-export default notification
