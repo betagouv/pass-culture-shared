@@ -12,8 +12,8 @@ export const createData = (initialState = {}) => (state = initialState, action) 
 
   } else if (/SUCCESS_DATA_(DELETE|GET|POST|PUT|PATCH)_(.*)/.test(action.type)) {
     // unpack config
-    const key = action.config.key ||
-      action.path.replace(/\/$/, '').replace(/\?.*$/, '')
+    const key = action.config.key || action.path.replace(/\/$/, '')
+                                                .split('/')[0]
 
     // resolve
     const nextState = getNextState(

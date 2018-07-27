@@ -24,11 +24,13 @@ class Field extends Component {
     name: PropTypes.string.isRequired,
   }
 
+  /*
   static getDerivedStateFromProps(newProps, currentState) {
     return Object.assign({
-      value: newProps.value || currentState.value
+      value: currentState.value || newProps.value
     })
   }
+  */
 
   componentDidMount() {
     const {

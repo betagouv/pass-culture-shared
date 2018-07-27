@@ -4,20 +4,23 @@ import BasicInput from './BasicInput'
 
 class NumberInput extends Component {
 
+  static displayValue = (value, props) => {
+    return value === 0 ? 0 : value
+  }
+
   onChange = e => {
-    this.props.onChange(
-      e.target.value
-        ? parseInt(e.target.value, 10)
-        : 0
-    )
+    const value = e.target.value
+      ? parseInt(e.target.value, 10)
+      : 0
+    e.target.value = value
+    this.props.onChange(value)
   }
 
   render () {
     return (
       <BasicInput {...this.props}
         onChange={this.onChange}
-        type='number'
-      />
+        type='number' />
     )
   }
 }

@@ -245,8 +245,8 @@ class Form extends Component {
   resetPatch = () => {
     const {
       name,
-      patch,
       mergeForm,
+      patch,
       removeErrors
     } = this.props
     removeErrors(name)
@@ -266,6 +266,7 @@ class Form extends Component {
     if (!TagName) {
       return this.childrenWithProps()
     }
+
     return (
       <TagName
         action={action}
