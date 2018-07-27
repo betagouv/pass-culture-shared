@@ -19,6 +19,7 @@ class Form extends Component {
     super(props)
     this.state = {
       isEditing: false,
+      isLoading: false,
       method: null,
       patch: {},
     }
@@ -93,6 +94,8 @@ class Form extends Component {
       storePath,
     } = this.props
 
+    this.setState({ isLoading: true })
+
     requestData(
       this.state.method,
       action.replace(/^\//g, ''),
@@ -105,44 +108,67 @@ class Form extends Component {
         name,
       }
     )
+
   }
 
   handleFail = () => {
     const {
-      failNotification,
-      failRedirect,
+      handleFailNotification,
+      handleFailRedirect,
       handleFail,
       history,
       showNotification
     } = this.props
+
+    this.setState({ isLoading: false })
+
     if (handleFail) {
       handleFail()
       return
     }
-    failNotification && showNotification({
-      text: failNotification,
+
+    handleFailNotification && showNotification({
+      text: handleFailNotification(state, action),
       type: 'danger'
     })
-    failRedirect && history.push(failRedirect)
+
+    handleFailRedirect && history.push(handleFailRedirect(state, action))
+
   }
 
-  handleSuccess = () => {
+  handleSuccess = (state, action) => {
     const {
+      handleSuccessNotification,
+      handleSuccessRedirect,
       handleSuccess,
+      location,
       history,
-      successNotification,
-      successRedirect,
+      patch,
       showNotification
     } = this.props
+
+    this.setState({ isLoading: false })
+
     if (handleSuccess) {
       handleSuccess()
       return
     }
-    successNotification && showNotification({
-      text: successNotification,
+
+    handleSuccessNotification && showNotification({
+      text: handleSuccessNotification(state, action),
       type: 'success'
     })
-    successRedirect && history.push(successRedirect)
+
+    if (handleSuccessRedirect) {
+      history.push(handleSuccessRedirect(state, action))
+    }
+    /*
+    else if (!get(patch, 'id')) {
+      const entityId = get(action, 'data.id')
+      const pathnameWithoutNew = location.pathname.split('/').slice(0, -1).join('/')
+      entityId && history.push(`${pathnameWithoutNew}/${entityId}`)
+    }
+    */
 
   }
 
@@ -158,7 +184,10 @@ class Form extends Component {
       readOnly,
       size,
     } = this.props
-    const { isEditing } = this.state
+    const {
+      isEditing,
+      isLoading
+    } = this.state
 
     let requiredFields = []
 
@@ -209,6 +238,7 @@ class Form extends Component {
         return newChild
       } else if (c.type.displayName === 'SubmitButton') {
         return React.cloneElement(c, Object.assign({
+          isLoading,
           name,
           getDisabled: () => {
             if (isEditing) {

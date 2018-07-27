@@ -1,3 +1,4 @@
+import classnames from 'classnames'
 import React, { Component } from 'react'
 
 class SubmitButton extends Component {
@@ -12,13 +13,19 @@ class SubmitButton extends Component {
   render () {
     const {
       children,
+      className,
+      isLoading,
       getTitle,
       getDisabled,
       requiredFields,
       ...otherProps,
     } = this.props
+
     return (
-      <button {...otherProps} title={getTitle()} disabled={getDisabled()}>
+      <button {...otherProps}
+        className={classnames(className, { 'is-loading': isLoading })}
+        disabled={getDisabled()}
+        title={getTitle()} >
         {children}
       </button>
     )
