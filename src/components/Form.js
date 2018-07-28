@@ -61,8 +61,8 @@ class Form extends Component {
 
     // no need to go further if patch is actually equal to formPatch
     const mergePatch = Object.assign({}, patch)
-    Object.keys(patch).forEach(key => {
-      if (formPatch[key] === patch[key]) {
+    Object.keys(mergePatch).forEach(key => {
+      if (formPatch[key] === mergePatch[key]) {
         delete mergePatch[key]
       }
     })

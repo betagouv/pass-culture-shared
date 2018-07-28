@@ -29,7 +29,7 @@ class Field extends Component {
     const {
       value,
     } = this.props
-    typeof value !== 'undefined' && this.onChange(value)
+    typeof value !== 'undefined' && this.onChange(value, { isMounting: true })
   }
 
   componentDidUpdate(prevProps) {
@@ -39,7 +39,7 @@ class Field extends Component {
     }
   }
 
-  onChange = value => {
+  onChange = (value, config) => {
 
     const {
       InputComponent,
@@ -49,7 +49,10 @@ class Field extends Component {
 
     const storeValue = get(InputComponent, 'storeValue', this.props.storeValue)
 
-    onChange(storeValue(value, this.props), { type })
+    onChange(
+      storeValue(value, this.props),
+      Object.assign({}, this.props, config)
+    )
   }
 
   renderInput = () => {
