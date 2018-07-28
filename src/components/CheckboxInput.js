@@ -1,18 +1,30 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import BasicInput from './BasicInput'
 
-const CheckboxInput = props => {
+class CheckboxInput extends Component {
 
-  const onInputChange = e => props.onChange(e.target.checked)
+  onChange = e => {
+    this.props.onChange(e.target.checked)
+  }
 
-  return (
-    <BasicInput {...props}
-      className='input'
-      onChange={onInputChange}
-      type='checkbox' />
-  )
+  render () {
+    const {
+      readOnly,
+      value
+    } = this.props
 
+    console.log('RENDER value', value)
+
+    return (
+      <BasicInput {...this.props}
+        className='input'
+        checked={value}
+        disabled={readOnly}
+        onChange={this.onChange}
+        type='checkbox' />
+    )
+  }
 }
 
 export default CheckboxInput

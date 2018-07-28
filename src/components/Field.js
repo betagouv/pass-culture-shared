@@ -29,7 +29,7 @@ class Field extends Component {
     const {
       value,
     } = this.props
-    value && this.onChange(value)
+    typeof value !== 'undefined' && this.onChange(value)
   }
 
   componentDidUpdate(prevProps) {

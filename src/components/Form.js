@@ -70,10 +70,12 @@ class Form extends Component {
       return
     }
 
-    (
+    if (
       get(notification, 'type') === 'danger' ||
       get(notification, 'type') === 'success'
-    ) && closeNotification()
+    ) {
+      closeNotification()
+    }
     removeErrors(name)
     mergeForm(name, mergePatch, config)
 
@@ -210,7 +212,11 @@ class Form extends Component {
             readOnly: c.props.readOnly || readOnly,
             size,
             type,
-            value: formValue || baseValue || '',
+            value: typeof formValue !== 'undefined'
+              ? formValue
+              : typeof baseValue !== 'undefined'
+                ? baseValue
+                : ''
           }
         ))
 
@@ -265,10 +271,12 @@ class Form extends Component {
       removeErrors
     } = this.props
 
-    (
+    if (
       get(notification, 'type') === 'danger' ||
       get(notification, 'type') === 'success'
-    ) && closeNotification()
+    ) {
+      closeNotification()
+    }
     removeErrors(name)
     mergeForm(name, patch)
   }
