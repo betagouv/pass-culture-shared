@@ -50,7 +50,12 @@ class Field extends Component {
     const storeValue = get(InputComponent, 'storeValue', this.props.storeValue)
 
     onChange(
-      storeValue(value, this.props),
+      storeValue(
+        (value === "" && this.props.value)
+          ? " "
+          : value,
+        this.props
+      ),
       Object.assign({}, this.props, config)
     )
   }

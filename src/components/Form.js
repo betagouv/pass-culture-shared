@@ -199,6 +199,12 @@ class Form extends Component {
           this.onMergeForm(newPatch, config)
         }
 
+        const value = typeof formValue !== 'undefined'
+          ? formValue
+          : typeof baseValue !== 'undefined'
+            ? baseValue
+            : ''
+
         const newChild =  React.cloneElement(c,
           Object.assign({
             errors: [].concat(errorsPatch)
@@ -212,11 +218,7 @@ class Form extends Component {
             readOnly: c.props.readOnly || readOnly,
             size,
             type,
-            value: typeof formValue !== 'undefined'
-              ? formValue
-              : typeof baseValue !== 'undefined'
-                ? baseValue
-                : ''
+            value
           }
         ))
 
