@@ -1,4 +1,5 @@
 import classnames from 'classnames'
+import get from 'lodash.get'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
@@ -24,14 +25,6 @@ class Field extends Component {
     name: PropTypes.string.isRequired,
   }
 
-  /*
-  static getDerivedStateFromProps(newProps, currentState) {
-    return Object.assign({
-      value: currentState.value || newProps.value
-    })
-  }
-  */
-
   componentDidMount() {
     const {
       value,
@@ -54,26 +47,29 @@ class Field extends Component {
       type
     } = this.props
 
-    const displayValue = InputComponent.displayValue || this.props.displayValue
-    const storeValue = InputComponent.storeValue || this.props.storeValue
+    const storeValue = get(InputComponent, 'storeValue', this.props.storeValue)
 
-    this.setState({
-      value: displayValue(value),
-    })
-
-    onChange(storeValue(value), { type })
+    onChange(storeValue(value, this.props), { type })
   }
 
   renderInput = () => {
 
-    const inputProps = Object.assign({}, this.props, {
-      'aria-describedby': `${this.props.id}-error`,
-      onChange: this.onChange,
-      required: this.props.required && !this.props.readonly,
-      value: this.state.value,
-    })
+    const {
+      id,
+      InputComponent,
+      readonly,
+      required,
+      value
+    } = this.props
 
-    const InputComponent = this.props.InputComponent
+    const displayValue = get(InputComponent, 'displayValue', this.props.displayValue)
+
+    const inputProps = Object.assign({}, this.props, {
+      'aria-describedby': `${id}-error`,
+      onChange: this.onChange,
+      required: required && !readonly,
+      value: displayValue(value, this.props),
+    })
 
     return InputComponent && <InputComponent {...inputProps} />
   }
@@ -93,71 +89,82 @@ class Field extends Component {
     const $input = this.renderInput()
 
     if (type === 'hidden') return $input
-    switch(layout) {
-      case 'horizontal':
-        return (
-          <div className='field is-horizontal'>
-            {
-              label && (
-                <div className={`field-label is-${size}`}>
-                  <label htmlFor={id} className='label'>
-                    <span className={`subtitle ${classnames({required, readOnly})}`}>
-                      {label} :
-                    </span>
-                  </label>
-                </div>
-              )
-            }
-            <div className='field-body'>
-              <div className={classnames('field', {
-                'checkbox': type==='checkbox',
-                'is-expanded': isExpanded
-              })}>
-                {$input}
+
+    if (layout === 'horizontal') {
+      return (
+        <div className='field is-horizontal'>
+          {
+            label && (
+              <div className={`field-label is-${size}`}>
+                <label htmlFor={id} className='label'>
+                  <span className={`subtitle ${classnames({required, readOnly})}`}>
+                    {label} :
+                  </span>
+                </label>
               </div>
-              {
-                errors && errors.map((e, i) => (
-                  <p className='help is-danger columns' id={`${id}-error`} key={i}>
-                    <Icon className='column is-1' svg="picto-warning" alt="Warning" />
-                    <span className='column'> {e} </span>
-                  </p>
-                ))
-              }
-            </div>
-          </div>
-        )
-      case 'sign-in-up':
-        if (type === 'checkbox') {
-          return <div className='field checkbox'>{$input}</div>
-        } else {
-          const {sublabel} = this.props
-          return (
-            <div className="field">
-              {
-                label && (
-                  <label className='label' htmlFor={id}>
-                    <h3 className={classnames({required, 'with-subtitle': sublabel})}>{label}</h3>
-                    {sublabel && <p>... {sublabel} :</p>}
-                  </label>
-                )
-              }
-            <div className="control">
+            )
+          }
+          <div className='field-body'>
+            <div className={classnames('field', {
+              'checkbox': type === 'checkbox',
+              'is-expanded': isExpanded
+            })}>
               {$input}
             </div>
-            <ul className="help is-danger" id={`${id}-error`}>
-              {
-                errors && errors.map((e, i) => (
-                  <li className="columns" key={i}>
-                    <Icon className="column is-1" svg="picto-warning" alt="Warning" />
-                    <p className="column"> {e} </p>
-                  </li>
-                ))
-              }
-            </ul>
+            {
+              errors && errors.map((e, i) => (
+                <p className='help is-danger columns' id={`${id}-error`} key={i}>
+                  <Icon className='column is-1' svg="picto-warning" alt="Warning" />
+                  <span className='column'> {e} </span>
+                </p>
+              ))
+            }
           </div>
-        )}
-      default:
-        break
+        </div>
+      )
+    }
+
+    if (layout === 'vertical') {
+
+      if (type === 'checkbox') {
+        return (
+          <div className='field checkbox'>
+            <label
+              className={classnames({ required })}
+              htmlFor={id}>
+              {$input}
+              {label}
+            </label>
+          </div>
+        )
+      }
+
+      const { sublabel } = this.props
+      return (
+        <div className="field">
+          {
+            label && (
+              <label className='label' htmlFor={id}>
+                <h3 className={classnames({required, 'with-subtitle': sublabel})}>{label}</h3>
+                {sublabel && <p>... {sublabel} :</p>}
+              </label>
+            )
+          }
+          <div className="control">
+            {$input}
+          </div>
+          <ul className="help is-danger" id={`${id}-error`}>
+            {
+              errors && errors.map((e, i) => (
+                <li className="columns" key={i}>
+                  <Icon className="column is-1" svg="picto-warning" alt="Warning" />
+                  <p className="column"> {e} </p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      )
     }
     return $input
   }
