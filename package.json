@@ -5,8 +5,12 @@
     "moment": "^2.18.1",
     "moment-locale-fr": "^1.0.0",
     "moment-timezone": "^0.5.21",
+    "react": "^0.14||^15.5.4||^16.1.1",
+    "react-autocomplete": "^1.8.1",
     "react-autosize-textarea": "^4.0.0",
     "react-datepicker": "^1.5.0",
+    "react-dom": "^0.14||^15.5.4||^16.1.1",
+    "react-dotdotdot": "^1.2.3",
     "redux-saga": "^0.15.3",
     "uuid": "^3.3.2"
   },
