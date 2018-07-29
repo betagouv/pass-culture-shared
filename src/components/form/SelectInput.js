@@ -5,7 +5,6 @@ import React, { Component } from 'react'
 import { optionify } from '../../utils/form'
 
 class SelectInput extends Component {
-
   componentDidMount() {
     this.handleUniqueSelectOption()
   }
@@ -17,25 +16,18 @@ class SelectInput extends Component {
   }
 
   handleUniqueSelectOption = () => {
-    const {
-      onChange: fieldOnChange,
-      options,
-      optionValue
-    } = this.props
+    const { onChange: fieldOnChange, options, optionValue } = this.props
     if (options && options.length === 1) {
       fieldOnChange(options[0][optionValue])
     }
   }
 
   onChange = e => {
-    const {
-      onChange: fieldOnChange
-    } = this.props
+    const { onChange: fieldOnChange } = this.props
     fieldOnChange(e.target.value)
   }
 
   render() {
-
     const {
       autoComplete,
       id,
@@ -53,15 +45,18 @@ class SelectInput extends Component {
 
     const actualReadOnly = readOnly || options.length === 1
     const actualOptions = optionify(
-        options.map(o => ({
-          label: get(o, optionLabel),
-          value: get(o, optionValue)
-        })),
-        placeholder
-      )
+      options.map(o => ({
+        label: get(o, optionLabel),
+        value: get(o, optionValue),
+      })),
+      placeholder
+    )
 
     return (
-      <div className={classnames(`select is-${size}`, { readonly: actualReadOnly })}>
+      <div
+        className={classnames(`select is-${size}`, {
+          readonly: actualReadOnly,
+        })}>
         <select
           aria-describedby={this.props['aria-describedby']}
           autoComplete={autoComplete}
@@ -71,15 +66,12 @@ class SelectInput extends Component {
           type={type}
           value={value}
           onChange={this.onChange}
-          disabled={actualReadOnly} >
-          {
-            actualOptions.filter(o => o)
-                         .map(({ label, value }, index) => (
-                            <option key={index} value={value}>
-                              {label}
-                            </option>
-                          ))
-          }
+          disabled={actualReadOnly}>
+          {actualOptions.filter(o => o).map(({ label, value }, index) => (
+            <option key={index} value={value}>
+              {label}
+            </option>
+          ))}
         </select>
       </div>
     )

@@ -3,19 +3,24 @@ import { getNextState } from '../utils/data'
 export const ASSIGN_DATA = 'ASSIGN_DATA'
 export const RESET_DATA = 'RESET_DATA'
 
-export const createData = (initialState = {}) => (state = initialState, action) => {
+export const createData = (initialState = {}) => (
+  state = initialState,
+  action
+) => {
   if (action.type === ASSIGN_DATA) {
     return Object.assign({}, state, action.patch)
-
   } else if (action.type === RESET_DATA) {
     return initialState
-
-  } else if (/SUCCESS_DATA_(DELETE|GET|POST|PUT|PATCH)_(.*)/.test(action.type)) {
+  } else if (
+    /SUCCESS_DATA_(DELETE|GET|POST|PUT|PATCH)_(.*)/.test(action.type)
+  ) {
     // unpack config
-    const key = action.config.key || action.path.replace(/\/$/, '')
-                                                .split('?')[0]
-                                                .split('/')[0]
-
+    const key =
+      action.config.key ||
+      action.path
+        .replace(/\/$/, '')
+        .split('?')[0]
+        .split('/')[0]
 
     // resolve
     const nextState = getNextState(
@@ -23,9 +28,7 @@ export const createData = (initialState = {}) => (state = initialState, action) 
       action.method,
       {
         // force casting into an array
-        [key]: !Array.isArray(action.data)
-                  ? [action.data]
-                  : action.data,
+        [key]: !Array.isArray(action.data) ? [action.data] : action.data,
       },
       action.config
     )
@@ -37,7 +40,6 @@ export const createData = (initialState = {}) => (state = initialState, action) 
 
     // return
     return Object.assign({}, state, nextState)
-
   }
   return state
 }

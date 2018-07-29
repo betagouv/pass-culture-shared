@@ -1,7 +1,7 @@
 export const ADD_BLOCKERS = 'ADD_BLOCKERS'
 export const REMOVE_BLOCKERS = 'REMOVE_BLOCKERS'
 
-export function blockers (state = [], action) {
+export function blockers(state = [], action) {
   switch (action.type) {
     case ADD_BLOCKERS:
       return state.concat([{ block: action.block, name: action.name }])

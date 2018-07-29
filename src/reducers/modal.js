@@ -5,7 +5,7 @@ export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 const initialState = {
   config: { fromDirection: 'right' },
   isActive: false,
-  $modal: null
+  $modal: null,
 }
 
 export function modal(state = initialState, action) {

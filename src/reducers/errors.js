@@ -8,12 +8,12 @@ export const errors = (state = initialState, action) => {
   switch (action.type) {
     case MERGE_ERRORS:
       return Object.assign({}, state, {
-        [action.name]: Object.assign({}, state[action.name], action.patch)
+        [action.name]: Object.assign({}, state[action.name], action.patch),
       })
     case REMOVE_ERRORS:
       return Object.assign({}, state, {
-          [action.name]: null,
-        })
+        [action.name]: null,
+      })
     case RESET_ERRORS:
       return initialState
     default:
@@ -33,5 +33,5 @@ export const removeErrors = name => ({
 })
 
 export const resetErrors = () => ({
-  type: RESET_ERRORS
+  type: RESET_ERRORS,
 })

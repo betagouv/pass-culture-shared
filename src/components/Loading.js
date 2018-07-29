@@ -4,7 +4,6 @@ import React, { Component } from 'react'
 import Icon from './Icon'
 
 class Loading extends Component {
-
   constructor() {
     super()
     this.state = {
@@ -19,11 +18,10 @@ class Loading extends Component {
   }
 
   startDots = () => {
-    if (this.timer)
-      window.clearInterval(this.timer)
+    if (this.timer) window.clearInterval(this.timer)
     this.timer = window.setInterval(() => {
       this.setState({
-        nbDots: (this.state.nbDots) % 3 + 1
+        nbDots: this.state.nbDots % 3 + 1,
       })
     }, this.props.dotFrequency)
   }
@@ -37,18 +35,15 @@ class Loading extends Component {
   }
 
   render() {
-    const {
-      className,
-      label,
-      style,
-      Tag,
-    } = this.props
+    const { className, label, style, Tag } = this.props
     return (
-      <Tag className={classnames("loading", className)} style={style}>
-        <Icon svg='loader-r' />
+      <Tag className={classnames('loading', className)} style={style}>
+        <Icon svg="loader-r" />
         <span
-          className='content'
-          data-dots={Array(this.state.nbDots).fill('.').join('')}>
+          className="content"
+          data-dots={Array(this.state.nbDots)
+            .fill('.')
+            .join('')}>
           {label}
         </span>
       </Tag>

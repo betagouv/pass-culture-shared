@@ -5,27 +5,13 @@ import { fetchData } from '../utils/request'
 
 function* fromWatchRequestDataActions(action) {
   // UNPACK
-  const {
-    method,
-    path,
-    config
-  } = action
-  const {
-    body,
-    encode,
-    type
-  } = (config || {})
+  const { method, path, config } = action
+  const { body, encode, type } = config || {}
 
   // DATA
   try {
-
     // CALL
-    const result = yield call(
-      fetchData,
-      method,
-      path,
-      { body, encode }
-    )
+    const result = yield call(fetchData, method, path, { body, encode })
 
     // SUCCESS OR FAIL
     if (result.data) {
@@ -34,11 +20,19 @@ function* fromWatchRequestDataActions(action) {
       console.error(result.errors)
       yield put(failData(method, path, result.errors, config))
     }
-
   } catch (error) {
-    yield put(failData(method, path, [{
-      global: "Erreur serveur. Tentez de rafraîchir la page."
-    }], config))
+    yield put(
+      failData(
+        method,
+        path,
+        [
+          {
+            global: 'Erreur serveur. Tentez de rafraîchir la page.',
+          },
+        ],
+        config
+      )
+    )
   }
 }
 

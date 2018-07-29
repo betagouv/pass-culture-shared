@@ -18,10 +18,7 @@ class Modal extends Component {
   }
 
   handleActiveChange = (prevProps = {}) => {
-    const {
-      isActive,
-      transitionDuration
-    } = this.props
+    const { isActive, transitionDuration } = this.props
 
     if (isActive && !prevProps.isActive) {
       // Opening
@@ -81,11 +78,11 @@ class Modal extends Component {
     this.handleActiveChange()
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const {
       closeModal,
       isClosingOnLocationChange,
-      location: { pathname }
+      location: { pathname },
     } = this.props
     if (isClosingOnLocationChange && pathname !== prevProps.location.pathname) {
       closeModal()
@@ -115,8 +112,7 @@ class Modal extends Component {
         })}
         role="dialog"
         style={{ backgroundColor: maskColor }}
-        onClick={this.onCloseClick}
-      >
+        onClick={this.onCloseClick}>
         <div
           className={classnames('modal-dialog', {
             fullscreen,
@@ -126,17 +122,14 @@ class Modal extends Component {
             transitionDuration: `${transitionDuration}ms`,
             transform: this.transform(),
           }}
-          onClick={e => this.stopPropagation(e)}
-        >
+          onClick={e => this.stopPropagation(e)}>
           {!isUnclosable &&
             hasCloseButton && (
               <button className="close" onClick={this.onCloseClick}>
                 <Icon svg="ico-close-b" />
               </button>
             )}
-          <div className="modal-content">
-            {$modal}
-          </div>
+          <div className="modal-content">{$modal}</div>
         </div>
       </div>
     )
@@ -150,8 +143,10 @@ Modal.defaultProps = {
   maskColor: 'rgba(0, 0, 0, 0.8)',
 }
 
-export default  withRouter(connect(
-  ({ modal: { config, $modal, isActive } }) =>
-    Object.assign({ $modal, isActive }, config),
-  { closeModal }
-)(Modal))
+export default withRouter(
+  connect(
+    ({ modal: { config, $modal, isActive } }) =>
+      Object.assign({ $modal, isActive }, config),
+    { closeModal }
+  )(Modal)
+)

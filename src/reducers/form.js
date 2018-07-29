@@ -18,7 +18,7 @@ export const form = (state = initialState, action) => {
         nextPatch[key] = nextValue
       }
       return Object.assign({}, state, {
-        [action.name]: nextPatch
+        [action.name]: nextPatch,
       })
     case RESET_FORM:
       return initialState
@@ -31,9 +31,9 @@ export const mergeForm = (name, patch, config) => ({
   type: MERGE_FORM,
   name,
   patch,
-  config
+  config,
 })
 
 export const resetForm = () => ({
-  type: RESET_FORM
+  type: RESET_FORM,
 })

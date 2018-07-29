@@ -28,7 +28,7 @@
     "compile": "babel --plugins transform-class-properties,transform-object-rest-spread --presets env,react -d lib/ src/",
     "postinstall": "if [ -d \"src/\" ]; then npm run compile; fi",
     "precommit": "pretty-quick --staged",
-    "prettier": "$(yarn bin)/prettier --config config/prettier.js --write 'src/**/*.js'",
+    "prettier": "$(yarn bin)/prettier --write 'src/**/*.js'",
     "watch": "nodemon --watch src --exec \"npm run compile\""
   },
   "version": "0.0.3"
