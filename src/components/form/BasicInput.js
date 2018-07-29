@@ -12,22 +12,25 @@ const BasicInput = props => {
     required,
     type,
     size,
-    value
+    value,
   } = props
 
-  return <input
-    aria-describedby={props['aria-describedby']}
-    autoComplete={autoComplete}
-    checked={checked}
-    className={`input is-${size}`}
-    disabled={disabled}
-    id={props.id}
-    name={name}
-    onChange={onChange}
-    required={required}
-    readOnly={readOnly}
-    type={type}
-    value={value} />
+  return (
+    <input
+      aria-describedby={props['aria-describedby']}
+      autoComplete={autoComplete}
+      checked={checked}
+      className={`input is-${size}`}
+      disabled={disabled}
+      id={props.id}
+      name={name}
+      onChange={onChange}
+      required={required}
+      readOnly={readOnly}
+      type={type}
+      value={value}
+    />
+  )
 }
 
 export default BasicInput

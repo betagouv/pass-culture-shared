@@ -6,7 +6,6 @@ export const SHOW_NOTIFICATION = 'SHOW_NOTIFICATION'
 const initialState = null
 
 export function notification(state = initialState, action) {
-
   switch (action.type) {
     case CLOSE_NOTIFICATION:
       return initialState
@@ -20,7 +19,7 @@ export function notification(state = initialState, action) {
 
 export function closeNotification() {
   return {
-    type: CLOSE_NOTIFICATION
+    type: CLOSE_NOTIFICATION,
   }
 }
 

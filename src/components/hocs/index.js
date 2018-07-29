@@ -1,5 +1,3 @@
 import withLogin from './withLogin'
 
-export {
-  withLogin
-}
+export { withLogin }

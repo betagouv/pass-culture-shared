@@ -1,8 +1,5 @@
 import moment from 'moment'
-import { put,
-  select,
-  takeEvery
-} from 'redux-saga/effects'
+import { put, select, takeEvery } from 'redux-saga/effects'
 
 import { resetData } from '../reducers/data'
 import { setUser } from '../reducers/user'

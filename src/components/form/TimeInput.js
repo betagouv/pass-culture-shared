@@ -4,9 +4,8 @@ import React, { Component } from 'react'
 import BasicInput from './BasicInput'
 
 class TimeInput extends Component {
-
   static displayValue = (value, props) => {
-    const { tz } = (props || {})
+    const { tz } = props || {}
     return value && tz && moment(value).tz(tz)
   }
 
@@ -21,17 +20,15 @@ class TimeInput extends Component {
     }
   }
 
-  render () {
+  render() {
     const { value } = this.props
 
     return (
-      <BasicInput {...this.props}
+      <BasicInput
+        {...this.props}
         onChange={this.onInputChange}
-        value={
-          value
-            ? moment(value).format('HH:mm')
-            : ''
-        }/>
+        value={value ? moment(value).format('HH:mm') : ''}
+      />
     )
   }
 }

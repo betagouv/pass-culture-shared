@@ -2,7 +2,6 @@ import classnames from 'classnames'
 import React, { Component } from 'react'
 
 class SubmitButton extends Component {
-
   static defaultProps = {
     requiredFields: [],
     getDisabled: () => true,
@@ -10,7 +9,7 @@ class SubmitButton extends Component {
     type: 'submit',
   }
 
-  render () {
+  render() {
     const {
       children,
       className,
@@ -18,14 +17,15 @@ class SubmitButton extends Component {
       getTitle,
       getDisabled,
       requiredFields,
-      ...otherProps,
+      ...otherProps
     } = this.props
 
     return (
-      <button {...otherProps}
+      <button
+        {...otherProps}
         className={classnames(className, { 'is-loading': isLoading })}
         disabled={getDisabled()}
-        title={getTitle()} >
+        title={getTitle()}>
         {children}
       </button>
     )
@@ -34,6 +34,6 @@ class SubmitButton extends Component {
 
 // NEEDED FOR MINIFY BUILD TIME
 // BECAUCE c.type.displayName DISAPPEAR OTHERWISE
-SubmitButton.displayName = "SubmitButton"
+SubmitButton.displayName = 'SubmitButton'
 
 export default SubmitButton

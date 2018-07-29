@@ -13,7 +13,6 @@ import TextareaInput from './TextareaInput'
 import TextInput from './TextInput'
 import TimeInput from './TimeInput'
 
-
 Form.WrappedComponent.inputsByType = {
   checkbox: CheckboxInput,
   date: DateInput,
@@ -41,5 +40,5 @@ export {
   SubmitButton,
   TextareaInput,
   TextInput,
-  TimeInput
+  TimeInput,
 }

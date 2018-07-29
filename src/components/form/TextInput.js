@@ -13,7 +13,8 @@ const TextInput = props => {
     <BasicInput
       {...props}
       onChange={onInputChange}
-      autoComplete={guessAutoComplete()} />
+      autoComplete={guessAutoComplete()}
+    />
   )
 }
 

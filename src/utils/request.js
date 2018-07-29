@@ -4,28 +4,11 @@ import { API_URL } from './config'
 
 const { version } = process.env
 
-const success_status_codes = [
-  200,
-  201,
-  202,
-  203,
-  205,
-  206,
-  207,
-  208,
-  210,
-  226
-]
-
-
+const success_status_codes = [200, 201, 202, 203, 205, 206, 207, 208, 210, 226]
 
 export async function fetchData(method, path, config = {}) {
   // unpack
-  const {
-    body,
-    encode,
-    token
-  } = config
+  const { body, encode, token } = config
 
   // init
   const init = {
@@ -34,27 +17,24 @@ export async function fetchData(method, path, config = {}) {
   }
 
   init.headers = {
-    'AppVersion': version,
-    'X-Request-ID': uuid()
+    AppVersion: version,
+    'X-Request-ID': uuid(),
   }
 
   if (method && method !== 'GET' && method !== 'DELETE') {
-
     // encode
     if (encode !== 'multipart/form-data') {
-      Object.assign(
-        init.headers,
-        {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      )
+      Object.assign(init.headers, {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      })
     }
 
     // body
-    init.body = init.headers['Content-Type'] === 'application/json'
-      ? JSON.stringify(body || {})
-      : body
+    init.body =
+      init.headers['Content-Type'] === 'application/json'
+        ? JSON.stringify(body || {})
+        : body
   }
 
   // token
@@ -67,7 +47,6 @@ export async function fetchData(method, path, config = {}) {
 
   // fetch
   const result = await fetch(`${API_URL}/${path.replace(/^\//, '')}`, init)
-
 
   // check
   if (success_status_codes.includes(result.status)) {
