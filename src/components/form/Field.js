@@ -3,7 +3,7 @@ import get from 'lodash.get'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Icon from './Icon'
+import Icon from '../Icon'
 
 class Field extends Component {
 
@@ -29,7 +29,9 @@ class Field extends Component {
     const {
       value,
     } = this.props
-    typeof value !== 'undefined' && this.onChange(value, { isMounting: true })
+    typeof value !== 'undefined' &&
+    value !== '' &&
+    this.onChange(value, { isMounting: true })
   }
 
   componentDidUpdate(prevProps) {
@@ -43,19 +45,21 @@ class Field extends Component {
 
     const {
       InputComponent,
-      onChange,
+      onChange: formOnChange,
       type
     } = this.props
 
     const storeValue = get(InputComponent, 'storeValue', this.props.storeValue)
 
-    onChange(
-      storeValue(
-        (value === "" && this.props.value)
-          ? " "
-          : value,
-        this.props
-      ),
+    const storedValue = storeValue(
+      (value === "" && this.props.value)
+        ? " "
+        : value,
+      this.props
+    )
+
+    formOnChange(
+      storedValue,
       Object.assign({}, this.props, config)
     )
   }
@@ -70,7 +74,8 @@ class Field extends Component {
       value
     } = this.props
 
-    const displayValue = get(InputComponent, 'displayValue', this.props.displayValue)
+    const displayValue = this.props.displayValue ||
+      get(InputComponent, 'displayValue')
 
     const inputProps = Object.assign({}, this.props, {
       'aria-describedby': `${id}-error`,

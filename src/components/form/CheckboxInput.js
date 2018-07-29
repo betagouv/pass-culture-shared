@@ -5,7 +5,10 @@ import BasicInput from './BasicInput'
 class CheckboxInput extends Component {
 
   onChange = e => {
-    this.props.onChange(e.target.checked)
+    const {
+      onChange: fieldOnChange
+    } = this.props
+    fieldOnChange(e.target.checked)
   }
 
   render () {

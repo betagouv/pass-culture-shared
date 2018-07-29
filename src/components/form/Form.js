@@ -5,12 +5,12 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { compose } from 'redux'
 
-import { requestData } from '../reducers/data'
-import { removeErrors } from '../reducers/errors'
-import { mergeForm } from '../reducers/form'
-import { closeNotification, showNotification } from '../reducers/notification'
-import { recursiveMap } from '../utils/react'
-import { pluralize } from '../utils/string'
+import { requestData } from '../../reducers/data'
+import { removeErrors } from '../../reducers/errors'
+import { mergeForm } from '../../reducers/form'
+import { closeNotification, showNotification } from '../../reducers/notification'
+import { recursiveMap } from '../../utils/react'
+import { pluralize } from '../../utils/string'
 
 class Form extends Component {
 
@@ -62,8 +62,12 @@ class Form extends Component {
     // no need to go further if patch is actually equal to formPatch
     const mergePatch = Object.assign({}, patch)
     Object.keys(mergePatch).forEach(key => {
-      if (formPatch[key] === mergePatch[key]) {
+      if (
+        formPatch[key] === mergePatch[key]
+      ) {
         delete mergePatch[key]
+      } else if (mergePatch[key] === " " && !get(basePatch, key)) {
+        mergePatch[key] = ""
       }
     })
     if (Object.keys(mergePatch).length === 0) {
@@ -235,8 +239,11 @@ class Form extends Component {
             if (isEditing) {
               return false
             }
+
             const missingFields = requiredFields.filter(f =>
               !get(formPatch, f.props.patchKey))
+
+            console.log('missingFields', missingFields, 'requiredFields', requiredFields)
             return missingFields.length > 0
           },
           getTitle: () => {

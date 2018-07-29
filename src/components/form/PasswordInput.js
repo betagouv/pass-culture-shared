@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import BasicInput from './BasicInput'
-import Icon from './Icon'
+import Icon from '../Icon'
 
 
 class PasswordInput extends Component {

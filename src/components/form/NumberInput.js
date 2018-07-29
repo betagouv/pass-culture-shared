@@ -20,7 +20,11 @@ class NumberInput extends Component {
     return (
       <BasicInput {...this.props}
         onChange={this.onChange}
-        type='number' />
+        type={
+          typeof this.props.value === 'string'
+          ? 'text'
+          : 'number'
+        } />
     )
   }
 }
