@@ -16,15 +16,17 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.22.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "prettier": "1.12.1"
   },
   "main": "lib/index.js",
   "name": "pass-culture-shared",
   "private": false,
   "scripts": {
     "compile": "babel --plugins transform-class-properties,transform-object-rest-spread --presets env,react -d lib/ src/",
-    "postinstall": "npm run compile",
+    "postinstall": "if [ -d \"src/\" ]; then npm run compile; fi",
+    "prettier": "$(yarn bin)/prettier --config config/prettier.js --write 'src/**/*.js'",
     "watch": "nodemon --watch src --exec \"npm run compile\""
   },
-  "version": "0.0.2"
+  "version": "0.0.3"
 }
