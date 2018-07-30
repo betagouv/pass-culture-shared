@@ -37,7 +37,7 @@
   "name": "pass-culture-shared",
   "private": false,
   "scripts": {
-    "compile": "babel --plugins transform-class-properties,transform-object-rest-spread --presets env,react -d lib/ src/",
+    "compile": "rm -rf lib && babel --plugins transform-class-properties,transform-object-rest-spread --presets env,react -d lib/ src/",
     "postinstall": "if [ -d \"src/\" ]; then npm run compile; fi",
     "precommit": "pretty-quick --staged",
     "prettier": "$(yarn bin)/prettier --write 'src/**/*.js'",
