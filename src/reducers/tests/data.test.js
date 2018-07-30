@@ -1,41 +1,39 @@
-import data, {
-  assignData,
-  failData,
-  filterData,
-  removeDataError,
-  requestData,
-  resetData,
-  successData,
-  ASSIGN_DATA,
-  FILTER_DATA,
-  REMOVE_DATA_ERROR,
-  RESET_DATA
- } from '../data'
+import { assignData, createData, failData, requestData, resetData, successData, ASSIGN_DATA, RESET_DATA } from '../data'
 
-describe('src | reducers | data  ', () => {
 
-  let state
-  beforeEach(() => {
-    state = {
-      bookings: [],
-      recommendations: []
-    }
+  describe('src | reducer | data', () => {
+    describe.skip('createData', () => {
+      describe('If Action type is ASSIGN_DATA it returns the initial state', () => {
+        it('should return correct action', () => {
+          // TODO To finish
+          // given
+          const state = {
+            bookings: [],
+            recommendations: []
+          }
+          const action = {
+            type: ASSIGN_DATA,
+            method: 'POST',
+            path: 'http://fakeUrl.com',
+            patch: 'fake patch'
+          }
+
+          // when
+          const updatedState = createData(state, action)
+
+          console.log('updatedState ---->', updatedState)
+          const expected = {}
+
+          // then
+          expect(updatedState).toEqual(expected)
+        })
+      })
+    })
   })
 
-  it('should return the initial state by default', () => {
-    // given
-    const action = {}
+  describe('src | actions | data', () => {
 
-    // when
-    const updatedState = data(undefined, action)
 
-    console.log('updatedState', updatedState);
-
-    // then
-    expect(updatedState).toEqual(state)
-  })
-
-  describe('src | actions', () => {
     describe('assignData', () => {
       it('should return correct action', () => {
         // given
@@ -68,40 +66,6 @@ describe('src | reducers | data  ', () => {
         method,
         path,
         type: 'FAIL_DATA_POST_HTTP://FAKEURL.COM'
-        }
-
-        // then
-        expect(action).toMatchObject(expected)
-      })
-    })
-    describe('filterData', () => {
-      it('should return correct action', () => {
-        // given
-        const key = 'fake Key'
-        const filter = 'fake Filter'
-
-        // when
-        const action = filterData(key, filter)
-        const expected = {
-        filter,
-        key,
-        type: FILTER_DATA
-        }
-
-        // then
-        expect(action).toMatchObject(expected)
-      })
-    })
-    describe('removeDataError', () => {
-      it('should return correct action', () => {
-        // given
-        const name = 'fake Name'
-
-        // when
-        const action = removeDataError(name)
-        const expected = {
-        name,
-        type: REMOVE_DATA_ERROR
         }
 
         // then
@@ -180,4 +144,3 @@ describe('src | reducers | data  ', () => {
       })
     })
   })
-})
