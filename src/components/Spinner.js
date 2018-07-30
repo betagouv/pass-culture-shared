@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 
 import Icon from './Icon'
 
-class Loading extends Component {
+class Spinner extends Component {
   constructor() {
     super()
     this.state = {
@@ -37,7 +37,7 @@ class Loading extends Component {
   render() {
     const { className, label, style, Tag } = this.props
     return (
-      <Tag className={classnames('loading', className)} style={style}>
+      <Tag className={classnames('spinner', className)} style={style}>
         <Icon svg="loader-r" />
         <span
           className="content"
@@ -51,4 +51,4 @@ class Loading extends Component {
   }
 }
 
-export default Loading
+export default Spinner

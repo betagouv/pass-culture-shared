@@ -1,7 +1,7 @@
 import classnames from 'classnames'
 import React, { Component } from 'react'
 
-import Loading from './Loading'
+import Spinner from './Spinner'
 
 const UP = 'up'
 const DOWN = 'down'
@@ -22,7 +22,7 @@ class InfiniteScroller extends Component {
     loadScrollRatio: 0.9,
     scrollingElement: document.documentElement,
     renderLoading: () => (
-      <Loading Tag="li" style={{ justifyContent: 'center' }} />
+      <Spinner Tag="li" style={{ justifyContent: 'center' }} />
     ),
     renderFinished: () => (
       <li style={{ justifyContent: 'center' }}>C'est fini !</li>
