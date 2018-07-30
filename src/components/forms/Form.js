@@ -260,7 +260,7 @@ class Form extends Component {
                   missingText}`
               },
             },
-            this.props.Tag !== 'form'
+            this.props.Tag !== 'form' || !this.props.onSubmit
               ? {
                   // If not a real form, need to mimic the submit behavior
                   onClick: this.onSubmit,
