@@ -91,7 +91,7 @@ class Field extends Component {
               <label htmlFor={id} className="label">
                 <span
                   className={`subtitle ${classnames({ required, readOnly })}`}>
-                  {label} :
+                  {label}&nbsp;:
                 </span>
               </label>
             </div>
@@ -144,7 +144,7 @@ class Field extends Component {
                 className={classnames({ required, 'with-subtitle': sublabel })}>
                 {label}
               </h3>
-              {sublabel && <p>... {sublabel} :</p>}
+              {sublabel && <p>...&nbsp;{sublabel}&nbsp;:</p>}
             </label>
           )}
           <div className="control">{$input}</div>

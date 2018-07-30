@@ -31,7 +31,7 @@ class Form extends Component {
     formatPatch: data => data,
     formPatch: {},
     successNotification: 'Formulaire non validé',
-    TagName: 'form',
+    Tag: 'form',
   }
 
   static propTypes = {
@@ -130,7 +130,8 @@ class Form extends Component {
         type: 'danger',
       })
 
-    handleFailRedirect && history.push(handleFailRedirect(state, action))
+    handleFailRedirect &&
+      history.push(handleFailRedirect(state, action))
   }
 
   handleSuccess = (state, action) => {
@@ -157,9 +158,8 @@ class Form extends Component {
         type: 'success',
       })
 
-    if (handleSuccessRedirect) {
+    handleSuccessRedirect &&
       history.push(handleSuccessRedirect(state, action))
-    }
   }
 
   childrenWithProps = () => {
@@ -241,30 +241,26 @@ class Form extends Component {
                   f => !get(formPatch, f.props.patchKey)
                 )
 
-                console.log(
-                  'missingFields',
-                  missingFields,
-                  'requiredFields',
-                  requiredFields
-                )
                 return missingFields.length > 0
               },
               getTitle: () => {
                 const missingFields = requiredFields.filter(
                   f => !get(formPatch, f.props.patchKey)
                 )
+
                 if (missingFields.length === 0) return
-                return `Champs ${pluralize(
-                  'non-valide',
-                  missingFields.length
-                )} : ${missingFields
-                  .map(f =>
-                    (f.props.label || f.props.title || '').toLowerCase()
-                  )
-                  .join(', ')}`
+
+                const missingText = missingFields.map(f =>
+                  (typeof (f.props.label || f.props.title) !== 'string'
+                    ? f.props.name
+                    : f.props.label || f.props.title || '').toLowerCase())
+                                                 .join(', ')
+
+                return `Champs ${pluralize('non-valide', missingFields.length)}&nbsp;:&nbsp;${
+                  missingText}`
               },
             },
-            this.props.TagName !== 'form'
+            this.props.Tag !== 'form'
               ? {
                   // If not a real form, need to mimic the submit behavior
                   onClick: this.onSubmit,
@@ -308,21 +304,21 @@ class Form extends Component {
   }
 
   render() {
-    const { action, className, name, TagName } = this.props
+    const { action, className, name, Tag } = this.props
     const { method } = this.state
-    if (!TagName) {
+    if (!Tag) {
       return this.childrenWithProps()
     }
 
     return (
-      <TagName
+      <Tag
         action={action}
         className={className}
         id={name}
         method={method}
         onSubmit={this.onSubmit}>
         {this.childrenWithProps()}
-      </TagName>
+      </Tag>
     )
   }
 }

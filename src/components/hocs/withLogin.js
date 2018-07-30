@@ -14,7 +14,7 @@ const withLogin = (config = {}) => WrappedComponent => {
       this.isRequired = isRequired || Boolean(props.handleDataRequest)
     }
 
-    componentDidMount = () => {
+    componentDidMount = (prevProps) => {
       const { history, location, user, requestData } = this.props
 
       if (user === null && this.isRequired) {
@@ -25,12 +25,19 @@ const withLogin = (config = {}) => WrappedComponent => {
               history.push(successRedirect)
           },
           handleFail: () => {
-            console.log('')
             if (failRedirect && failRedirect !== location.pathname)
               history.push(failRedirect)
           },
         })
+        return
       }
+
+      /*
+      if (user && !prevProps.user) {
+        if (successRedirect && successRedirect !== location.pathname)
+          history.push(successRedirect)
+      }
+      */
     }
 
     render() {

@@ -11,8 +11,6 @@ class CheckboxInput extends Component {
   render() {
     const { readOnly, value } = this.props
 
-    console.log('RENDER value', value)
-
     return (
       <BasicInput
         {...this.props}
