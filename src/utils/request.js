@@ -2,7 +2,7 @@ import uuid from 'uuid'
 
 import { API_URL } from './config'
 
-const { version } = process.env
+const { NAME, VERSION } = process.env
 
 const success_status_codes = [200, 201, 202, 203, 205, 206, 207, 208, 210, 226]
 
@@ -17,7 +17,8 @@ export async function fetchData(method, path, config = {}) {
   }
 
   init.headers = {
-    AppVersion: version,
+    AppName: NAME,
+    AppVersion: VERSION,
     'X-Request-ID': uuid(),
   }
 
