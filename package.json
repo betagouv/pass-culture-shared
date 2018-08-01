@@ -43,5 +43,5 @@
     "prettier": "$(yarn bin)/prettier --write 'src/**/*.js'",
     "watch": "nodemon --watch src --exec \"npm run compile\""
   },
-  "version": "0.0.6"
+  "version": "0.0.7"
 }

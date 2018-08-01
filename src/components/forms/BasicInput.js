@@ -22,7 +22,7 @@ const BasicInput = props => {
       checked={checked}
       className={`input is-${size}`}
       disabled={disabled}
-      id={props.id}
+      id={id}
       name={name}
       onChange={onChange}
       required={required}

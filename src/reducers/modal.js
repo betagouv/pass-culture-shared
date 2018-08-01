@@ -1,6 +1,5 @@
 export const CLOSE_MODAL = 'CLOSE_MODAL'
 export const SHOW_MODAL = 'SHOW_MODAL'
-export const LOCATION_CHANGE = '@@router/LOCATION_CHANGE'
 
 const initialState = {
   config: { fromDirection: 'right' },
@@ -11,10 +10,6 @@ const initialState = {
 export function modal(state = initialState, action) {
   switch (action.type) {
     case CLOSE_MODAL:
-      return Object.assign({}, state, {
-        isActive: false,
-      })
-    case LOCATION_CHANGE:
       return Object.assign({}, state, {
         isActive: false,
       })

@@ -1,14 +1,12 @@
 import uuid from 'uuid'
 
-import { API_URL } from './config'
-
 const { NAME, VERSION } = process.env
 
 const success_status_codes = [200, 201, 202, 203, 205, 206, 207, 208, 210, 226]
 
 export async function fetchData(method, path, config = {}) {
   // unpack
-  const { body, encode, token } = config
+  const { body, encode, token, url } = config
 
   // init
   const init = {
@@ -47,7 +45,7 @@ export async function fetchData(method, path, config = {}) {
   }
 
   // fetch
-  const result = await fetch(`${API_URL}/${path.replace(/^\//, '')}`, init)
+  const result = await fetch(`${url}/${path.replace(/^\//, '')}`, init)
 
   // check
   if (success_status_codes.includes(result.status)) {
@@ -55,7 +53,6 @@ export async function fetchData(method, path, config = {}) {
       window.cordova.plugins.CookieManagementPlugin.flush()
     }
     return { data: await result.json() }
-  } else {
-    return { errors: await result.json() }
   }
+  return { errors: await result.json() }
 }

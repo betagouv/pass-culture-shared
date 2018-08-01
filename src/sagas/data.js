@@ -3,38 +3,39 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { failData, successData } from '../reducers/data'
 import { fetchData } from '../utils/request'
 
-function* fromWatchRequestDataActions(action) {
-  // UNPACK
-  const { method, path, config } = action
-  const { body, encode, type } = config || {}
+const fromWatchRequestDataActions = (extraConfig={}) =>
+  function* (action) {
+    // UNPACK
+    const { method, path, config } = action
+    const { body, encode, url } = Object.assign(extraConfig, config || {})
 
-  // DATA
-  try {
-    // CALL
-    const result = yield call(fetchData, method, path, { body, encode })
+    // DATA
+    try {
+      // CALL
+      const result = yield call(fetchData, method, path, { body, encode, url })
 
-    // SUCCESS OR FAIL
-    if (result.data) {
-      yield put(successData(method, path, result.data, config))
-    } else {
-      console.error(result.errors)
-      yield put(failData(method, path, result.errors, config))
-    }
-  } catch (error) {
-    yield put(
-      failData(
-        method,
-        path,
-        [
-          {
-            global: 'Erreur serveur. Tentez de rafraîchir la page.',
-          },
-        ],
-        config
+      // SUCCESS OR FAIL
+      if (result.data) {
+        yield put(successData(method, path, result.data, config))
+      } else {
+        console.error(result.errors)
+        yield put(failData(method, path, result.errors, config))
+      }
+    } catch (error) {
+      yield put(
+        failData(
+          method,
+          path,
+          [
+            {
+              global: 'Erreur serveur. Tentez de rafraîchir la page.',
+            },
+          ],
+          config
+        )
       )
-    )
+    }
   }
-}
 
 function* fromWatchFailDataActions(action) {
   if (action.config.handleFail) {
@@ -50,10 +51,10 @@ function* fromWatchSuccessDataActions(action) {
   }
 }
 
-export function* watchDataActions() {
+export function* watchDataActions(config = {}) {
   yield takeEvery(
     ({ type }) => /REQUEST_DATA_(.*)/.test(type),
-    fromWatchRequestDataActions
+    fromWatchRequestDataActions(config)
   )
   yield takeEvery(
     ({ type }) => /FAIL_DATA_(.*)/.test(type),
