@@ -1,5 +1,6 @@
 export * from './data'
 export * from './form'
+export * from './logger'
 export * from './object'
 export * from './react'
 export * from './request'
