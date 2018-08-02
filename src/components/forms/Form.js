@@ -75,8 +75,10 @@ class Form extends Component {
     }
 
     if (
-      get(notification, 'type') === 'danger' ||
-      get(notification, 'type') === 'success'
+      get(notification, 'name') === name && (
+        get(notification, 'type') === 'danger' ||
+        get(notification, 'type') === 'success'
+      )
     ) {
       closeNotification()
     }
@@ -90,7 +92,6 @@ class Form extends Component {
       action,
       formPatch,
       formatPatch,
-      handleSuccess,
       name,
       requestData,
       storePath,
@@ -114,6 +115,7 @@ class Form extends Component {
       handleFailRedirect,
       handleFail,
       history,
+      name,
       showNotification,
     } = this.props
 
@@ -126,6 +128,7 @@ class Form extends Component {
 
     handleFailNotification &&
       showNotification({
+        name,
         text: handleFailNotification(state, action),
         type: 'danger',
       })
@@ -139,9 +142,8 @@ class Form extends Component {
       handleSuccessNotification,
       handleSuccessRedirect,
       handleSuccess,
-      location,
       history,
-      patch,
+      name,
       showNotification,
     } = this.props
 
@@ -154,6 +156,7 @@ class Form extends Component {
 
     handleSuccessNotification &&
       showNotification({
+        name,
         text: handleSuccessNotification(state, action),
         type: 'success',
       })
@@ -225,7 +228,8 @@ class Form extends Component {
         }
 
         return newChild
-      } else if (c.type.displayName === 'SubmitButton') {
+      }
+      if (c.type.displayName === 'SubmitButton') {
         return React.cloneElement(
           c,
           Object.assign(
@@ -269,7 +273,8 @@ class Form extends Component {
               : {}
           )
         )
-      } else if (c.type.displayName === 'CancelButton') {
+      }
+      if (c.type.displayName === 'CancelButton') {
         return React.cloneElement(c, {
           onClick: () => {
             const { to } = c.props
@@ -294,8 +299,10 @@ class Form extends Component {
     } = this.props
 
     if (
-      get(notification, 'type') === 'danger' ||
-      get(notification, 'type') === 'success'
+      get(notification, 'name') === name && (
+        get(notification, 'type') === 'danger' ||
+        get(notification, 'type') === 'success'
+      )
     ) {
       closeNotification()
     }

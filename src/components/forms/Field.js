@@ -39,7 +39,7 @@ class Field extends Component {
   }
 
   onChange = (value, config) => {
-    const { InputComponent, onChange: formOnChange, type } = this.props
+    const { InputComponent, onChange: formOnChange } = this.props
 
     const storeValue = get(InputComponent, 'storeValue', this.props.storeValue)
 
