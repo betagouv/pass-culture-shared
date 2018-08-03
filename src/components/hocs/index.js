@@ -1,3 +1,4 @@
 import withLogin from './withLogin'
+import withSearch from './withSearch'
 
-export { withLogin }
+export { withLogin, withSearch }

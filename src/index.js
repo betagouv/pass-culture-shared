@@ -1,4 +1,5 @@
 export * from './components'
 export * from './reducers'
 export * from './sagas'
+export * from './selectors'
 export * from './utils'
