@@ -7,7 +7,7 @@ export const form = (state = initialState, action) => {
   switch (action.type) {
     case MERGE_FORM:
       const nextPatch = Object.assign({}, state[action.name])
-      for (let key of Object.keys(action.patch)) {
+      for (let key of Object.keys((action.patch || {}))) {
         const nextValue = action.patch[key]
         if (nextValue === '' || Number.isNaN(nextValue)) {
           if (nextPatch[key]) {
