@@ -1,15 +1,15 @@
 import moment from 'moment'
 
-export function addIsNewAttribute(object, comparedTo) {
-    if (typeof object === 'object' && object.dateCreatedAt && moment(object.dateCreatedAt).isAfter(moment(comparedTo))) {
-      return Object.assign({}, object, {isNew: true})
-    }
-    return object
-}
-
-export function dataWithIsNew(data, comparedTo) {
-  return Array.isArray(data) ?
-    data.map(el => addIsNewAttribute(el, comparedTo)) : (
-      typeof data === 'object' ? addIsNewAttribute(data) : data
-    )
+export function resolveIsNew(datum, data, config) {
+  const comparedTo = config.state.tracker[config.path]
+  const dateKey = config.dateKey || 'dateCreated'
+  if (
+    typeof datum === 'object' &&
+    datum[dateKey] &&
+    moment(datum[dateKey]).isAfter(moment(comparedTo))
+  ) {
+    console.log('datum', datum)
+    return Object.assign({ isNew: true }, datum)
+  }
+  return datum
 }

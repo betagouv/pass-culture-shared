@@ -32,7 +32,7 @@ export const createData = (initialState = {}) => (
         // force casting into an array
         [key]: !Array.isArray(action.data) ? [action.data] : action.data,
       },
-      action.config
+      Object.assign({ path: action.path }, action.config)
     )
 
     // last

@@ -20,16 +20,30 @@ export function getNextState(state, method, patch, config = {}) {
     // PREVIOUS
     const previousData = state[key]
 
-    // CLONE
-    // FORCE TO GIVE AN ID
-    // UNIFY BY ID
-    // (BECAUSE DEEPEST NORMALIZED DATA CAN RETURN ARRAY OF SAME ELEMENTS)
+    // TREAT
     const data = patch[key]
     if (!data) {
       continue
     }
-    const nextData = uniqBy(
-      data.map((datum, index) => Object.assign({ id: index }, datum)),
+    let nextData = uniqBy(
+      data.map((datum, index) => {
+
+        // CLONE
+        let nextDatum = Object.assign(
+          // FORCE TO GIVE AN ID
+          { id: index },
+          datum
+        )
+
+        // MAYBE RESOLVE
+        if (config.resolve) {
+          nextDatum = config.resolve(nextDatum, data, config)
+        }
+
+        return nextDatum
+      }),
+      // UNIFY BY ID
+      // (BECAUSE DEEPEST NORMALIZED DATA CAN RETURN ARRAY OF SAME ELEMENTS)
       datum => datum.id
     )
 

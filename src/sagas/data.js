@@ -6,8 +6,12 @@ import { fetchData } from '../utils/request'
 const fromWatchRequestDataActions = (extraConfig={}) =>
   function* (action) {
     // UNPACK
-    const { method, path, config } = action
-    const { body, encode, url } = Object.assign(extraConfig, config || {})
+    const { method, path } = action
+
+    // CONFIG
+    const state = yield select(state => state)
+    const config = Object.assign({ state }, extraConfig, action.config)
+    const { body, encode, url } = config
 
     // DATA
     try {
