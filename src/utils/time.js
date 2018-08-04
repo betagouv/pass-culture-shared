@@ -8,7 +8,6 @@ export function resolveIsNew(datum, data, config) {
     datum[dateKey] &&
     moment(datum[dateKey]).isAfter(moment(comparedTo))
   ) {
-    console.log('datum', datum)
     return Object.assign({ isNew: true }, datum)
   }
   return datum
