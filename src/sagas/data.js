@@ -1,4 +1,5 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
+import { call, put, race, select, takeEvery } from 'redux-saga/effects'
 
 import { failData, successData } from '../reducers/data'
 import { fetchData } from '../utils/request'
@@ -6,34 +7,53 @@ import { fetchData } from '../utils/request'
 const fromWatchRequestDataActions = (extraConfig={}) =>
   function* (action) {
     // UNPACK
-    const { method, path, config } = action
-    const { body, encode, url } = Object.assign(extraConfig, config || {})
+    const { method, path } = action
+
+    // CONFIG
+    const state = yield select(state => state)
+    const config = Object.assign({ state }, extraConfig, action.config)
+    const { body, encode, timeout, url } = config
 
     // DATA
     try {
-      // CALL
-      const result = yield call(fetchData, method, path, { body, encode, url })
 
-      // SUCCESS OR FAIL
-      if (result.data) {
-        yield put(successData(method, path, result.data, config))
+      // RACE
+      let fetchResult, timeoutResult
+      if (timeout) {
+        const raceResult = yield race({
+          fetchResult: call(fetchData, method, path, { body, encode, url }),
+          timeoutResult: call(delay, timeout)
+        })
+        fetchResult = raceResult.fetchResult
+        timeoutResult = raceResult.timeoutResult
       } else {
-        console.error(result.errors)
-        yield put(failData(method, path, result.errors, config))
+        fetchResult = yield call(fetchData, method, path, { body, encode, url })
       }
+
+      // RESULT
+      if (fetchResult) {
+        // SUCCESS OR FAIL
+        if (fetchResult.data) {
+          yield put(successData(method, path, fetchResult.data, config))
+        } else {
+          console.error(fetchResult.errors)
+          yield put(failData(method, path, fetchResult.errors, config))
+        }
+      } else if (timeoutResult) {
+        // TIMEOUT
+        const errors = [{
+          global: 'La connexion au serveur est trop faible',
+        }]
+        console.error(errors)
+        yield put(failData(method,path,errors,config))
+      }
+
     } catch (error) {
-      yield put(
-        failData(
-          method,
-          path,
-          [
-            {
-              global: 'Erreur serveur. Tentez de rafraîchir la page.',
-            },
-          ],
-          config
-        )
-      )
+      const errors = [{
+        global: 'Erreur serveur. Tentez de rafraîchir la page.',
+      }]
+      console.error(errors)
+      yield put(failData(method, path, errors, config))
     }
   }
 

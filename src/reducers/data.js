@@ -9,9 +9,11 @@ export const createData = (initialState = {}) => (
 ) => {
   if (action.type === ASSIGN_DATA) {
     return Object.assign({}, state, action.patch)
-  } else if (action.type === RESET_DATA) {
+  }
+  if (action.type === RESET_DATA) {
     return initialState
-  } else if (
+  }
+  if (
     /SUCCESS_DATA_(DELETE|GET|POST|PUT|PATCH)_(.*)/.test(action.type)
   ) {
     // unpack config
@@ -30,7 +32,7 @@ export const createData = (initialState = {}) => (
         // force casting into an array
         [key]: !Array.isArray(action.data) ? [action.data] : action.data,
       },
-      action.config
+      Object.assign({ path: action.path }, action.config)
     )
 
     // last
