@@ -46,6 +46,7 @@ export const createData = (initialState = {}) => (
   return state
 }
 
+// ACTIONS
 export const assignData = patch => ({
   patch,
   type: ASSIGN_DATA,

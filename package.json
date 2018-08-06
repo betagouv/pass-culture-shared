@@ -17,8 +17,10 @@
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.2.3",
+    "babel-jest": "^23.4.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.22.0",
     "eslint": "^4.1.1",
@@ -28,6 +30,7 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.1.0",
+    "jest": "^23.4.2",
     "nodemon": "^1.11.0",
     "prettier": "1.12.1",
     "prettier-eslint": "^8.8.2",
@@ -41,7 +44,8 @@
     "postinstall": "if [ -d \"src/\" ]; then npm run compile; fi",
     "precommit": "pretty-quick --staged",
     "prettier": "$(yarn bin)/prettier --write 'src/**/*.js'",
-    "watch": "nodemon --watch src --exec \"npm run compile\""
+    "watch": "nodemon --watch src --exec \"npm run compile\"",
+    "test": "yarn jest --env=jsdom"
   },
   "version": "0.0.10"
 }
