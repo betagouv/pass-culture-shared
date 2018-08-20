@@ -51,6 +51,40 @@ class Field extends Component {
     formOnChange(storedValue, Object.assign({}, this.props, config))
   }
 
+  renderErrors = () => {
+    const {
+      id,
+      errors
+    } = this.props
+
+    if (get(errors, 'length')) {
+      return errors.map((e, index) => (
+        <p
+          className="help is-danger columns"
+          id={`${id}-error`}
+          key={index}>
+          <Icon
+            className="column is-1"
+            svg="picto-warning"
+            alt="Warning"
+          />
+          <span className="column"> {e} </span>
+        </p>
+      ))
+    }
+    return (
+      <p
+        className="help is-danger columns"
+        id={`${id}-error`}>
+        <Icon
+          className="column is-1 is-invisible"
+          svg="picto-warning"
+          alt="Warning"
+        />
+      </p>
+    )
+  }
+
   renderInput = () => {
     const { id, InputComponent, readonly, required, value } = this.props
 
@@ -83,6 +117,8 @@ class Field extends Component {
 
     if (type === 'hidden') return $input
 
+    const $errors = this.renderErrors()
+
     if (layout === 'horizontal') {
       return (
         <div className="field is-horizontal">
@@ -104,20 +140,7 @@ class Field extends Component {
               })}>
               {$input}
             </div>
-            {errors &&
-              errors.map((e, i) => (
-                <p
-                  className="help is-danger columns"
-                  id={`${id}-error`}
-                  key={i}>
-                  <Icon
-                    className="column is-1"
-                    svg="picto-warning"
-                    alt="Warning"
-                  />
-                  <span className="column"> {e} </span>
-                </p>
-              ))}
+            {$errors}
           </div>
         </div>
       )
@@ -149,17 +172,7 @@ class Field extends Component {
           )}
           <div className="control">{$input}</div>
           <ul className="help is-danger" id={`${id}-error`}>
-            {errors &&
-              errors.map((e, i) => (
-                <li className="columns" key={i}>
-                  <Icon
-                    className="column is-1"
-                    svg="picto-warning"
-                    alt="Warning"
-                  />
-                  <p className="column"> {e} </p>
-                </li>
-              ))}
+            {$errors}
           </ul>
         </div>
       )
