@@ -2,7 +2,7 @@ import { delay } from 'redux-saga'
 import { call, put, race, select, takeEvery } from 'redux-saga/effects'
 
 import { failData, successData } from '../reducers/data'
-import { fetchData } from '../utils/request'
+import { fetchData } from '../utils/data'
 
 const fromWatchRequestDataActions = (extraConfig={}) =>
   function* (action) {
