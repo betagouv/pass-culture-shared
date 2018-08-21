@@ -1,7 +1,7 @@
 import classnames from 'classnames'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 
 import Icon from './Icon'
 import { closeModal } from '../reducers/modal'
