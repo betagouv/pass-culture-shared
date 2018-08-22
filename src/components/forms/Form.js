@@ -5,13 +5,12 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 
+import { addBlockers, removeBlockers } from '../../reducers/blockers'
 import { requestData } from '../../reducers/data'
 import { removeErrors } from '../../reducers/errors'
 import { mergeForm } from '../../reducers/form'
-import {
-  closeNotification,
-  showNotification,
-} from '../../reducers/notification'
+import { closeModal, showModal } from '../../reducers/modal'
+import { closeNotification, showNotification } from '../../reducers/notification'
 import { recursiveMap } from '../../utils/react'
 import { pluralize } from '../../utils/string'
 
@@ -27,10 +26,11 @@ class Form extends Component {
 
   static defaultProps = {
     errorsPatch: {},
-    failNotification: 'Formulaire non validé',
+    failNotification: "Formulaire non validé",
     formatPatch: data => data,
     formPatch: {},
-    successNotification: 'Formulaire non validé',
+    historyBlock: "Êtes vous surs de vouloir quitter la page ?",
+    successNotification: "Formulaire non validé",
     Tag: 'form',
   }
 
@@ -310,6 +310,79 @@ class Form extends Component {
     mergeForm(name, patch)
   }
 
+  componentDidMount() {
+    const {
+      addBlockers,
+      historyBlock,
+      handleHistoryBlock,
+      name
+    } = this.props
+
+    if (handleHistoryBlock) {
+      addBlockers(name, handleHistoryBlock)
+      return
+    }
+
+    if (historyBlock) {
+      addBlockers(name,
+        (nextLocation, unblock) => {
+          const {
+            closeModal,
+            formPatch,
+            history,
+            showModal
+          } = this.props
+          const {
+            pathname,
+            search
+          } = nextLocation
+
+          // NO NEED TO BLOCK IF THE FORM IS EMPTY
+          if (!formPatch || !Object.keys(formPatch).length) {
+            return false
+          }
+
+          showModal(
+            <div>
+              <div className="subtitle">
+                {historyBlock}
+              </div>
+              <div className="level">
+                <button
+                  className="button is-primary level-item"
+                  onClick={() => {
+                    closeModal()
+                    unblock()
+                    history.push(`${pathname}${search}`)
+                  }}>
+                  Oui
+                </button>
+                <button
+                  className="button is-secondary level-item"
+                  onClick={closeModal}>
+                  Non
+                </button>
+              </div>
+            </div>,
+            {
+              isUnclosable: true
+            }
+          )
+
+          return true
+        }
+      )
+    }
+  }
+
+  componentWillUnmount () {
+    const {
+      name,
+      removeBlockers
+    } = this.props
+    removeBlockers(name)
+  }
+
   render() {
     const { action, className, name, Tag } = this.props
     const { method } = this.state
@@ -339,10 +412,14 @@ export default compose(
       errorsPatch: get(state, `errors.${ownProps.name}`),
     }),
     {
+      addBlockers,
+      closeModal,
       closeNotification,
       mergeForm,
+      removeBlockers,
       removeErrors,
       requestData,
+      showModal,
       showNotification,
     }
   )

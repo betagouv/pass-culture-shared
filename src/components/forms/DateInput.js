@@ -15,6 +15,7 @@ class DateInput extends Component {
       dateFormat,
       filterDate,
       highlightedDates,
+      id,
       maxDate,
       minDate,
       readOnly,
@@ -33,6 +34,7 @@ class DateInput extends Component {
             className="date"
             filterDate={filterDate}
             highlightDates={(highlightedDates || []).map(d => moment(d))}
+            id={id}
             minDate={
               minDate === 'today' ? moment() : minDate && moment(minDate)
             }
