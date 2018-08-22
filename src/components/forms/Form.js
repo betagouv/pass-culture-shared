@@ -5,17 +5,17 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 
+import Block from '../Block'
+import { blockersByName } from '../hocs/withBlock'
 import { requestData } from '../../reducers/data'
 import { removeErrors } from '../../reducers/errors'
 import { mergeForm } from '../../reducers/form'
-import {
-  closeNotification,
-  showNotification,
-} from '../../reducers/notification'
+import { closeModal, showModal } from '../../reducers/modal'
+import { closeNotification, showNotification } from '../../reducers/notification'
 import { recursiveMap } from '../../utils/react'
 import { pluralize } from '../../utils/string'
 
-class Form extends Component {
+class _Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -26,11 +26,12 @@ class Form extends Component {
   }
 
   static defaultProps = {
+    BlockComponent: Block,
     errorsPatch: {},
-    failNotification: 'Formulaire non validé',
+    failNotification: "Formulaire non validé",
     formatPatch: data => data,
     formPatch: {},
-    successNotification: 'Formulaire non validé',
+    successNotification: "Formulaire non validé",
     Tag: 'form',
   }
 
@@ -310,6 +311,41 @@ class Form extends Component {
     mergeForm(name, patch)
   }
 
+  componentDidMount() {
+    const {
+      BlockComponent,
+      name
+    } = this.props
+
+    if (BlockComponent) {
+
+      console.log('QDQSD')
+      
+      blockersByName[name] = (nextLocation, unblock) => {
+        const {
+          formPatch,
+          showModal
+        } = this.props
+
+        // NO NEED TO BLOCK IF THE FORM IS EMPTY
+        if (!formPatch || !Object.keys(formPatch).length) {
+          return false
+        }
+
+        showModal(<BlockComponent
+          nextLocation={nextLocation}
+          unblock={unblock} />, { isUnclosable: false })
+
+        return true
+      }
+    }
+  }
+
+  componentWillUnmount () {
+    const { name } = this.props
+    blockersByName[name] && delete blockersByName[name]
+  }
+
   render() {
     const { action, className, name, Tag } = this.props
     const { method } = this.state
@@ -330,7 +366,7 @@ class Form extends Component {
   }
 }
 
-export default compose(
+const Form = compose(
   withRouter,
   connect(
     (state, ownProps) => ({
@@ -339,11 +375,18 @@ export default compose(
       errorsPatch: get(state, `errors.${ownProps.name}`),
     }),
     {
+      closeModal,
       closeNotification,
       mergeForm,
       removeErrors,
       requestData,
+      showModal,
       showNotification,
     }
   )
-)(Form)
+)(_Form)
+
+Form.defaultProps = _Form.defaultProps
+Form.inputsByType = _Form.inputsByType
+
+export default Form

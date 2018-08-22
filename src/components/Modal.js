@@ -2,6 +2,7 @@ import classnames from 'classnames'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { compose } from 'redux'
 
 import Icon from './Icon'
 import { closeModal } from '../reducers/modal'
@@ -146,10 +147,11 @@ Modal.defaultProps = {
   maskColor: 'rgba(0, 0, 0, 0.8)',
 }
 
-export default withRouter(
+export default compose(
+  withRouter,
   connect(
     ({ modal: { config, $modal, isActive } }) =>
       Object.assign({ $modal, isActive }, config),
     { closeModal }
-  )(Modal)
-)
+  )
+)(Modal)
