@@ -13,7 +13,8 @@ import TextareaInput from './TextareaInput'
 import TextInput from './TextInput'
 import TimeInput from './TimeInput'
 
-Form.WrappedComponent.inputsByType = {
+
+Form.inputsByType = {
   checkbox: CheckboxInput,
   date: DateInput,
   email: TextInput,

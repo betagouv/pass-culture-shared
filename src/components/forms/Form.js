@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 
-import { addBlockers, removeBlockers } from '../../reducers/blockers'
+import Block from '../Block'
+import { blockersByName } from '../hocs/withBlock'
 import { requestData } from '../../reducers/data'
 import { removeErrors } from '../../reducers/errors'
 import { mergeForm } from '../../reducers/form'
@@ -14,7 +15,7 @@ import { closeNotification, showNotification } from '../../reducers/notification
 import { recursiveMap } from '../../utils/react'
 import { pluralize } from '../../utils/string'
 
-class Form extends Component {
+class _Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -25,11 +26,11 @@ class Form extends Component {
   }
 
   static defaultProps = {
+    BlockComponent: Block,
     errorsPatch: {},
     failNotification: "Formulaire non validé",
     formatPatch: data => data,
     formPatch: {},
-    historyBlock: "Êtes vous surs de vouloir quitter la page ?",
     successNotification: "Formulaire non validé",
     Tag: 'form',
   }
@@ -312,75 +313,37 @@ class Form extends Component {
 
   componentDidMount() {
     const {
-      addBlockers,
-      historyBlock,
-      handleHistoryBlock,
+      BlockComponent,
       name
     } = this.props
 
-    if (handleHistoryBlock) {
-      addBlockers(name, handleHistoryBlock)
-      return
-    }
+    if (BlockComponent) {
 
-    if (historyBlock) {
-      addBlockers(name,
-        (nextLocation, unblock) => {
-          const {
-            closeModal,
-            formPatch,
-            history,
-            showModal
-          } = this.props
-          const {
-            pathname,
-            search
-          } = nextLocation
+      console.log('QDQSD')
+      
+      blockersByName[name] = (nextLocation, unblock) => {
+        const {
+          formPatch,
+          showModal
+        } = this.props
 
-          // NO NEED TO BLOCK IF THE FORM IS EMPTY
-          if (!formPatch || !Object.keys(formPatch).length) {
-            return false
-          }
-
-          showModal(
-            <div>
-              <div className="subtitle">
-                {historyBlock}
-              </div>
-              <div className="level">
-                <button
-                  className="button is-primary level-item"
-                  onClick={() => {
-                    closeModal()
-                    unblock()
-                    history.push(`${pathname}${search}`)
-                  }}>
-                  Oui
-                </button>
-                <button
-                  className="button is-secondary level-item"
-                  onClick={closeModal}>
-                  Non
-                </button>
-              </div>
-            </div>,
-            {
-              isUnclosable: true
-            }
-          )
-
-          return true
+        // NO NEED TO BLOCK IF THE FORM IS EMPTY
+        if (!formPatch || !Object.keys(formPatch).length) {
+          return false
         }
-      )
+
+        showModal(<BlockComponent
+          nextLocation={nextLocation}
+          unblock={unblock} />, { isUnclosable: false })
+
+        return true
+      }
     }
   }
 
   componentWillUnmount () {
-    const {
-      name,
-      removeBlockers
-    } = this.props
-    removeBlockers(name)
+    const { name } = this.props
+    blockersByName[name] && delete blockersByName[name]
   }
 
   render() {
@@ -403,7 +366,7 @@ class Form extends Component {
   }
 }
 
-export default compose(
+const Form = compose(
   withRouter,
   connect(
     (state, ownProps) => ({
@@ -412,15 +375,18 @@ export default compose(
       errorsPatch: get(state, `errors.${ownProps.name}`),
     }),
     {
-      addBlockers,
       closeModal,
       closeNotification,
       mergeForm,
-      removeBlockers,
       removeErrors,
       requestData,
       showModal,
       showNotification,
     }
   )
-)(Form)
+)(_Form)
+
+Form.defaultProps = _Form.defaultProps
+Form.inputsByType = _Form.inputsByType
+
+export default Form
