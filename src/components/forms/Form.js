@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 
-import Block from '../Block'
 import { blockersByName } from '../hocs/withBlock'
 import { requestData } from '../../reducers/data'
 import { removeErrors } from '../../reducers/errors'
@@ -26,7 +25,6 @@ class _Form extends Component {
   }
 
   static defaultProps = {
-    BlockComponent: Block,
     errorsPatch: {},
     failNotification: "Formulaire non validé",
     formatPatch: data => data,
@@ -318,9 +316,6 @@ class _Form extends Component {
     } = this.props
 
     if (BlockComponent) {
-
-      console.log('QDQSD')
-      
       blockersByName[name] = (nextLocation, unblock) => {
         const {
           formPatch,
@@ -334,7 +329,7 @@ class _Form extends Component {
 
         showModal(<BlockComponent
           nextLocation={nextLocation}
-          unblock={unblock} />, { isUnclosable: false })
+          unblock={unblock} />, { isUnclosable: true })
 
         return true
       }

@@ -11,12 +11,11 @@ const withBlock = WrappedComponent => {
 
       this.unblock && this.unblock()
 
+      if (!Object.keys(blockersByName).length) {
+        return true
+      }
+
       this.unblock = history.block(nextLocation => {
-
-        if (!Object.keys(blockersByName).length) {
-          return true
-        }
-
         // test all the blockersByName
         for (let blocker of Object.values(blockersByName)) {
           const shouldBlock = blocker && blocker(nextLocation, this.unblock)
