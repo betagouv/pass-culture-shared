@@ -3,9 +3,9 @@ import React, { Component } from 'react'
 import BasicInput from './BasicInput'
 
 class CheckboxInput extends Component {
-  onChange = e => {
+  onChange = event => {
     const { onChange: fieldOnChange } = this.props
-    fieldOnChange(e.target.checked)
+    fieldOnChange(event.target.checked, { event })
   }
 
   render() {

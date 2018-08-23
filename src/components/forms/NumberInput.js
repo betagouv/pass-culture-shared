@@ -7,10 +7,13 @@ class NumberInput extends Component {
     return value === 0 ? 0 : value
   }
 
-  onChange = e => {
-    const value = e.target.value ? parseInt(e.target.value, 10) : 0
-    e.target.value = value
-    this.props.onChange(value)
+  onChange = event => {
+    const { onChange: fieldOnChange } = this.props
+    const value = event.target.value
+      ? parseInt(event.target.value, 10) 
+      : 0
+    event.target.value = value
+    fieldOnChange(value, { event })
   }
 
   render() {

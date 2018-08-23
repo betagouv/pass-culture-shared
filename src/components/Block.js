@@ -33,7 +33,9 @@ const Block = ({
         </button>
         <button
           className="button is-secondary level-item"
-          onClick={closeModal}>
+          onClick={() => {
+            dispatch(closeModal())
+          }}>
           Non
         </button>
       </div>

@@ -22,9 +22,9 @@ class SelectInput extends Component {
     }
   }
 
-  onChange = e => {
+  onChange = event => {
     const { onChange: fieldOnChange } = this.props
-    fieldOnChange(e.target.value)
+    fieldOnChange(event.target.value, { event })
   }
 
   render() {

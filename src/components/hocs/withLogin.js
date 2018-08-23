@@ -31,13 +31,6 @@ const withLogin = (config = {}) => WrappedComponent => {
         })
         return
       }
-
-      /*
-      if (user && !prevProps.user) {
-        if (successRedirect && successRedirect !== location.pathname)
-          history.push(successRedirect)
-      }
-      */
     }
 
     render() {
