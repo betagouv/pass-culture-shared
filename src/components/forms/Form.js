@@ -102,7 +102,10 @@ class _Form extends Component {
       storePath,
     } = this.props
 
-    this.setState({ isLoading: true })
+    this.setState({
+      hasAtLeastOneTargetValue: false, 
+      isLoading: true
+    })
 
     requestData(this.state.method, action.replace(/^\//g, ''), {
       body: formatPatch(formPatch),
