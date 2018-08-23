@@ -18,6 +18,7 @@ class _Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      hasAtLeastOneTargetValue: false,
       isEditing: false,
       isLoading: false,
       method: null,
@@ -59,6 +60,11 @@ class _Form extends Component {
       patch: basePatch,
       removeErrors,
     } = this.props
+    const { hasAtLeastOneTargetValue } = this.state
+
+    if (!hasAtLeastOneTargetValue && get(config, 'event.target.value')) {
+      this.setState({ hasAtLeastOneTargetValue: true })
+    }
 
     // no need to go further if patch is actually equal to formPatch
     const mergePatch = Object.assign({}, patch)
@@ -309,21 +315,23 @@ class _Form extends Component {
     mergeForm(name, patch)
   }
 
-  componentDidMount() {
+  handleHistoryBlock () {
     const {
-      BlockComponent,
-      name
+      BlockComponent
     } = this.props
 
     if (BlockComponent) {
-      blockersByName[name] = (nextLocation, unblock) => {
+      blockersByName.form = (nextLocation, unblock) => {
         const {
-          formPatch,
+          readOnly,
           showModal
         } = this.props
+        const {
+          hasAtLeastOneTargetValue
+        } = this.state
 
-        // NO NEED TO BLOCK IF THE FORM IS EMPTY
-        if (!formPatch || !Object.keys(formPatch).length) {
+        // NO NEED TO BLOCK IF THE FORM IS READONLY OR WITH NO INTERACTION FROM USER
+        if (readOnly || !hasAtLeastOneTargetValue) {
           return false
         }
 
@@ -336,9 +344,24 @@ class _Form extends Component {
     }
   }
 
+  componentDidMount() {
+    this.handleHistoryBlock()
+  }
+
+  componentDidUpdate(prevProps) {
+    const { location, readOnly } = this.props
+
+    if (prevProps.readOnly !== readOnly) {
+      this.handleHistoryBlock()
+    }
+    if (prevProps.location.key !== location.key) {
+      this.setState({ hasAtLeastOneTargetValue: false })
+    }
+  }
+
   componentWillUnmount () {
-    const { name } = this.props
-    blockersByName[name] && delete blockersByName[name]
+    const { BlockComponent } = this.props
+    BlockComponent && blockersByName.form && delete blockersByName.form
   }
 
   render() {
@@ -380,6 +403,7 @@ const Form = compose(
     }
   )
 )(_Form)
+
 
 Form.defaultProps = _Form.defaultProps
 Form.inputsByType = _Form.inputsByType

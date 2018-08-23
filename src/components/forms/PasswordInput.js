@@ -22,7 +22,10 @@ class PasswordInput extends Component {
     })
   }
 
-  onInputChange = e => this.props.onChange(e.target.value)
+  onInputChange = event => {
+    const { onChange: fieldOnChange } = this.props
+    fieldOnChange(event.target.value, { event })
+  }
 
   render() {
     const { noPasswordToggler, ...otherProps } = this.props

@@ -9,14 +9,14 @@ class TimeInput extends Component {
     return value && tz && moment(value).tz(tz)
   }
 
-  onInputChange = e => {
-    const { onChange, value } = this.props
-    if (onChange && value) {
-      const [hour, minutes] = e.target.value.split(':')
+  onInputChange = event => {
+    const { onChange: fieldOnChange, value } = this.props
+    if (fieldOnChange && value) {
+      const [hour, minutes] = event.target.value.split(':')
       const date = moment(value)
         .hours(hour)
         .minutes(minutes)
-      onChange(date && date.toISOString())
+      fieldOnChange(date && date.toISOString(), { event })
     }
   }
 

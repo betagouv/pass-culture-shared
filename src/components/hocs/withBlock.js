@@ -33,6 +33,12 @@ const withBlock = WrappedComponent => {
       this.handleHistoryBlock()
     }
 
+    componentDidUpdate(prevProps) {
+      if (prevProps.location.key !== this.props.location.key) {
+        this.handleHistoryBlock()
+      }
+    }
+
     render () {
       return <WrappedComponent {...this.props} blockersByName={blockersByName} />
     }

@@ -2,7 +2,9 @@ import React from 'react'
 import Textarea from 'react-autosize-textarea'
 
 const TextareaInput = props => {
-  const onChange = e => props.onChange(e.target.value)
+  const { onChange: fieldOnChange } = props
+
+  const onChange = event => fieldOnChange(event.target.value, { event })
 
   return (
     <Textarea
