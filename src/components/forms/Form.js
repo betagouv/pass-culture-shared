@@ -62,7 +62,7 @@ class _Form extends Component {
     } = this.props
     const { hasAtLeastOneTargetValue } = this.state
 
-    if (!hasAtLeastOneTargetValue && get(config, 'event.target.value')) {
+    if (!hasAtLeastOneTargetValue && get(config, 'event.target')) {
       this.setState({ hasAtLeastOneTargetValue: true })
     }
 
@@ -92,7 +92,7 @@ class _Form extends Component {
   }
 
   onSubmit = e => {
-    e.preventDefault()
+    e && e.preventDefault()
     const {
       action,
       formPatch,
@@ -103,7 +103,7 @@ class _Form extends Component {
     } = this.props
 
     this.setState({
-      hasAtLeastOneTargetValue: false, 
+      hasAtLeastOneTargetValue: false,
       isLoading: true
     })
 
@@ -351,8 +351,15 @@ class _Form extends Component {
     this.handleHistoryBlock()
   }
 
-  componentDidUpdate(prevProps) {
-    const { location, readOnly } = this.props
+  componentDidUpdate(prevProps, prevState) {
+    const {
+      isAutoSubmit,
+      location,
+      readOnly
+    } = this.props
+    const {
+      hasAtLeastOneTargetValue
+    } = this.state
 
     if (prevProps.readOnly !== readOnly) {
       this.handleHistoryBlock()
@@ -360,6 +367,14 @@ class _Form extends Component {
     if (prevProps.location.key !== location.key) {
       this.setState({ hasAtLeastOneTargetValue: false })
     }
+
+    if (
+      isAutoSubmit &&
+      hasAtLeastOneTargetValue && !prevState.hasAtLeastOneTargetValue
+    ) {
+      this.onSubmit()
+    }
+
   }
 
   componentWillUnmount () {
@@ -407,8 +422,10 @@ const Form = compose(
   )
 )(_Form)
 
-
+// WE NEED TO SHORT PASS THEM BECAUSE OF
+// THE compose withRouter, connect
 Form.defaultProps = _Form.defaultProps
 Form.inputsByType = _Form.inputsByType
+
 
 export default Form
