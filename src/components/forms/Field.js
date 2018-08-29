@@ -104,7 +104,6 @@ class Field extends Component {
 
   renderLayout() {
     const {
-      errors,
       id,
       isExpanded,
       label,

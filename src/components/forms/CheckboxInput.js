@@ -4,6 +4,7 @@ import BasicInput from './BasicInput'
 
 class CheckboxInput extends Component {
   onChange = event => {
+    event.persist()
     const { onChange: fieldOnChange } = this.props
     fieldOnChange(event.target.checked, { event })
   }
