@@ -19,7 +19,6 @@ const withLogin = (config = {}) => WrappedComponent => {
               history.push(successRedirect)
           },
           handleFail: () => {
-            console.log('failRedirect', failRedirect)
             if (failRedirect && failRedirect !== location.pathname)
               history.push(failRedirect)
           },
