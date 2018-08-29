@@ -67,7 +67,7 @@ class Field extends Component {
           <Icon
             className="column is-1"
             svg="picto-warning"
-            alt="Warning"
+            alt="Attention"
           />
           <span className="column"> {e} </span>
         </p>
@@ -80,7 +80,7 @@ class Field extends Component {
         <Icon
           className="column is-1 is-invisible"
           svg="picto-warning"
-          alt="Warning"
+          alt="Attention"
         />
       </p>
     )
