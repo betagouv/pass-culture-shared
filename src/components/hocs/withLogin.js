@@ -6,25 +6,20 @@ import { compose } from 'redux'
 import { requestData } from '../../reducers/data'
 
 const withLogin = (config = {}) => WrappedComponent => {
-  const { failRedirect, isRequired, successRedirect } = config
+  const { failRedirect, successRedirect } = config
 
   class _withLogin extends Component {
-    constructor(props) {
-      super(props)
-      this.isRequired = isRequired || Boolean(props.handleDataRequest)
-    }
-
     componentDidMount = (prevProps) => {
       const { history, location, user, requestData } = this.props
 
-      if (user === null && this.isRequired) {
+      if (user === null) {
         requestData('GET', `users/current`, {
-          key: 'users',
           handleSuccess: () => {
             if (successRedirect && successRedirect !== location.pathname)
               history.push(successRedirect)
           },
           handleFail: () => {
+            console.log('failRedirect', failRedirect)
             if (failRedirect && failRedirect !== location.pathname)
               history.push(failRedirect)
           },
