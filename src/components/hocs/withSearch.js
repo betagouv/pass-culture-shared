@@ -97,6 +97,7 @@ const withSearch = (config = {}) => WrappedComponent => {
           handleRemoveFilter={this.handleRemoveFilter}
           handleSearchChange={this.handleSearchChange}
           goToNextSearchPage={this.goToNextSearchPage}
+          handleQueryParamsChange={this.handleQueryParamsChange}
         />
       )
     }
