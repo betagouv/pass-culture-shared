@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 const CancelButton = ({ children, requiredFields, ...otherProps }) => {
   return <button {...otherProps}>{children}</button>

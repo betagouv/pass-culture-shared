@@ -5,8 +5,10 @@ import BasicInput from './BasicInput'
 const TextInput = props => {
   const { onChange: fieldOnChange } = props
 
-  const onInputChange = event =>
+  const onInputChange = event => {
+    event.persist()
     fieldOnChange(event.target.value, { event })
+  }
 
   const guessAutoComplete = () => {
     if (props.name === 'email') return 'email'

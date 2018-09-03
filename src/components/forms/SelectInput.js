@@ -24,6 +24,7 @@ class SelectInput extends Component {
 
   onChange = event => {
     const { onChange: fieldOnChange } = this.props
+    event.persist()
     fieldOnChange(event.target.value, { event })
   }
 

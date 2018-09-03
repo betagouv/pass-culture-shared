@@ -24,6 +24,7 @@ class PasswordInput extends Component {
 
   onInputChange = event => {
     const { onChange: fieldOnChange } = this.props
+    event.persist()
     fieldOnChange(event.target.value, { event })
   }
 
