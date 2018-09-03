@@ -102,6 +102,23 @@ class Field extends Component {
     return InputComponent && <InputComponent {...inputProps} />
   }
 
+  renderDisplayLength = () => {
+    const {
+      displayMaxLength,
+      maxLength,
+      value
+    } = this.props
+    if (!displayMaxLength) {
+      return
+    }
+
+    return (
+      <span className="has-text-weight-light is-size-7" >
+        {value.length} / {maxLength} caractères
+      </span>
+    )
+  }
+
   renderLayout() {
     const {
       id,
@@ -118,6 +135,7 @@ class Field extends Component {
     if (type === 'hidden') return $input
 
     const $errors = this.renderErrors()
+    const $displayLength = this.renderDisplayLength()
 
     if (layout === 'horizontal') {
       return (
@@ -130,6 +148,7 @@ class Field extends Component {
                   {label}&nbsp;:
                 </span>
               </label>
+              {$displayLength}
             </div>
           )}
           <div className="field-body">
@@ -154,6 +173,7 @@ class Field extends Component {
               {$input}
               {label}
             </label>
+            {$displayLength}
           </div>
         )
       }
