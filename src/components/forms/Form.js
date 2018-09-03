@@ -215,10 +215,7 @@ class _Form extends Component {
         const newChild = React.cloneElement(
           c,
           Object.assign({
-            errors: []
-              .concat(errorsPatch)
-              .filter(e => get(e, c.props.name))
-              .map(e => get(e, c.props.name)),
+            errors: get(errorsPatch, c.props.name),
             id: `${name}-${c.props.name}`,
             InputComponent,
             layout,
@@ -247,6 +244,19 @@ class _Form extends Component {
               getDisabled: () => {
                 if (isEditing) {
                   return false
+                }
+
+                const disablingFields = requiredFields.filter(
+                  f => {
+                    if (f.props.disabling && f.props.disabling()) {
+                      return true
+                    }
+                    return false
+                  }
+                )
+
+                if (disablingFields.length > 0) {
+                  return true
                 }
 
                 const missingFields = requiredFields.filter(

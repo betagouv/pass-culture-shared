@@ -87,13 +87,14 @@ class Field extends Component {
   }
 
   renderInput = () => {
-    const { id, InputComponent, readonly, required, value } = this.props
+    const { errors, id, InputComponent, readonly, required, value } = this.props
 
     const displayValue =
       this.props.displayValue || get(InputComponent, 'displayValue')
 
     const inputProps = Object.assign({}, this.props, {
       'aria-describedby': `${id}-error`,
+      errors,
       onChange: this.onChange,
       required: required && !readonly,
       value: displayValue(value, this.props),
