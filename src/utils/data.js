@@ -46,16 +46,34 @@ export async function fetchData(method, path, config = {}) {
   }
 
   // fetch
-  const result = await fetch(`${url}/${path.replace(/^\//, '')}`, init)
+  const fetchResult = await fetch(`${url}/${path.replace(/^\//, '')}`, init)
+
+  // prepare result
+  const {
+    ok,
+    status
+  } = fetchResult
+  const result = {
+    ok,
+    status
+  }
 
   // check
-  if (success_status_codes.includes(result.status)) {
+  if (success_status_codes.includes(status)) {
+
+    // TODO: do we need that here precisely ?
     if (window.cordova) {
       window.cordova.plugins.CookieManagementPlugin.flush()
     }
-    return { data: await result.json() }
+
+    // success with data
+    result.data = await fetchResult.json()
+    return result
   }
-  return { errors: await result.json() }
+
+  // fail with errors
+  result.errors = await fetchResult.json()
+  return result
 }
 
 

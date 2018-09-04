@@ -10,8 +10,7 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
     const { method, path } = action
 
     // CONFIG
-    const state = yield select(state => state)
-    const config = Object.assign({ state }, extraConfig, action.config)
+    const config = Object.assign({}, extraConfig, action.config)
     const { body, encode, timeout, url } = config
 
     // DATA
@@ -32,6 +31,11 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
 
       // RESULT
       if (fetchResult) {
+
+        // PASSING CONFIG
+        const { ok, status } = fetchResult
+        Object.assign(config, { ok, status })
+
         // SUCCESS OR FAIL
         if (fetchResult.data) {
           yield put(successData(method, path, fetchResult.data, config))
@@ -45,13 +49,18 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
           global: 'La connexion au serveur est trop faible',
         }]
         console.error(errors)
-        yield put(failData(method,path,errors,config))
+        yield put(failData(method, path, errors, config))
       }
 
     } catch (error) {
-      const errors = [{
-        global: 'Erreur serveur. Tentez de rafraîchir la page.',
-      }]
+      const errors = [
+        {
+          global: 'Erreur serveur. Tentez de rafraîchir la page.',
+        },
+        {
+          data: error
+        }
+      ]
       console.error(errors)
       yield put(failData(method, path, errors, config))
     }
