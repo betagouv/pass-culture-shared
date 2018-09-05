@@ -1,3 +1,4 @@
+import get from 'lodash.get'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
@@ -16,12 +17,15 @@ const withSearch = (config = {}) => WrappedComponent => {
   })
 
   class _withSearch extends Component {
-    constructor() {
+    constructor(props) {
       super()
       this.state = {
-        queryParams: defaultQueryParams,
         page: 1,
+        queryParams: defaultQueryParams,
+        value: null
       }
+      props.assignData({ [dataKey]: [] })
+
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -66,13 +70,17 @@ const withSearch = (config = {}) => WrappedComponent => {
         history,
         location
       } = this.props
-      const { queryParams } = this.state
+      const { queryParams, value } = this.state
+
+      console.log('>>>>', newValue, queryParams)
 
       const newPath = `${location.pathname}?${objectToQueryString(
         Object.assign({}, queryParams, newValue)
       )}`
-      assignData({ [dataKey]: [] })
+      if (get(value, 'search')!== get(newValue, 'search'))
+        assignData({ [dataKey]: [] })
       this.setState({
+        value: newValue,
         page: 1,
       })
       history.push(newPath)
