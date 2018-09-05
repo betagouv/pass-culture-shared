@@ -1,8 +1,6 @@
 import moment from 'moment'
 
-export function resolveIsNew(datum, data, config) {
-  const comparedTo = config.state.tracker[config.path]
-  const dateKey = config.dateKey || 'dateCreated'
+export function resolveIsNew(datum, dateKey, comparedTo) {
   if (
     typeof datum === 'object' &&
     datum[dateKey] &&
