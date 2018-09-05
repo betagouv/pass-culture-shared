@@ -33,7 +33,9 @@
   }
 }
 
+
 .field {
+
   .required:not(.readOnly) {
     &:after {
       content: ' *';
@@ -41,6 +43,7 @@
       display: inline;
     }
   }
+
   &.checkbox {
     align-items: flex-start;
     display: flex;

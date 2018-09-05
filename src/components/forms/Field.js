@@ -55,7 +55,7 @@ class Field extends Component {
   renderErrors = () => {
     const {
       id,
-      errors
+      errors,
     } = this.props
 
     if (get(errors, 'length')) {
@@ -65,11 +65,11 @@ class Field extends Component {
           id={`${id}-error`}
           key={index}>
           <Icon
-            className="column is-1"
+            className="column is-1 is-paddingless"
             svg="picto-warning"
             alt="Attention"
           />
-          <span className="column"> {e} </span>
+          <span className="column is-paddingless"> {e} </span>
         </p>
       ))
     }
@@ -78,7 +78,7 @@ class Field extends Component {
         className="help is-danger columns"
         id={`${id}-error`}>
         <Icon
-          className="column is-1 is-invisible"
+          className="column is-1 is-invisible is-paddingless"
           svg="picto-warning"
           alt="Attention"
         />
