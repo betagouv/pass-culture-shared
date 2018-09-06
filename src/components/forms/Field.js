@@ -159,7 +159,7 @@ class Field extends Component {
                 'is-expanded': isExpanded,
               })}>
               {$input}
-              {sublabel && <p class="has-text-weight-light is-size-7">{sublabel}</p>}
+              {sublabel && <p className="has-text-weight-light is-size-7">{sublabel}</p>}
             </div>
             {$errors}
           </div>
