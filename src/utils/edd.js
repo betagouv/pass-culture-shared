@@ -1,4 +1,4 @@
-export edd_codes_musique = [
+export const edd_codes_musique = [
     {code: 501, label: 'Jazz', children: [
         {code: 502, label: 'Acid Jazz'},
         {code: 503, label: 'Avant-Garde Jazz'},
@@ -215,7 +215,7 @@ export edd_codes_musique = [
     ]},
 ]
 
-export edd_codes = [
+export const edd_codes = [
   {code: 100, label: 'Arts de la rue', children: [
       {code: 101, label: 'Carnaval'},
       {code: 102, label: 'Fanfare'},
@@ -258,7 +258,6 @@ export edd_codes = [
       {code: 405, label: 'Stand Up'},
       {code: 406, label: 'Ventriloque'},
   ]},
-  {code: 500, label: 'Musique', children: edd_codes_musique},
   {code: 1100, label: 'Spectacle Musical / Cabaret / Opérette', children: [
       {code: 1101, label: 'Cabaret'},
       {code: 1102, label: 'Café Concert'},
@@ -281,7 +280,7 @@ export edd_codes = [
       {code: 1205, label: 'Spectacle pédagogique'},
       {code: 1206, label: 'Marionettes'},
       {code: 1207, label: 'Comédie musicale jeunesse'},
-      {code: 1208, label: 'Théâtre d'Ombres'},
+      {code: 1208, label: "Théâtre d'Ombres"},
   ]},
   {code: 1300, label: 'Théâtre', children: [
       {code: 1301, label: 'Boulevard'},
@@ -291,7 +290,7 @@ export edd_codes = [
       {code: 1305, label: 'Lecture'},
       {code: 1306, label: 'Spectacle Scénographique'},
       {code: 1307, label: 'Théâtre Experimental'},
-      {code: 1308, label: 'Théâtre d'Objet'},
+      {code: 1308, label: "Théâtre d'Objet"},
       {code: 1309, label: 'Tragédie'},
   ]},
   {code: 1400, label: 'Pluridisciplinaire', children: [
