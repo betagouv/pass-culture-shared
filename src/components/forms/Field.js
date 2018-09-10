@@ -114,7 +114,7 @@ class Field extends Component {
 
     return (
       <span className="has-text-weight-light is-size-7" >
-        {value.length} / {maxLength} caractères
+        {get(value, 'length', 0)} / {maxLength} caractères
       </span>
     )
   }
