@@ -217,6 +217,7 @@ class _Form extends Component {
           Object.assign({
             errors: get(errorsPatch, c.props.name),
             id: `${name}-${c.props.name}`,
+            formName: name,
             InputComponent,
             layout,
             onChange,
