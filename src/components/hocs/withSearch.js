@@ -12,6 +12,8 @@ const withSearch = (config = {}) => WrappedComponent => {
 
   const { dataKey } = config
   const defaultQueryParams = config.defaultQueryParams || ({
+    distance: undefined,
+    from_date: undefined,
     search: undefined,
     order_by: `createdAt+desc`,
   })
@@ -50,6 +52,18 @@ const withSearch = (config = {}) => WrappedComponent => {
       this.setState(previousState => ({ page: previousState.page + 1 }))
     }
 
+    handleClearQueryParams = () => {
+      const {
+        history,
+        location
+      } = this.props
+      this.setState({
+        queryParams: defaultQueryParams,
+        search: undefined
+      })
+      history.push(location.pathname)
+    }
+
     handleOrderDirectionChange = e => {
       const [by, direction] = this.state.queryParams.order_by.split('+')
       this.handleQueryParamsChange({
@@ -72,7 +86,6 @@ const withSearch = (config = {}) => WrappedComponent => {
       } = this.props
       const { queryParams, value } = this.state
 
-      console.log('>>>>', newValue, queryParams)
 
       const newPath = `${location.pathname}?${objectToQueryString(
         Object.assign({}, queryParams, newValue)
@@ -100,6 +113,7 @@ const withSearch = (config = {}) => WrappedComponent => {
         <WrappedComponent
           {...this.props}
           {...this.state}
+          handleClearQueryParams={this.handleClearQueryParams}
           handleOrderByChange={this.handleOrderByChange}
           handleOrderDirectionChange={this.handleOrderDirectionChange}
           handleRemoveFilter={this.handleRemoveFilter}
