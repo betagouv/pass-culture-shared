@@ -39,26 +39,31 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
         // SUCCESS OR FAIL
         if (fetchResult.data) {
           yield put(successData(method, path, fetchResult.data, config))
-        } else {
+        } else if (fetchResult.errors) {
           console.error(fetchResult.errors)
           yield put(failData(method, path, fetchResult.errors, config))
+        } else {
+          console.warn(`expected a fetched data or a errors from ${method} ${path}`)
         }
       } else if (timeoutResult) {
         // TIMEOUT
         const errors = [{
-          global: 'La connexion au serveur est trop faible',
+          global: ['La connexion au serveur est trop faible'],
         }]
         console.error(errors)
         yield put(failData(method, path, errors, config))
       }
 
     } catch (error) {
+
+      // catch is a normally a fail of the api
+      Object.assign(config, { ok: false, status: 500 })
       const errors = [
         {
-          global: 'Erreur serveur. Tentez de rafraîchir la page.',
+          global: ['Erreur serveur. Tentez de rafraîchir la page.'],
         },
         {
-          data: error
+          data: [String(error)]
         }
       ]
       console.error(errors)
