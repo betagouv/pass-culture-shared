@@ -61,15 +61,15 @@ class Field extends Component {
     if (get(errors, 'length')) {
       return errors.map((e, index) => (
         <p
-          className="help is-danger columns"
+          className="help is-danger columns is-vcentered"
           id={`${id}-error`}
           key={index}>
           <Icon
-            className="column is-1 is-paddingless"
+            className="column is-1"
             svg="picto-warning"
             alt="Attention"
           />
-          <span className="column is-paddingless"> {e} </span>
+          <span className="column is-paddingless is-narrow"> {e} </span>
         </p>
       ))
     }
