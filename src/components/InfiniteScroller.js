@@ -1,3 +1,4 @@
+import get from 'lodash.get'
 import classnames from 'classnames'
 import React, { Component } from 'react'
 
@@ -25,11 +26,15 @@ class InfiniteScroller extends Component {
       <Spinner Tag="li" style={{ justifyContent: 'center' }} />
     ),
     renderFinished: () => (
-      <li style={{ justifyContent: 'center' }}>C'est fini !</li>
+      <li style={{ justifyContent: 'center' }}>
+        C'est fini !
+      </li>
     ),
     renderErrors: errors => (
-      <li className="notification is-danger">{errors.join(' ')}</li>
-    ),
+      <li className="notification is-danger">
+        {get(errors, 'global') && get(errors, 'global').join(' ')}
+      </li>
+    )
   }
 
   scrollWatch = e => {
@@ -89,6 +94,7 @@ class InfiniteScroller extends Component {
       Tag,
     } = this.props
     const { errors, isFinished, isLoading } = this.state
+
     return (
       <Tag className={classnames('infinite-scroller', className)}>
         {children}
