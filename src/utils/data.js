@@ -70,6 +70,10 @@ export async function fetchData(method, path, config = {}) {
     result.data = await fetchResult.json()
     return result
   }
+  else if (status === 204) {
+    result.data = {}
+    return result
+  }
 
   // fail with errors
   result.errors = await fetchResult.json()
