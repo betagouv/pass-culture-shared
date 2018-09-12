@@ -85,3 +85,20 @@ export function formatSiren(string) {
   const formattedSiren = (siren.match(/.{1,3}/g) || []).join(' ')
   return `${formattedSiren} ${nic}`.trim()
 }
+
+export function getRequestErrorString(request) {
+  const flat = [];
+  if (request.errors instanceof Array) {
+    return request.errors.map(errors =>
+      Object.keys(errors).map(key => errors[key]).join(' ')
+    ).join(' ')
+  }
+
+  if (request.errors instanceof Object) {
+    return Object.keys(request.errors).map(key =>
+      request.errors[key].map(error => error).join(' ')
+    ).join(' ')
+  }
+
+  return '';
+}
