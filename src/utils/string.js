@@ -99,4 +99,6 @@ export function getRequestErrorString(request) {
       request.errors[key].map(error => error).join(' ')
     ).join(' ')
   }
+
+  return '';
 }
