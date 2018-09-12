@@ -82,7 +82,9 @@ export async function fetchData(method, path, config = {}) {
     result.data = await fetchResult.json()
     return result
   }
-  else if (status === 204) {
+
+  // special 204
+  if (status === 204) {
     result.data = {}
     return result
   }
