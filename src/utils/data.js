@@ -70,6 +70,11 @@ export async function fetchData(method, path, config = {}) {
     // warn
     if (!fetchResult.json) {
       console.warn(`fetch is a success but expected a json format for the fetchResult of ${fetchUrl}`)
+      result.errors = [
+        {
+          global: ["Le serveur ne renvoit pas de la donnée au bon format"]
+        }
+      ]
       return result
     }
 
@@ -85,6 +90,11 @@ export async function fetchData(method, path, config = {}) {
   // warn
   if (!fetchResult.json) {
     console.warn(`fetch returns ${status} but we still expected a json format for the fetchResult of ${fetchUrl}`)
+    result.errors = [
+      {
+        global: ["Le serveur ne renvoit pas de la donnée au bon format"]
+      }
+    ]
     return result
   }
 
