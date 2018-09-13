@@ -33,6 +33,7 @@ class DateInput extends Component {
         <span>
           <DatePicker
             className="date"
+            dateFormat={dateFormat}
             filterDate={filterDate}
             highlightDates={(highlightedDates || []).map(d => moment(d))}
             id={id}
