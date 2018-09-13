@@ -43,7 +43,7 @@ class PasswordInput extends Component {
         <div className="control is-expanded">{input}</div>
         <div className="control">
           <button
-            className="button is-rounded is-medium"
+            className="button is-rounded"
             onClick={this.toggleHidden}>
             <Icon
               svg={this.state.isPasswordHidden ? 'ico-eye close' : 'ico-eye'}

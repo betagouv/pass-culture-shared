@@ -64,11 +64,12 @@ class Field extends Component {
           className="help is-danger columns is-vcentered"
           id={`${id}-error`}
           key={index}>
-          <Icon
-            className="column is-1"
-            svg="picto-warning"
-            alt="Attention"
-          />
+          <span className="column">
+            <Icon
+              svg="picto-warning"
+              alt="Attention"
+            />
+          </span>
           <span className="column is-paddingless is-narrow"> {e} </span>
         </p>
       ))
@@ -144,7 +145,9 @@ class Field extends Component {
           'readonly': readOnly
         })}>
           {label && (
-            <div className={`field-label is-${size}`}>
+            <div className={classnames(`field-label is-${size}`, {
+              'readonly': readOnly
+            })}>
               <label htmlFor={id} className="label">
                 <span
                   className={`subtitle ${classnames({ required, readOnly })}`}>
