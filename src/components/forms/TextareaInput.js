@@ -3,6 +3,11 @@ import Textarea from 'react-autosize-textarea'
 
 class TextareaInput extends Component {
 
+  static defaultProps = {
+    rows: 1
+  }
+
+
   onChange = event => {
     const {
       maxLength,
@@ -23,6 +28,7 @@ class TextareaInput extends Component {
       name,
       required,
       readOnly,
+      rows,
       size,
       type,
       value
@@ -35,11 +41,12 @@ class TextareaInput extends Component {
         className={`textarea is-${size}`}
         id={id}
         name={name}
+        onChange={this.onChange}
         required={required}
         type={type}
-        value={value}
-        onChange={this.onChange}
         readOnly={readOnly}
+        rows={rows}
+        value={value}
       />
     )
   }

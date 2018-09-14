@@ -64,11 +64,12 @@ class Field extends Component {
           className="help is-danger columns is-vcentered"
           id={`${id}-error`}
           key={index}>
-          <Icon
-            className="column is-1"
-            svg="picto-warning"
-            alt="Attention"
-          />
+          <span className="column is-narrow">
+            <Icon
+              svg="picto-warning"
+              alt="Attention"
+            />
+          </span>
           <span className="column is-paddingless is-narrow"> {e} </span>
         </p>
       ))
@@ -140,9 +141,13 @@ class Field extends Component {
 
     if (layout === 'horizontal') {
       return (
-        <div className="field is-horizontal">
+        <div className={classnames(`field field-${type} is-horizontal`, {
+          'readonly': readOnly
+        })}>
           {label && (
-            <div className={`field-label is-${size}`}>
+            <div className={classnames(`field-label is-${size}`, {
+              'readonly': readOnly
+            })}>
               <label htmlFor={id} className="label">
                 <span
                   className={`subtitle ${classnames({ required, readOnly })}`}>
@@ -154,8 +159,7 @@ class Field extends Component {
           )}
           <div className="field-body">
             <div
-              className={classnames('field', {
-                checkbox: type === 'checkbox',
+              className={classnames(`control control-${type}`, {
                 'is-expanded': isExpanded,
               })}>
               {$input}
@@ -170,7 +174,7 @@ class Field extends Component {
     if (layout === 'vertical') {
       if (type === 'checkbox') {
         return (
-          <div className="field checkbox">
+          <div className="field field-checkbox">
             <label className={classnames({ required })} htmlFor={id}>
               {$input}
               {label}
@@ -182,7 +186,7 @@ class Field extends Component {
 
       const { sublabel } = this.props
       return (
-        <div className="field">
+        <div className={`field field-${type}`}>
           {label && (
             <label className="label" htmlFor={id}>
               <h3
