@@ -25,9 +25,10 @@ class DateInput extends Component {
     } = this.props
 
     return readOnly ? (
-      <span className={`label is-${size}`}>
-        {value && moment(value).format(dateFormat)}
-      </span>
+      <input
+        className={`input is-${size}`}
+        readOnly
+        value={value && moment(value).format(dateFormat)} />
     ) : (
       <div className={`input is-${size} date-picker`}>
         <span>

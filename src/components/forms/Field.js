@@ -64,7 +64,7 @@ class Field extends Component {
           className="help is-danger columns is-vcentered"
           id={`${id}-error`}
           key={index}>
-          <span className="column">
+          <span className="column is-narrow">
             <Icon
               svg="picto-warning"
               alt="Attention"
