@@ -1,4 +1,5 @@
 import get from 'lodash.get'
+import set from 'lodash.set'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -192,16 +193,31 @@ class _Form extends Component {
     return recursiveMap(children, c => {
       if (c.type.displayName === 'Field') {
         const patchKey = c.props.patchKey || c.props.name // name is unique, patchKey may not
-        const formValue = get(formPatch, patchKey)
-        const baseValue = get(basePatch, patchKey)
+        const getKey = c.props.setKey
+          ? `${c.props.setKey}.${patchKey}`
+          : patchKey
+        const formValue = get(formPatch, getKey)
+        const baseValue = get(basePatch, getKey)
         const type = c.props.type || 'text'
         const InputComponent = Form.inputsByType[type]
         if (!InputComponent)
           console.error('Component not found for type:', type)
 
         const onChange = (value, config) => {
-          const newPatch =
-            typeof value === 'object' ? value : { [patchKey]: value }
+
+          let newPatch
+
+          const setValue = typeof value === 'object'
+            ? value
+            : { [patchKey]: value }
+
+          if (c.props.setKey) {
+            newPatch = {}
+            set(newPatch, c.props.setKey, setValue)
+          } else {
+            newPatch = setValue
+          }
+
           this.onMergeForm(newPatch, config)
         }
 
