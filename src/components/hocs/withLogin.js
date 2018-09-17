@@ -9,11 +9,12 @@ const withLogin = (config = {}) => WrappedComponent => {
   const { failRedirect, successRedirect } = config
 
   class _withLogin extends Component {
-    componentDidMount = (prevProps) => {
-      const { history, location, user, requestData } = this.props
+
+    componentDidMount = prevProps => {
+      const { dispatch, history, location, user } = this.props
 
       if (user === null) {
-        requestData('GET', `users/current`, {
+        dispatch(requestData('GET', `users/current`, {
           handleSuccess: () => {
             if (successRedirect && successRedirect !== location.pathname)
               history.push(successRedirect)
@@ -22,8 +23,7 @@ const withLogin = (config = {}) => WrappedComponent => {
             if (failRedirect && failRedirect !== location.pathname)
               history.push(failRedirect)
           },
-        })
-        return
+        }))
       }
     }
 
@@ -33,7 +33,7 @@ const withLogin = (config = {}) => WrappedComponent => {
   }
   return compose(
     withRouter,
-    connect(state => ({ user: state.user }), { requestData })
+    connect(state => ({ user: state.user }))
   )(_withLogin)
 }
 
