@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
 import React, { Component } from 'react'
 
 import BasicInput from './BasicInput'
@@ -10,10 +10,10 @@ class TimeInput extends Component {
   }
 
   onInputChange = event => {
-    const { onChange: fieldOnChange, value } = this.props
+    const { onChange: fieldOnChange, value, tz } = this.props
     if (fieldOnChange && value) {
       const [hour, minutes] = event.target.value.split(':')
-      const date = moment(value)
+      const date = moment(value).tz(tz)
         .hours(hour)
         .minutes(minutes)
       fieldOnChange(date && date.toISOString(), { event })
@@ -21,13 +21,13 @@ class TimeInput extends Component {
   }
 
   render() {
-    const { value } = this.props
+    const { value, tz} = this.props
 
     return (
       <BasicInput
         {...this.props}
         onChange={this.onInputChange}
-        value={value ? moment(value).format('HH:mm') : ''}
+        value={value ? moment(value).tz(tz).format('HH:mm') : ''}
       />
     )
   }
