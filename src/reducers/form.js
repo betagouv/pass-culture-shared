@@ -1,3 +1,7 @@
+import merge from 'lodash.merge'
+
+import { isObject } from '../utils/object'
+
 const initialState = {}
 
 export const MERGE_FORM = 'MERGE_FORM'
@@ -26,9 +30,8 @@ export const form = (state = initialState, action) => {
 
         // IF THE VALUE IS AN OBJECT, WE MERGE IT WITH THE PREVIOUS
         // VALUE, ELSE WE JUST SET IT
-        if (nextValue && typeof nextValue === "object" && Object.keys(nextValue).length) {
-          // TODO: use a merge function
-          nextPatch[key] = Object.assign({}, nextPatch[key], nextValue)
+        if (isObject(nextValue)) {
+          nextPatch[key] = merge({}, nextPatch[key], nextValue)
         } else {
           nextPatch[key] = nextValue
         }
