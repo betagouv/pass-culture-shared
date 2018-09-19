@@ -3,10 +3,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
-import createCachedSelector from 're-reselect'
 
 import { assignData } from '../../reducers/data'
-import { objectToQueryString, queryStringToObject } from '../../utils/string'
+import searchSelector from '../../selectors/search'
+import { objectToQueryString } from '../../utils/string'
 
 const withSearch = (config = {}) => WrappedComponent => {
 
@@ -130,11 +130,6 @@ const withSearch = (config = {}) => WrappedComponent => {
       )
     }
   }
-
-  const searchSelector = createCachedSelector(
-    (state, search) => search,
-    queryStringToObject
-  )((state, search) => search || '')
 
   return compose(
     withRouter,
