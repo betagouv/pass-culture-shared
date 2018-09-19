@@ -124,8 +124,11 @@ const withSearch = (config = {}) => WrappedComponent => {
 
       const previousValue = queryParams[key]
       if (get(previousValue, 'length')) {
-        const nextValue = previousValue.replace(`,${value}`, '')
+        let nextValue = previousValue.replace(`,${value}`, '')
                                        .replace(value, '')
+        if (nextValue[0] === ',') {
+          nextValue = nextValue.slice(1)
+        }
         this.handleQueryParamsChange({ [key]: nextValue })
       } else if (typeof previousValue === "undefined") {
         console.warn(`Weird did you forget to mention this ${key} query param in your withSearch hoc ?`)
