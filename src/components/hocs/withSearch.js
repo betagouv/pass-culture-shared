@@ -3,20 +3,16 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
+import createCachedSelector from 're-reselect'
 
 import { assignData } from '../../reducers/data'
-import searchSelector from '../../selectors/search'
-import { objectToQueryString } from '../../utils/string'
+import { objectToQueryString, queryStringToObject } from '../../utils/string'
 
 const withSearch = (config = {}) => WrappedComponent => {
 
   const { dataKey } = config
-  const defaultQueryParams = config.defaultQueryParams || ({
-    distance: undefined,
-    from_date: undefined,
-    search: undefined,
-    order_by: `createdAt+desc`,
-  })
+  const defaultQueryParams = config.defaultQueryParams || {}
+  const keywordsQueryString = config.keywordsQueryString || 'keywords'
 
   class _withSearch extends Component {
     constructor(props) {
@@ -78,7 +74,7 @@ const withSearch = (config = {}) => WrappedComponent => {
       })
     }
 
-    handleQueryParamsChange = (newValue) => {
+    handleQueryParamsChange = newValue => {
       const {
         assignData,
         history,
@@ -86,16 +82,25 @@ const withSearch = (config = {}) => WrappedComponent => {
       } = this.props
       const { queryParams, value } = this.state
 
+      const queryObject = Object.assign({}, queryParams, newValue)
 
-      const newPath = `${location.pathname}?${objectToQueryString(
-        Object.assign({}, queryParams, newValue)
-      )}`
-      if (get(value, 'search')!== get(newValue, 'search'))
+      const queryString = objectToQueryString(queryObject)
+
+      const newPath = `${location.pathname}?${queryString}`
+
+      // KEYWORDS HAS CHANGED SO WE NEED TO REFRESH THE PIPE
+      if (
+        get(newValue, keywordsQueryString) === null ||
+        get(value, keywordsQueryString) !== get(newValue, keywordsQueryString)
+      ) {
         assignData({ [dataKey]: [] })
+      }
+
       this.setState({
         value: newValue,
         page: 1,
       })
+
       history.push(newPath)
     }
 
@@ -103,9 +108,9 @@ const withSearch = (config = {}) => WrappedComponent => {
       this.handleQueryParamsChange({ [key]: null })
     }
 
-    handleSearchChange = e => {
+    handleKeywordsChange = e => {
       e.preventDefault()
-      this.handleQueryParamsChange({ search: e.target.elements.search.value })
+      this.handleQueryParamsChange({ [keywordsQueryString]: e.target.elements.keywords.value })
     }
 
     render() {
@@ -114,16 +119,23 @@ const withSearch = (config = {}) => WrappedComponent => {
           {...this.props}
           {...this.state}
           handleClearQueryParams={this.handleClearQueryParams}
+          handleKeywordsChange={this.handleKeywordsChange}
           handleOrderByChange={this.handleOrderByChange}
           handleOrderDirectionChange={this.handleOrderDirectionChange}
-          handleRemoveFilter={this.handleRemoveFilter}
-          handleSearchChange={this.handleSearchChange}
-          goToNextSearchPage={this.goToNextSearchPage}
           handleQueryParamsChange={this.handleQueryParamsChange}
+          handleRemoveFilter={this.handleRemoveFilter}
+          goToNextSearchPage={this.goToNextSearchPage}
+
         />
       )
     }
   }
+
+  const searchSelector = createCachedSelector(
+    (state, search) => search,
+    queryStringToObject
+  )((state, search) => search || '')
+
   return compose(
     withRouter,
     connect(
