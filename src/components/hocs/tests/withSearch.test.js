@@ -21,18 +21,5 @@ describe('src | components | hocs | withSearch', () => {
       expect(wrapper).toBeDefined()
       expect(wrapper).toMatchSnapshot()
     })
-
-    // it('should match snapshot', () => {
-    //   const props = {
-    //     handleQueryParamsChange: jest.fn()
-    //   }
-    //   const wrapper = shallow(<WrapperComponent {...props}/>)
-    //   expect(wrapper).toBeDefined()
-    //   expect(wrapper).toMatchSnapshot()
-    //
-    //   const instance = wrapper.instance()
-    //   console.log('instance', instance);
-    //
-    // })
   })
 })
