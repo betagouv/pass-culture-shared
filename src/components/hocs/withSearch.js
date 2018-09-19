@@ -104,6 +104,34 @@ const withSearch = (config = {}) => WrappedComponent => {
       history.push(newPath)
     }
 
+    handleQueryParamAdd = (key, value) => {
+      const { queryParams } = this.state
+
+      let nextValue = value
+      const previousValue = queryParams[key]
+      if (get(previousValue, 'length')) {
+        nextValue = `${previousValue},${value}`
+      } else if (typeof previousValue === "undefined") {
+       console.warn(`Weird did you forget to mention this ${key} query param in your withSearch hoc ?`)
+      }
+
+      this.handleQueryParamsChange({ [key]: nextValue })
+
+    }
+
+    handleQueryParamRemove = (key, value) => {
+      const { queryParams } = this.state
+
+      const previousValue = queryParams[key]
+      if (get(previousValue, 'length')) {
+        const nextValue = previousValue.replace(`,${value}`, '')
+                                       .replace(value, '')
+        this.handleQueryParamsChange({ [key]: nextValue })
+      } else if (typeof previousValue === "undefined") {
+        console.warn(`Weird did you forget to mention this ${key} query param in your withSearch hoc ?`)
+      }
+    }
+
     handleRemoveFilter = key => e => {
       this.handleQueryParamsChange({ [key]: null })
     }
@@ -122,10 +150,11 @@ const withSearch = (config = {}) => WrappedComponent => {
           handleKeywordsChange={this.handleKeywordsChange}
           handleOrderByChange={this.handleOrderByChange}
           handleOrderDirectionChange={this.handleOrderDirectionChange}
+          handleQueryParamAdd={this.handleQueryParamAdd}
+          handleQueryParamRemove={this.handleQueryParamRemove}
           handleQueryParamsChange={this.handleQueryParamsChange}
           handleRemoveFilter={this.handleRemoveFilter}
           goToNextSearchPage={this.goToNextSearchPage}
-
         />
       )
     }
