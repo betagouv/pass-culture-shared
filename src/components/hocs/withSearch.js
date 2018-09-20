@@ -74,12 +74,15 @@ const withSearch = (config = {}) => WrappedComponent => {
       })
     }
 
-    handleQueryParamsChange = newValue => {
+    handleQueryParamsChange = (newValue, config={}) => {
       const {
         assignData,
         history,
         location
       } = this.props
+      const isRefreshing = typeof config.isRefreshing === "undefined"
+        ? true
+        : config.isRefreshing
       const { queryParams, value } = this.state
 
       const queryObject = Object.assign({}, queryParams, newValue)
@@ -90,8 +93,9 @@ const withSearch = (config = {}) => WrappedComponent => {
 
       // KEYWORDS HAS CHANGED SO WE NEED TO REFRESH THE PIPE
       if (
-        get(newValue, keywordsQueryString) === null ||
-        get(value, keywordsQueryString) !== get(newValue, keywordsQueryString)
+        isRefreshing
+        //get(newValue, keywordsQueryString) === null ||
+        //get(value, keywordsQueryString) !== get(newValue, keywordsQueryString)
       ) {
         assignData({ [dataKey]: [] })
       }
@@ -139,18 +143,12 @@ const withSearch = (config = {}) => WrappedComponent => {
       this.handleQueryParamsChange({ [key]: null })
     }
 
-    handleKeywordsChange = e => {
-      e.preventDefault()
-      this.handleQueryParamsChange({ [keywordsQueryString]: e.target.elements.keywords.value })
-    }
-
     render() {
       return (
         <WrappedComponent
           {...this.props}
           {...this.state}
           handleClearQueryParams={this.handleClearQueryParams}
-          handleKeywordsChange={this.handleKeywordsChange}
           handleOrderByChange={this.handleOrderByChange}
           handleOrderDirectionChange={this.handleOrderDirectionChange}
           handleQueryParamAdd={this.handleQueryParamAdd}
