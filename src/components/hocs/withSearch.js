@@ -12,8 +12,7 @@ const withSearch = (config = {}) => WrappedComponent => {
 
   const { dataKey } = config
   const defaultQueryParams = config.defaultQueryParams || {}
-  const keywordsQueryString = config.keywordsQueryString || 'keywords'
-
+  
   class _withSearch extends Component {
     constructor(props) {
       super()
@@ -83,20 +82,16 @@ const withSearch = (config = {}) => WrappedComponent => {
       const isRefreshing = typeof config.isRefreshing === "undefined"
         ? true
         : config.isRefreshing
-      const { queryParams, value } = this.state
+      const pathname = config.pathname || location.pathname
+      const { queryParams } = this.state
 
       const queryObject = Object.assign({}, queryParams, newValue)
 
       const queryString = objectToQueryString(queryObject)
 
-      const newPath = `${location.pathname}?${queryString}`
+      const newPath = `${pathname}?${queryString}`
 
-      // KEYWORDS HAS CHANGED SO WE NEED TO REFRESH THE PIPE
-      if (
-        isRefreshing
-        //get(newValue, keywordsQueryString) === null ||
-        //get(value, keywordsQueryString) !== get(newValue, keywordsQueryString)
-      ) {
+      if (isRefreshing) {
         assignData({ [dataKey]: [] })
       }
 
