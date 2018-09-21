@@ -41,7 +41,7 @@ const SubscribedChannels = ({ subscribedChannels }) => (
 
 const selectSubscribedChannels = createSelector(
   state => state.data.channels,
-  channels => channels.filter(channel => channel.isSubscribed > 10)
+  channels => channels.filter(channel => channel.isSubscribed)
 )
 
 export default connect(

@@ -50,11 +50,7 @@ class ChannelsPage extends Component {
   }
 
   render () {
-    const {
-      globalError,
-      channels,
-      channelsError,
-    } = this.state
+    const { channels, channelsError, globalError } = this.state
 
     if (channelsError) {
       return (

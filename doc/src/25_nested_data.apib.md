@@ -87,8 +87,7 @@ const selectSubscribedChannels = createSelector(
       // object value stored in the reducer
       Object.assign(
         {
-          favoritesCount: channel.videos.filter(video => video.isFavorite)
-                                        .length
+          favoritesCount: channel.videos.filter(video => video.isFavorite).length
         },
         channel
       )

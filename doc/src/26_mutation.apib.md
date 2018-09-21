@@ -34,14 +34,9 @@ import React, { Component } from 'react'
 class VideoItem extends Component {
 
   onFavoriteClick = () => {
-    const {
-      dispatch,
-      video,
-    } = this.props
-    const {
-      id,
-      isFavorite
-    } = video
+    const { dispatch, video } = this.props
+    const { id, isFavorite } = video
+
     dispatch(requestData(
       'PATCH',
       `videos/${id}`,
@@ -54,13 +49,9 @@ class VideoItem extends Component {
   }
 
   render () {
-    const {
-      video
-    } = this.props
-    const {
-      isFavorite,
-      name
-    } = video
+    const { video } = this.props
+    const { isFavorite, name } = video
+    
     return (
       <div>
         {name}
