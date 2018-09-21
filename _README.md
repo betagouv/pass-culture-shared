@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
 export default rootReducer
 ```
 
-And in your rootSaga in sagas/index.js:
+And in your rootSagas in sagas/index.js:
 
 ```javascript
 import { watchDataActions } from 'pass-culture-shared'
@@ -172,8 +172,8 @@ const SubscribedChannels = ({ subscribedChannels }) => (
     <p> subscriptions: </p>
     {
       subscribedChannels.map(({ id, name }) => (
-        <p key={id}>
-          {name}
+        <p key={subscribedChannel.id}>
+          {subscribedChannel.name}
         </p>
       ))
     }
@@ -282,9 +282,9 @@ const SubscribedChannels = ({ lastSubscribedVideos, subscribedChannels }) => (
 const selectSubscribedChannels = createSelector(
   state => state.data.channels,
   channels => {
-    let subscribedChannels = channels.filter(channel => channel.isSubscribed)
+    let filteredChannels = channels.filter(channel => channel.isSubscribed)
 
-    subscribedChannels = subscribedChannels.map(channel =>
+    filteredChannels = filteredChannels.map(channel =>
       // Note that we pay attention to not mutate the
       // object value stored in the reducer
       Object.assign(
@@ -296,7 +296,7 @@ const selectSubscribedChannels = createSelector(
       )
     )
 
-    return subscribedChannels
+    return filteredChannels
 
   }
 )
@@ -304,8 +304,8 @@ const selectSubscribedChannels = createSelector(
 const selectLastSubscribedVideos = createSelector(
   selectSubscribedChannels,
   subscribedChannels => flatten(
-    subscribedChannels.map(cChannel =>
-      channel.videos.filter(video =>
+    subscribedChannels.map(subscribedChannel =>
+      subscribedChannel.videos.filter(video =>
         (moment(video.publishedDatetime) - moment.now()).getDays() < 3)
       )
     )
@@ -337,10 +337,10 @@ by
 
 ```
 {
-  lastSubscribedVideos.map(video => (
+  lastSubscribedVideos.map(lastSubscribedVideo => (
     <VideoItem
-      key={video.id}
-      video={video}
+      key={lastSubscribedVideo.id}
+      video={lastSubscribedVideo}
     />
   ))
 }
@@ -439,44 +439,39 @@ In addition of data stored at state.data.videos,
 the state.data.venues will not have anymore their nested children { videos },
 as it is now a redundant and not reactive sub data info.
 
-We need now some adaptation in the mapStateToProps of the SubscribedChannels Component:
+We need now some adaptation in the mapStateToProps of our children Components.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```javascript
-
-const selectLastSubscribedVideosByChannelId = createCachedSelector(
-  state => state.data.videos,
-  (state, channelId) => channelId,
-  videos => (
-  videos.filter(video =>
-    (moment(video.publishedDatetime) - moment.now()).getDays() < 3) &&
-    video.channelId === channelId
-  )
-)((state, channelId) => channelId || '')
-
 const selectSubscribedChannels = createSelector(
   state => state.data.channels,
-  channels => {
-    let subscribedChannels = channels.filter(channel => channel.isSubscribed)
-
-    subscribedChannels = subscribedChannels.map(channel =>
-
-      const lastSubscribedVideos = selectLastSubscribedVideosByChannelId(
-        state, channel.id)
-
-      Object.assign(
-        {
-          favoritesCount: lastSubscribedVideos.filter(video => video.isFavorite)
-                                              .length
-        },
-        channel
-      )
-    )
-
-    return subscribedChannels
-  }
+  channels => channels.filter(channel => channel.isSubscribed)
 )
 
-const selectLastSubscribedVideosByChannels = createSelector(
+const selectVideosByChannels = createSelector(
   state => state.data.videos,
   (state, channels) => channels,
   (videos, channels) => flatten(
@@ -485,6 +480,61 @@ const selectLastSubscribedVideosByChannels = createSelector(
         // do the retrieve tx to the joining key
         channels.find(channel =>
           video.channelId  === channel.id)
+      )
+    )
+  )
+)
+
+const selectLastSubscribedVideos = createSelector(
+  state => state.data.videos,
+  (state, subscribedChannels) => subscribedChannels,
+  (videos, subscribedChannels) => flatten(
+    subscribedChannels.map(subscribedChannel =>
+      videos.filter(video =>
+        // do the retrieve tx to the joining key
+        subscribedChannels.find(subscribedChannel =>
+          video.channelId  === subscribedChannel.id)
+        &&
+        (moment(video.publishedDatetime) - moment.now()).getDays() < 3
+      )
+    )
+  )
+)
+
+const
+
+const selectSubscribedChannels = createSelector(
+  state => state.data.channels,
+  channels => {
+    let filteredChannels = channels.filter(channel => channel.isSubscribed)
+
+    filteredChannels = filteredChannels.map(channel =>
+      // Note that we pay attention to not mutate the
+      // object value stored in the reducer
+      Object.assign(
+        {
+          favoritesCount: channel.videos.filter(video => video.isFavorite)
+                                        .length
+        },
+        channel
+      )
+    )
+
+    return filteredChannels
+
+  }
+)
+
+
+const selectLastSubscribedVideos = createSelector(
+  state => state.data.videos,
+  (state, subscribedChannels) => subscribedChannels,
+  (videos, subscribedChannels) => flatten(
+    subscribedChannels.map(subscribedChannel =>
+      videos.filter(video =>
+        // do the retrieve tx to the joining key
+        subscribedChannels.find(subscribedChannel =>
+          video.channelId  === subscribedChannel.id)
         &&
         (moment(video.publishedDatetime) - moment.now()).getDays() < 3
       )
@@ -495,17 +545,29 @@ const selectLastSubscribedVideosByChannels = createSelector(
 export default connect(
   state => {
     const subscribedChannels = selectSubscribedChannels(state)
+
     return {
-      lastSubscribedVideos: selectLastSubscribedVideosByChannels(state, subscribedChannels),
+      lastSubscribedVideos: selectLastSubscribedVideos(state, subscribedChannels),
       subscribedChannels
     }
   }
 )
 ```
 
-If you don't feel easy with filter logic in reselects, you may
-instead keep on modularizing your components and you will find by yourself
-that selectors are more easy to write, for example in this case where in the ChannelsPage, let's modularize also things into ChannelItems:
+
+
+
+
+
+
+
+In the ChannelsPage, let's modularize also things into ChannelItems.
+
+
+
+
+
+
 
 replace
 ```javascript
@@ -529,7 +591,7 @@ by
 }
 ```
 
-Then ChannelItem does more easily the job for being sync with the videos isFavorite mutations.
+with
 
 ```
 import React from 'react'
@@ -555,10 +617,30 @@ const selectFavoritesCountByChannelId => createCachedSelector(
 
 export default connect(
   (state, ownProps) => ({
-    favoritesCount: selectFavoritesCountByChannelId(state, ownProps.channel.id)
+    favoritesCount: selectFavoritesCountByChannelId(state, ownProps.video.channelId)
   })
 )(ChannelItem)
 
+```
+
+```javascript
+const selectLastSubscribedVideosByChannelId = createSelector(
+  state => state.data.videos,
+  (state, channelId) => channelId,
+  videos => flatten(
+    subscribedChannels.map(subscribedChannel =>
+      subscribedChannel.videos.filter(video =>
+        (moment(video.publishedDatetime) - moment.now()).getDays() < 3)
+      )
+    )
+)
+
+export default connect(
+  state => ({
+    lastSubscribedVideos: selectLastSubscribedVideosByChannelId(state),
+    subscribedChannels: selectSubscribedChannels(state)
+  })
+)
 ```
 
 
@@ -584,6 +666,74 @@ export default connect(
 
 
 
+
+
+Starting with the simple one, VideoItem
+
+instead of
+```
+export default connect()(VideoItem)
+```
+
+we juste create a re-reselector
+```
+// at the top
+import createCachedSelector from 're-reselect'
+
+...
+
+const selectVideo = createCachedSelector(
+
+)(state,)
+
+
+export default connect(
+  state => ({ video: selectVideoById(state, ownProps.video.id) })
+)(VideoItem)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+const selectSubscribedChannels = createSelector(
+  state => state.data.channels,
+  channels => {
+    let filteredChannels = channels.filter(channel => channel.isSubscribed)
+
+    filteredChannels = filteredChannels.map(channel =>
+      // Note that we pay attention to not mutate the
+      // object value stored in the reducer
+      Object.assign(
+        {
+          favoritesCount: channel.videos.filter(video => video.isFavorite)
+                                        .length
+        },
+        channel
+      )
+    )
+
+    return filteredChannels
+
+  }
+)
+
+const selectLastSubscribedVideos = createSelector(
+  selectSubscribedChannels,
+  subscribedChannels => flatten(
+    subscribedChannels.map(subscribedChannel =>
+      subscribedChannel.videos.filter(video =>
+        (moment(video.publishedDatetime) - moment.now()).getDays() < 3)
+      )
+    )
+)
 
 
 
