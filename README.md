@@ -1,7 +1,7 @@
 # pass-culture-shared
 Tous les objets javascript partagés entre l'application découverte et l'application pro
 
-
+(See also https://legacy.gitbook.com/book/erwan_ledoux/pass-culture-shared/details in construction)
 ## Documentation
 
 ### Data
@@ -413,6 +413,7 @@ something helping to make keeping the ChannelsPage aware of that change.
 We can also use the normalizing method for doing it in a sugar manner.
 We first need to tell how we want stored the data in the data reducer.
 
+```javascript
 class ChannelsPage extends Component {
 
   ...
@@ -429,6 +430,7 @@ class ChannelsPage extends Component {
   }
   ...
 }
+```
 
 What does this normalizer stand for ? It means here that all the channels entities
 will be parsed to find if they have a KEY 'videos', and all of these elements
