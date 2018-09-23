@@ -12,6 +12,7 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
     // CONFIG
     const config = Object.assign({}, extraConfig, action.config)
     const { body, encode, timeout, url } = config
+    const fetch = config.fetchData || fetchData
 
     // DATA
     try {
@@ -20,13 +21,13 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
       let fetchResult, timeoutResult
       if (timeout) {
         const raceResult = yield race({
-          fetchResult: call(fetchData, method, path, { body, encode, url }),
+          fetchResult: call(fetch, method, path, { body, encode, url }),
           timeoutResult: call(delay, timeout)
         })
         fetchResult = raceResult.fetchResult
         timeoutResult = raceResult.timeoutResult
       } else {
-        fetchResult = yield call(fetchData, method, path, { body, encode, url })
+        fetchResult = yield call(fetch, method, path, { body, encode, url })
       }
 
       // RESULT
