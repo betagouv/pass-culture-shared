@@ -1,8 +1,11 @@
-import { data } from 'pass-culture-shared'
+import { errors } from 'pass-culture-shared'
 import { combineReducers } from 'redux'
 
+import data from './data'
+
 const rootReducer = combineReducers({
-  data
+  data,
+  errors
 })
 
 export default rootReducer

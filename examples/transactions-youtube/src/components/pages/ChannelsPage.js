@@ -1,9 +1,9 @@
 import { requestData } from 'pass-culture-shared'
 import React, { Component } from 'react'
-import { connect } from 'redux'
+import { connect } from 'react-redux'
 
 import SubscribedChannels from './channels/SubscribedChannels'
-import channelsNormalizer from '../normalizers/channelsNormalizer'
+import channelsNormalizer from '../../normalizers/channelsNormalizer'
 
 class ChannelsPage extends Component {
 
