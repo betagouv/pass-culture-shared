@@ -9,6 +9,7 @@ Imagine a simple component used for fetching infos on youtube channel entities:
 ```javascript
 import get from 'lodash.get'
 import { requestData } from 'pass-culture-shared'
+import React, { Component } from 'react'
 import { connect } from 'redux'
 
 class ChannelsPage extends Component {
@@ -17,7 +18,7 @@ class ChannelsPage extends Component {
     super()
     this.state = {
       globalError: null,
-      channels: []
+      channels: [],
       channelsError: null
     }
   }

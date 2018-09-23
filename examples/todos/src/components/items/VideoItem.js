@@ -1,34 +1,4 @@
-### Mutation
-
-Suppose first we can click on it to mutate isFavorite
-
-```javascript
-{
-  lastSubscribedVideos.map({ id, isFavorite, name }) => (
-    <p key={id}>
-      {name} {' '} {isFavorite && '*'}
-    </p>
-  ))
-}
-```
-by
-
-```javascript
-{
-  lastSubscribedVideos.map(video => (
-    <VideoItem
-      key={video.id}
-      video={video}
-    />
-  ))
-}
-```
-
-with
-
-```javascript
 import { requestData } from 'pass-culture-shared'
-import get from 'lodash.get'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
@@ -66,6 +36,3 @@ class VideoItem extends Component {
 }
 
 export default connect()(VideoItem)
-```
-
-In this approach, onFavoriteClick the VideoItem will refresh the * accordingly to the sync state with the backend db.
