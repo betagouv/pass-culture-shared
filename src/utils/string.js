@@ -41,16 +41,6 @@ export function queryStringToObject(string = '') {
     .filter(el => el)
     .reduce((result, group) => {
       let [key, value] = group.split('=')
-      switch (key) {
-        case 'lieu':
-          key = 'venueId'
-          break
-        case 'structure':
-          key = 'offererId'
-          break
-        default:
-          break
-      }
       return Object.assign({}, result, { [key]: value })
     }, {})
 }

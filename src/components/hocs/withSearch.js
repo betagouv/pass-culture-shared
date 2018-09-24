@@ -11,13 +11,8 @@ import { objectToQueryString } from '../../utils/string'
 const withSearch = (config = {}) => WrappedComponent => {
 
   const { dataKey } = config
-  const defaultQueryParams = config.defaultQueryParams || ({
-    distance: undefined,
-    from_date: undefined,
-    search: undefined,
-    order_by: `createdAt+desc`,
-  })
-
+  const defaultQueryParams = config.defaultQueryParams || {}
+  
   class _withSearch extends Component {
     constructor(props) {
       super()
@@ -78,34 +73,69 @@ const withSearch = (config = {}) => WrappedComponent => {
       })
     }
 
-    handleQueryParamsChange = (newValue) => {
+    handleQueryParamsChange = (newValue, config={}) => {
       const {
         assignData,
         history,
         location
       } = this.props
-      const { queryParams, value } = this.state
+      const isRefreshing = typeof config.isRefreshing === "undefined"
+        ? true
+        : config.isRefreshing
+      const pathname = config.pathname || location.pathname
+      const { queryParams } = this.state
 
+      const queryObject = Object.assign({}, queryParams, newValue)
 
-      const newPath = `${location.pathname}?${objectToQueryString(
-        Object.assign({}, queryParams, newValue)
-      )}`
-      if (get(value, 'search')!== get(newValue, 'search'))
+      const queryString = objectToQueryString(queryObject)
+
+      const newPath = `${pathname}?${queryString}`
+
+      if (isRefreshing) {
         assignData({ [dataKey]: [] })
+      }
+
       this.setState({
         value: newValue,
         page: 1,
       })
+
       history.push(newPath)
+    }
+
+    handleQueryParamAdd = (key, value) => {
+      const { queryParams } = this.state
+
+      let nextValue = value
+      const previousValue = queryParams[key]
+      if (get(previousValue, 'length')) {
+        nextValue = `${previousValue},${value}`
+      } else if (typeof previousValue === "undefined") {
+       console.warn(`Weird did you forget to mention this ${key} query param in your withSearch hoc ?`)
+      }
+
+      this.handleQueryParamsChange({ [key]: nextValue })
+
+    }
+
+    handleQueryParamRemove = (key, value) => {
+      const { queryParams } = this.state
+
+      const previousValue = queryParams[key]
+      if (get(previousValue, 'length')) {
+        let nextValue = previousValue.replace(`,${value}`, '')
+                                       .replace(value, '')
+        if (nextValue[0] === ',') {
+          nextValue = nextValue.slice(1)
+        }
+        this.handleQueryParamsChange({ [key]: nextValue })
+      } else if (typeof previousValue === "undefined") {
+        console.warn(`Weird did you forget to mention this ${key} query param in your withSearch hoc ?`)
+      }
     }
 
     handleRemoveFilter = key => e => {
       this.handleQueryParamsChange({ [key]: null })
-    }
-
-    handleSearchChange = e => {
-      e.preventDefault()
-      this.handleQueryParamsChange({ search: e.target.elements.search.value })
     }
 
     render() {
@@ -116,14 +146,16 @@ const withSearch = (config = {}) => WrappedComponent => {
           handleClearQueryParams={this.handleClearQueryParams}
           handleOrderByChange={this.handleOrderByChange}
           handleOrderDirectionChange={this.handleOrderDirectionChange}
-          handleRemoveFilter={this.handleRemoveFilter}
-          handleSearchChange={this.handleSearchChange}
-          goToNextSearchPage={this.goToNextSearchPage}
+          handleQueryParamAdd={this.handleQueryParamAdd}
+          handleQueryParamRemove={this.handleQueryParamRemove}
           handleQueryParamsChange={this.handleQueryParamsChange}
+          handleRemoveFilter={this.handleRemoveFilter}
+          goToNextSearchPage={this.goToNextSearchPage}
         />
       )
     }
   }
+
   return compose(
     withRouter,
     connect(
