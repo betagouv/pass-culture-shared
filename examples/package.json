@@ -1,0 +1,4 @@
+{
+  "private": true,
+  "workspaces": ["transactions-todos", "transactions-youtube"]
+}
