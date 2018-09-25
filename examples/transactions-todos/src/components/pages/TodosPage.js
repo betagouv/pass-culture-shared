@@ -1,6 +1,6 @@
 import { requestData } from 'pass-culture-shared'
 import React, { Component } from 'react'
-import { connect } from 'redux'
+import { connect } from 'react-redux'
 
 import AddTodo from './todos/AddTodo'
 import VisiblesTodoList from './todos/VisiblesTodoList'

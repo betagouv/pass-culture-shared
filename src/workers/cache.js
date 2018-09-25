@@ -1,4 +1,4 @@
-import { IS_PROD, IS_LOCALHOST, ROOT_PATH } from '../utils/config'
+import { IS_LOCALHOST, ROOT_PATH } from '../utils/config'
 
 // In production, we register a service worker to serve assets from local cache.
 
@@ -11,7 +11,7 @@ import { IS_PROD, IS_LOCALHOST, ROOT_PATH } from '../utils/config'
 // This link also includes instructions on opting out of this behavior.
 
 export default function register() {
-  if (IS_PROD && 'serviceWorker' in navigator) {
+  if (process.env.NODE_ENV !== 'development' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location)
     if (publicUrl.origin !== window.location.origin) {
