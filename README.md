@@ -3,4 +3,22 @@
 Tous les objets javascript partagés entre l'application découverte et l'application pro
 
 ## Documentation
-Voir le dossier doc.
+
+**EN COURS DE CONSTRUCTION**
+
+La documentation est en ligne ici https://pass-culture-shared.netlify.com/
+
+## Examples
+
+**EN COURS DE CONSTRUCTION**
+
+Vous pouvez jouer avec les exemples youtube todos en allant dans le folder examples
+
+```
+yarn install
+``
+
+puis pour la demo you tube:
+```
+cd transactions-youtube && yarn start
+```
