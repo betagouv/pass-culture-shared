@@ -4994,10 +4994,11 @@ pascalcase@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
 
-pass-culture-shared@0.0.44:
-  version "0.0.44"
-  resolved "https://registry.yarnpkg.com/pass-culture-shared/-/pass-culture-shared-0.0.44.tgz#3b41d3be5f798ff44796910d67d7e02bda4682d4"
+pass-culture-shared@0.0.46:
+  version "0.0.46"
+  resolved "https://registry.yarnpkg.com/pass-culture-shared/-/pass-culture-shared-0.0.46.tgz#32e6f1ffe0e7c32f525d967aa278c68f7db7c42f"
   dependencies:
+    lodash.get "^4.4.2"
     lodash.merge "^4.6.1"
     lodash.set "^4.3.2"
     lodash.uniqby "^4.7.0"
@@ -5011,6 +5012,9 @@ pass-culture-shared@0.0.44:
     react-datepicker "^1.5.0"
     react-dom "^0.14||^15.5.4||^16.1.1"
     react-dotdotdot "^1.2.3"
+    react-redux "^5.0.7"
+    react-router-dom "^4.3.1"
+    redux "^4.0.0"
     redux-saga "^0.15.3"
     reselect "^3.0.1"
     uuid "^3.3.2"

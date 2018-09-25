@@ -10,7 +10,7 @@ const routes = [
     },
     {
         component: TodosPage,
-        path: '/channels',
+        path: '/todos',
         title: "Todos example",
     },
 ]
