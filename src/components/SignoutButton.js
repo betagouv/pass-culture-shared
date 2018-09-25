@@ -22,13 +22,6 @@ class SignoutButton extends Component {
     }
   }
 
-  handleSignoutError = () => {
-    const { error, history } = this.props
-    if (error) {
-      history.push('/connexion')
-    }
-  }
-
   handleSuccess = () => {
     const { handleSuccess, handleSuccessRedirect, history } = this.props
     if (handleSuccess) {
