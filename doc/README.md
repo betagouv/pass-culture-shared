@@ -1,7 +1,5 @@
 # Documentation de pass-culture-shared
 
-Voir la doc en ligne ICI: http://pass-culture-shared.netlify.com
-
 ## Installation des outils
 
 ```bash

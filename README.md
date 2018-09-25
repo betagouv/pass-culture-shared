@@ -6,7 +6,7 @@ Tous les objets javascript partagés entre l'application découverte et l'applic
 
 **EN COURS DE CONSTRUCTION**
 
-La documentation est en ligne ici https://pass-culture-shared.netlify.com/
+La documentation est en ligne ici https://code-doc-passculture.netlify.com/
 
 ## Examples
 
