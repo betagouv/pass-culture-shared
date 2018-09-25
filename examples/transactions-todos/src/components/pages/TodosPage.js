@@ -3,9 +3,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import AddTodo from './todos/AddTodo'
-import VisiblesTodoList from './todos/VisiblesTodoList'
+import VisibleTodosList from './todos/VisibleTodosList'
 import Footer from './todos/Footer'
-import todosNormalizer from '../normalizers/todosNormalizer'
+import todosNormalizer from '../../normalizers/todosNormalizer'
 
 class TodosPage extends Component {
 
@@ -39,7 +39,7 @@ class TodosPage extends Component {
     return (
       <div>
         <AddTodo />
-        <VisiblesTodoList />
+        <VisibleTodosList />
         <Footer />
       </div>
     )
