@@ -112,7 +112,9 @@ const withSearch = (config = {}) => WrappedComponent => {
       let nextValue = value
       const previousValue = queryParams[key]
       if (get(previousValue, 'length')) {
-        nextValue = `${previousValue},${value}`
+        const args = previousValue.split(',').concat([value])
+        args.sort()
+        nextValue = args.join(',')
       } else if (typeof previousValue === "undefined") {
        console.warn(`Weird did you forget to mention this ${key} query param in your withSearch hoc ?`)
       }
@@ -127,7 +129,7 @@ const withSearch = (config = {}) => WrappedComponent => {
       const previousValue = queryParams[key]
       if (get(previousValue, 'length')) {
         let nextValue = previousValue.replace(`,${value}`, '')
-                                       .replace(value, '')
+                                     .replace(value, '')
         if (nextValue[0] === ',') {
           nextValue = nextValue.slice(1)
         }

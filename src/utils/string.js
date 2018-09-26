@@ -65,17 +65,12 @@ export function updateQueryString(string, object) {
   return objectToQueryString(nextObject)
 }
 
-const mapQueryToApi = {
-  lieu: 'venueId',
-  structure: 'offererId',
-}
-
 export function getObjectWithMappedKeys(obj, keysMap) {
   const mappedObj = {}
   Object.keys(keysMap)
         .forEach(objKey => {
           let mappedKey = objKey
-          if (mapQueryToApi[objKey]) {
+          if (keysMap[objKey]) {
             mappedKey = keysMap[objKey]
           }
           mappedObj[mappedKey] = obj[objKey]
