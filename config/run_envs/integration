@@ -1,0 +1,2 @@
+API_URL='https://pass-culture-api-integration.scalingo.io'
+NODE_ENV="production"
