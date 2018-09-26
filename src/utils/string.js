@@ -65,6 +65,24 @@ export function updateQueryString(string, object) {
   return objectToQueryString(nextObject)
 }
 
+const mapQueryToApi = {
+  lieu: 'venueId',
+  structure: 'offererId',
+}
+
+export function getObjectWithMappedKeys(obj, keysMap) {
+  const mappedObj = {}
+  Object.keys(keysMap)
+        .forEach(objKey => {
+          let mappedKey = objKey
+          if (mapQueryToApi[objKey]) {
+            mappedKey = keysMap[objKey]
+          }
+          mappedObj[mappedKey] = obj[objKey]
+        })
+  return mappedObj
+}
+
 export function formatSiren(string) {
   const value = removeWhitespaces(string)
   if (!value) {
