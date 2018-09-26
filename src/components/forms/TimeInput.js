@@ -23,11 +23,15 @@ class TimeInput extends Component {
   render() {
     const { value, tz} = this.props
 
+    const timezonedValue = (value && tz)
+      ? moment(value).tz(tz).format('HH:mm')
+      : ''
+
     return (
       <BasicInput
         {...this.props}
         onChange={this.onInputChange}
-        value={value ? moment(value).tz(tz).format('HH:mm') : ''}
+        value={timezonedValue}
       />
     )
   }
