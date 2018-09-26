@@ -10,9 +10,9 @@ import { objectToQueryString } from '../../utils/string'
 
 const withSearch = (config = {}) => WrappedComponent => {
 
-  const { dataKey } = config
+  const { dataKey, queryToApiParams } = config
   const defaultQueryParams = config.defaultQueryParams || {}
-  
+
   class _withSearch extends Component {
     constructor(props) {
       super()
@@ -21,22 +21,25 @@ const withSearch = (config = {}) => WrappedComponent => {
         queryParams: defaultQueryParams,
         value: null
       }
-      props.assignData({ [dataKey]: [] })
-
+      props.dispatch(assignData({ [dataKey]: [] }))
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
       const queryParams = Object.assign(
-        {},
+        { page: prevState.page },
         defaultQueryParams,
         nextProps.queryParams
       )
+      const querySearch = objectToQueryString(queryParams)
 
-      const querySearch = objectToQueryString(
-        Object.assign({}, queryParams, { page: prevState.page })
-      )
+      const apiParams = queryToApiParams
+        ? queryToApiParams(queryParams)
+        : Object.assign({}, queryParams)
+      const apiSearch = objectToQueryString(apiParams)
 
       return {
+        apiParams,
+        apiSearch,
         queryParams,
         querySearch,
         page: prevState.page,
@@ -75,7 +78,7 @@ const withSearch = (config = {}) => WrappedComponent => {
 
     handleQueryParamsChange = (newValue, config={}) => {
       const {
-        assignData,
+        dispatch,
         history,
         location
       } = this.props
@@ -92,7 +95,7 @@ const withSearch = (config = {}) => WrappedComponent => {
       const newPath = `${pathname}?${queryString}`
 
       if (isRefreshing) {
-        assignData({ [dataKey]: [] })
+        dispatch(assignData({ [dataKey]: [] }))
       }
 
       this.setState({
@@ -109,7 +112,9 @@ const withSearch = (config = {}) => WrappedComponent => {
       let nextValue = value
       const previousValue = queryParams[key]
       if (get(previousValue, 'length')) {
-        nextValue = `${previousValue},${value}`
+        const args = previousValue.split(',').concat([value])
+        args.sort()
+        nextValue = args.join(',')
       } else if (typeof previousValue === "undefined") {
        console.warn(`Weird did you forget to mention this ${key} query param in your withSearch hoc ?`)
       }
@@ -124,7 +129,7 @@ const withSearch = (config = {}) => WrappedComponent => {
       const previousValue = queryParams[key]
       if (get(previousValue, 'length')) {
         let nextValue = previousValue.replace(`,${value}`, '')
-                                       .replace(value, '')
+                                     .replace(value, '')
         if (nextValue[0] === ',') {
           nextValue = nextValue.slice(1)
         }
@@ -161,8 +166,7 @@ const withSearch = (config = {}) => WrappedComponent => {
     connect(
       (state, ownProps) => ({
         queryParams: searchSelector(state, ownProps.location.search)
-      }),
-      { assignData }
+      })
     )
   )(_withSearch)
 }
