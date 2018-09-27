@@ -45,6 +45,7 @@ class InfiniteScroller extends Component {
 
     const pageScrollRatio = scrollTop / (scrollHeight - clientHeight)
     const scrollDirection = this.state.lastScrollTop > scrollTop ? UP : DOWN
+
     const shouldLoadMore =
       !isFinished &&
       !isLoading &&
