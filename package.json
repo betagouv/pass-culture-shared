@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "lodash.merge": "^4.6.1",
     "lodash.get": "^4.4.2",
+    "lodash.merge": "^4.6.1",
     "lodash.set": "^4.3.2",
     "lodash.uniqby": "^4.7.0",
     "moment": "^2.18.1",
@@ -16,6 +16,7 @@
     "react-dotdotdot": "^1.2.3",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
+    "react-time-input": "^0.0.19",
     "redux": "^4.0.0",
     "redux-saga": "^0.15.3",
     "reselect": "^3.0.1",
@@ -66,5 +67,5 @@
     "watch": "nodemon --watch src --exec \"npm run compile\"",
     "test": "yarn jest --env=jsdom"
   },
-  "version": "0.0.52"
+  "version": "0.0.54"
 }
