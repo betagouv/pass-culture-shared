@@ -11,7 +11,6 @@ class TimeInput extends Component {
   onInputChange = time => {
     const { onChange: fieldOnChange, value, tz } = this.props
     if (fieldOnChange && value) {
-      console.log('value', value, 'event.target.value', time)
       const [hour, minutes] = time.split(':')
       const date = moment(value).tz(tz)
         .hours(hour)
