@@ -1,5 +1,5 @@
 import withBlock from './withBlock'
 import withLogin from './withLogin'
-import withSearch from './withSearch'
+import withPagination from './withPagination'
 
-export { withBlock, withLogin, withSearch }
+export { withBlock, withLogin, withPagination }

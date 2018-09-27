@@ -67,7 +67,7 @@ export function updateQueryString(string, object) {
 
 export function getObjectWithMappedKeys(obj, keysMap) {
   const mappedObj = {}
-  Object.keys(keysMap)
+  Object.keys(obj)
         .forEach(objKey => {
           let mappedKey = objKey
           if (keysMap[objKey]) {
