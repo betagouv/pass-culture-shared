@@ -24,12 +24,14 @@ class DateInput extends Component {
       value,
     } = this.props
 
-    return readOnly ? (
-      <input
+    if (readOnly) {
+      return <input
         className={`input is-${size}`}
         readOnly
         value={value && moment(value).format(dateFormat)} />
-    ) : (
+    }
+
+    return (
       <div className={`input is-${size} date-picker`}>
         <span>
           <DatePicker
