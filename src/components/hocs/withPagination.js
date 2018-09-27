@@ -42,6 +42,26 @@ const withPagination = (config = {}) => WrappedComponent => {
 
     }
 
+    componentDidMount () {
+
+      const { search } = this.props
+      const { windowQuery } = this.state
+
+      const resetPage = search.page
+        ? Number(search.page)
+        : 1
+
+      const mountWindowQuery = {}
+      Object.keys(defaultWindowQuery).forEach(key => {
+        mountWindowQuery[key] = typeof windowQuery[key] !== "undefined"
+          ? windowQuery[key]
+          : defaultWindowQuery[key]
+      })
+
+      this.change(mountWindowQuery, { page: resetPage })
+
+    }
+
     static getDerivedStateFromProps(nextProps, prevState) {
 
       const windowQuery = {}
@@ -81,16 +101,26 @@ const withPagination = (config = {}) => WrappedComponent => {
     }
 
     reverseOrder = e => {
-      const [by, direction] = this.state.windowQuery.order_by.split('+')
+      const orderBy =  get(this, 'state.windowQuery.orderBy')
+      if (!orderBy) {
+        console.warn('there is no orderBy in the window query')
+        return
+      }
+      const [orderName, orderDirection] = orderBy.split('+')
       this.change({
-        order_by: [by, direction === 'desc' ? 'asc' : 'desc'].join('+'),
+        orderBy: [orderName, orderDirection === 'desc' ? 'asc' : 'desc'].join('+'),
       })
     }
 
     orderBy = e => {
-      const [, direction] = this.state.windowQuery.order_by.split('+')
+      const orderBy =  get(this, 'state.windowQuery.orderBy')
+      if (!orderBy) {
+        console.warn('there is no orderBy in the window query')
+        return
+      }
+      const [, orderDirection] = orderBy.split('+')
       this.change({
-        order_by: [e.target.value, direction].join('+'),
+        orderBy: [e.target.value, orderDirection].join('+'),
       })
     }
 
@@ -100,27 +130,38 @@ const withPagination = (config = {}) => WrappedComponent => {
         history,
         location
       } = this.props
-      const isRefreshing = typeof config.isRefreshing === "undefined"
+      const resetPage = config.page || 1
+      const isClearingData = typeof config.isClearingData === "undefined"
         ? true
-        : config.isRefreshing
+        : config.isClearingData
       const pathname = config.pathname || location.pathname
       const { windowQuery } = this.state
 
+      const hasKeyNotInWindowQuery = Object.keys(newValue)
+        .find(key => typeof defaultWindowQuery[key] === "undefined")
+
+      if (hasKeyNotInWindowQuery) {
+        console.warn('You tried to change the window query with a not specified key')
+        return
+      }
+
       const newWindowQuery = {}
-      defaultWindowQuery.forEach(key => {
-        newWindowQuery[key] = newValue[key] || windowQuery[key]
+      Object.keys(defaultWindowQuery).forEach(key => {
+        newWindowQuery[key] = typeof newValue[key] !== "undefined"
+          ? newValue[key]
+          : windowQuery[key]
       })
       const newWindowSearch = objectToQueryString(newWindowQuery)
 
-      const newPath = `${pathname}?page=1&${newWindowSearch}`
+      const newPath = `${pathname}?${newWindowSearch}`
 
-      if (isRefreshing) {
+      if (isClearingData) {
         dispatch(assignData({ [dataKey]: [] }))
       }
 
       this.setState({
         value: newValue,
-        page: 1,
+        page: resetPage,
       })
 
       history.push(newPath)
