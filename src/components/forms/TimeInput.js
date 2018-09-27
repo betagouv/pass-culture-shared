@@ -1,7 +1,6 @@
 import moment from 'moment-timezone'
 import React, { Component } from 'react'
-
-import BasicInput from './BasicInput'
+import ReactTimeInput from 'react-time-input';
 
 class TimeInput extends Component {
   static displayValue = (value, props) => {
@@ -9,29 +8,48 @@ class TimeInput extends Component {
     return value && tz && moment(value).tz(tz)
   }
 
-  onInputChange = event => {
+  onInputChange = time => {
     const { onChange: fieldOnChange, value, tz } = this.props
     if (fieldOnChange && value) {
-      const [hour, minutes] = event.target.value.split(':')
+      console.log('value', value, 'event.target.value', time)
+      const [hour, minutes] = time.split(':')
       const date = moment(value).tz(tz)
         .hours(hour)
         .minutes(minutes)
-      fieldOnChange(date && date.toISOString(), { event })
+      fieldOnChange(
+        date && date.toISOString(),
+        { event: { target: { value: time } } }
+      )
     }
   }
 
   render() {
-    const { value, tz} = this.props
+    const {
+      readOnly,
+      value,
+      size,
+      tz
+    } = this.props
 
     const timezonedValue = (value && tz)
       ? moment(value).tz(tz).format('HH:mm')
       : ''
 
+    if (readOnly) {
+      return (
+        <input
+          className={`input is-${size}`}
+          readOnly
+          value={timezonedValue} />
+      )
+    }
+
     return (
-      <BasicInput
-        {...this.props}
-        onChange={this.onInputChange}
-        value={timezonedValue}
+      <ReactTimeInput
+   			initTime={timezonedValue}
+   			className={`input is-${size}`}
+   			mountFocus='true'
+   			onTimeChange={this.onInputChange}
       />
     )
   }
