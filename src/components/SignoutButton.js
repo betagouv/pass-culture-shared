@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { compose } from 'redux'
 
 import { closeModal } from '../reducers/modal'
 import { requestData } from '../reducers/data'
@@ -57,4 +59,7 @@ class SignoutButton extends Component {
   }
 }
 
-export default withRouter(SignoutButton)
+export default compose(
+  withRouter,
+  connect()
+)(SignoutButton)
