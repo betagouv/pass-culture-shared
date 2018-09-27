@@ -47,7 +47,6 @@ class TimeInput extends Component {
       <ReactTimeInput
    			initTime={timezonedValue}
    			className={`input is-${size}`}
-   			mountFocus='true'
    			onTimeChange={this.onInputChange}
       />
     )
