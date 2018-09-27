@@ -4784,6 +4784,12 @@ react-test-renderer@^16.0.0-0, react-test-renderer@^16.5.1:
     react-is "^16.5.2"
     schedule "^0.5.0"
 
+react-time-input@^0.0.19:
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/react-time-input/-/react-time-input-0.0.19.tgz#7f4d72bb278505c7e31f28bcc2ad3be4a0031aa0"
+  dependencies:
+    user "0.0.0"
+
 react@^0.14||^15.5.4||^16.1.1:
   version "16.5.2"
   resolved "https://registry.yarnpkg.com/react/-/react-16.5.2.tgz#19f6b444ed139baa45609eee6dc3d318b3895d42"
@@ -5698,6 +5704,10 @@ use@^3.1.0:
 user-home@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/user-home/-/user-home-1.1.1.tgz#2b5be23a32b63a7c9deb8d0f28d485724a3df190"
+
+user@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/user/-/user-0.0.0.tgz#f27f1b23fc511f2a8efa40db55cfba123824e02a"
 
 util-deprecate@~1.0.1:
   version "1.0.2"
