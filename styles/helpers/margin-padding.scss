@@ -1,0 +1,70 @@
+@each $intSize in $intSizes {
+  $sides: (all, topbottom, leftright, top, left, right, bottom);
+
+  // convert value to SASS variables with unit
+  $pixelValue: number-to-pixel($intSize);
+
+  @each $side in $sides {
+    @if $side == 'all' {
+      .m#{$intSize} {
+        @include rem(margin, $pixelValue);
+      }
+
+      .p#{$intSize} {
+        @include rem(padding, $pixelValue);
+      }
+    }
+
+    @else if $side == 'topbottom' {
+      .my#{$intSize} {
+        @include rem(margin-top, $pixelValue);
+        @include rem(margin-bottom, $pixelValue);
+      }
+
+      .py#{$intSize} {
+        @include rem(padding-top, $pixelValue);
+        @include rem(padding-bottom, $pixelValue);
+      }
+    }
+
+    @else if $side == 'leftright' {
+      .mx#{$intSize} {
+        @include rem(margin-left, $pixelValue);
+        @include rem(margin-right, $pixelValue);
+      }
+
+      .px#{$intSize} {
+        @include rem(padding-left, $pixelValue);
+        @include rem(padding-right, $pixelValue);
+      }
+    }
+
+    @else {
+      .m#{str-slice($side, 0, 1)}#{$intSize} {
+        @include rem(margin-#{$side}, $pixelValue);
+      }
+
+      .p#{str-slice($side, 0, 1)}#{$intSize} {
+        @include rem(padding-#{$side}, $pixelValue);
+      }
+    }
+  }
+}
+
+// default padding to 1rem
+// appliquer aux pages, aux sections de pages
+.marged {
+  margin: $page-padding !important;
+}
+
+.marged-2x {
+  margin: ($page-padding * 2) !important;
+}
+
+.padded {
+  padding: $page-padding !important;
+}
+
+.padded-2x {
+  padding: ($page-padding * 2) !important;
+}
