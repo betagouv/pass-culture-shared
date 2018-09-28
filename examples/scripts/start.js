@@ -1,5 +1,15 @@
 'use strict';
 
+
+// Application
+const npmConfig = JSON.parse(process.env.npm_config_argv)
+const npmArgs = npmConfig.original
+if (!npmArgs[1]) {
+  console.log('You need to say which applications [youtube|todos]');
+  process.exit(1);
+}
+process.env.APP_NAME = JSON.parse(process.env.npm_config_argv).original[1]
+
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';

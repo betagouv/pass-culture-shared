@@ -1,17 +1,17 @@
 import React from 'react'
 import { Redirect } from 'react-router'
 
-import ChannelsPage from '../components/pages/ChannelsPage'
+import TodosPage from '../components/pages/TodosPage'
 
 const routes = [
     {
         path: '/',
-        render: () => <Redirect to="/channels" />,
+        render: () => <Redirect to="/todos" />,
     },
     {
-        component: ChannelsPage,
-        path: '/channels',
-        title: "Youtube channels example",
+        component: TodosPage,
+        path: '/todos',
+        title: "Todos example",
     },
 ]
 

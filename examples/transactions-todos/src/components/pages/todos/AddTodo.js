@@ -1,7 +1,8 @@
+import { requestData } from 'pass-culture-shared'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import todosNormalizer from '../../../normalizers/todos'
+import todosNormalizer from '../../../normalizers/todosNormalizer'
 
 const ENTER_KEY = 13
 
@@ -12,10 +13,10 @@ class AddTodo extends Component {
     if (event.keyCode !== ENTER_KEY) { return }
     event.preventDefault()
     if (!this.input.value.trim()) { return }
-    dispatch('POST', 'todos', {
+    dispatch(requestData('POST', 'todos', {
       body: [{ text: this.input.value }],
       normalizer: todosNormalizer
-    })
+    }))
     this.input.value = ''
   }
 

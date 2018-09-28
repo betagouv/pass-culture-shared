@@ -1,3 +1,5 @@
-export default todosNormalizer = {
+const todosNormalizer = {
   tags: 'tags'
 }
+
+export default todosNormalizer

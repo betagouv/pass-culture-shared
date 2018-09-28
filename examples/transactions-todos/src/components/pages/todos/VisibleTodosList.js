@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import Todo from './Todo'
+
+import TodoItem from '../../items/TodoItem'
 
 class VisibleTodosList extends Component {
 
@@ -8,41 +10,45 @@ class VisibleTodosList extends Component {
   }
 
   render () {
-    todos,
-    onCancelTodoClick,
-    onDestroyTodoClick,
-    onEditTodoClick,
-    onSaveTodoClick,
-    onToggleTodoClick,
-    onToggleAllTodosClick
-  } => {
-  const activeTodoCount = todos.reduce((accum, todo) => {
-    return todo.completed ? accum : accum + 1
-  }, 0)
-  return (<section className='main'>
-    <input
-      className='toggle-all'
-      type='checkbox'
-      onChange={() => onToggleAllTodosClick(
-        todos.map(todo => todo.id), activeTodoCount === 0)
-      }
-      checked={activeTodoCount === 0}
-    />
-    <ul className='todo-list'>
-      {todos.map(todo =>
-        <Todo
-          key={todo.id}
-          {...todo}
-          onCancel={() => onCancelTodoClick(todo.id)}
-          onClick={() => onToggleTodoClick(todo.id)}
-          onEdit={() => onEditTodoClick(todo.id)}
-          onDestroy={() => onDestroyTodoClick(todo.id)}
-          onToggle={() => onToggleTodoClick(todo.id, todo.completed)}
-          onSave={(text) => onSaveTodoClick(todo.id, text)}
+    const {
+      todos,
+      onCancelTodoClick,
+      onDestroyTodoClick,
+      onEditTodoClick,
+      onSaveTodoClick,
+      onToggleTodoClick,
+      onToggleAllTodosClick
+    } = this.props
+    const activeTodoCount = todos.reduce((accum, todo) => {
+      return todo.completed ? accum : accum + 1
+    }, 0)
+    return (
+      <section className='main'>
+        <input
+          className='toggle-all'
+          type='checkbox'
+          onChange={() => onToggleAllTodosClick(
+            todos.map(todo => todo.id), activeTodoCount === 0)
+          }
+          checked={activeTodoCount === 0}
         />
-      )}
-    </ul>
-  </section>)
+        <ul className='todo-list'>
+          {todos.map(todo =>
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onCancel={() => onCancelTodoClick(todo.id)}
+              onClick={() => onToggleTodoClick(todo.id)}
+              onEdit={() => onEditTodoClick(todo.id)}
+              onDestroy={() => onDestroyTodoClick(todo.id)}
+              onToggle={() => onToggleTodoClick(todo.id, todo.completed)}
+              onSave={(text) => onSaveTodoClick(todo.id, text)}
+            />
+          )}
+        </ul>
+      </section>
+    )
+  }
 }
 
 VisibleTodosList.propTypes = {
