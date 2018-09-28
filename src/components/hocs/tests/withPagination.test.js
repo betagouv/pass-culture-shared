@@ -2,15 +2,15 @@ import React, { Component }  from 'react'
 import { shallow } from 'enzyme'
 import renderer from 'react-test-renderer'
 
-import withSearch from '../withSearch'
+import withPagination from '../withPagination'
 
-describe('src | components | hocs | withSearch', () => {
+describe('src | components | hocs | withPagination', () => {
   let MockComponent, WrapperComponent
     MockComponent = renderer.create(
     Component
     )
 
-  WrapperComponent = withSearch(MockComponent)
+  WrapperComponent = withPagination(MockComponent)
 
   describe('snapshot', () => {
     it('should match snapshot', () => {

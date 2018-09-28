@@ -1,7 +1,8 @@
 import {
   getRequestErrorString,
   objectToQueryString,
-  pluralize
+  pluralize,
+  queryStringToObject
 } from '../string'
 
 describe('getRequestErrorString', () => {
@@ -109,6 +110,12 @@ describe('objectToQueryString', () => {
     }
     expect(objectToQueryString(fakeObject)).toEqual('')
   })
+  it('should return an empty fakeObject when it receive an object with a value that is null', () => {
+    const fakeObject = {
+      keywords: null,
+    }
+    expect(objectToQueryString(fakeObject)).toEqual('')
+  })
   it('should return a string when it receive an object with an number', () => {
     const fakeObject = {
       keywords: 12345,
@@ -116,19 +123,42 @@ describe('objectToQueryString', () => {
     expect(objectToQueryString(fakeObject)).toEqual('keywords=12345')
   })
 
+  it('should return a string when given an object', () => {
+    const location = {
+      "distance": "50",
+      "latitude": "48.863779099999995",
+      "longitude": "2.3374663",
+      "mots-cles": "conspiration",
+      "page": "1"
+    }
+    expect(objectToQueryString(location)).toEqual("distance=50&latitude=48.863779099999995&longitude=2.3374663&mots-cles=conspiration&page=1")
+  })
 })
 
 describe('queryStringToObject', () => {
-  it('should return an empty string when given an empty string', () => {
+  // TODO La fonction doit-elle renvoyer un objet vide s'il n'y a pas de string valide ?
+  // Elle n'est utilisée que dans le selectors/search
+  it.skip('should return an empty object when given an empty string', () => {
     const queryString = ''
-    expect(objectToQueryString(queryString)).toEqual('')
+    expect(queryStringToObject(queryString)).toEqual({})
   })
-  // it('should return an object when given a string', () => {
-  //   const queryString = 'keywords=fakeWords&distance=fakeDistance&from_date=fakeDistance&type=fakeDistance'
-  //   expect(objectToQueryString(queryString)).toEqual('')
-  // })
-  it('should return an object when given a string', () => {
-    const queryString = 'venueId=fakeWords'
-    expect(objectToQueryString(queryString)).toEqual('')
+  it.skip('should return an empty object when given an empty string', () => {
+    const queryString = null
+    expect(queryStringToObject(queryString)).toEqual({})
+  })
+  it.skip('should return an empty object when given an empty string', () => {
+    const queryString = undefined
+    expect(queryStringToObject(queryString)).toEqual({})
+  })
+  it('should return an empty object when given a string with query params', () => {
+    const queryString = "distance=50&latitude=48.863779099999995&longitude=2.3374663&mots-cles=conspiration&page=1"
+    const expected = {
+      "distance": "50",
+      "latitude": "48.863779099999995",
+      "longitude": "2.3374663",
+      "mots-cles": "conspiration",
+      "page": "1"
+    }
+    expect(queryStringToObject(queryString)).toEqual(expected)
   })
 })

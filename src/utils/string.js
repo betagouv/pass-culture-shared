@@ -35,14 +35,17 @@ export function pluralize(number, string, pluralizeWith) {
 }
 
 export function queryStringToObject(string = '') {
-  return string
-    .replace(/^\??/, '')
-    .split('&')
-    .filter(el => el)
-    .reduce((result, group) => {
-      let [key, value] = group.split('=')
-      return Object.assign({}, result, { [key]: value })
-    }, {})
+  return (
+    string &&
+    string
+      .replace(/^\??/, '')
+      .split('&')
+      .filter(el => el)
+      .reduce((result, group) => {
+        let [key, value] = group.split('=')
+        return Object.assign({}, result, { [key]: value })
+      }, {}))
+
 }
 
 export function objectToQueryString(object = {}) {
@@ -90,7 +93,6 @@ export function formatSiren(string) {
 }
 
 export function getRequestErrorString(request) {
-  const flat = [];
   if (request.errors instanceof Array) {
     return request.errors.map(errors =>
       Object.keys(errors).map(key => errors[key]).join(' ')
