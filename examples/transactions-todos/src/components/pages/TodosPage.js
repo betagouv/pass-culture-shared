@@ -1,5 +1,5 @@
 import { requestData } from 'pass-culture-shared'
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import AddTodo from './todos/AddTodo'
@@ -16,39 +16,14 @@ class TodosPage extends Component {
   }
 
   render () {
-    const { todosError, globalError } = this.props
-
-    if (todosError) {
-      return (
-        <div className="is-warning">
-          {/* something like 'You are not authorized to fetch todos' */}
-          {todosError}
-        </div>
-      )
-    }
-
-    if (globalError) {
-      return (
-        <div className="is-danger">
-        {/* something like 'Connection to the server has failed' */}
-          {globalError}
-        </div>
-      )
-    }
-
     return (
-      <div>
+      <section className="todoapp">
         <AddTodo />
         <VisibleTodosList />
         <Footer />
-      </div>
+      </section>
     )
   }
 }
 
-export default connect(
-  state => ({
-    todosError: state.errors.todos,
-    globalError: state.errors.global
-  })
-)(TodosPage)
+export default connect()(TodosPage)

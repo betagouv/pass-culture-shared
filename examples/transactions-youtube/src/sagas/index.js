@@ -8,7 +8,6 @@ function* rootSaga() {
     watchDataActions({
       // special local fake server for the demo
       fetchData,
-      timeout: 10000,
     })
   ])
 }

@@ -5,6 +5,8 @@ import todos from './todos'
 
 function fetchData (method, path, config) {
 
+  console.log('method, path, config', method, path, config)
+
   if (/todos\/(.*)$/.test(path)) {
 
     if (method === 'GET') {

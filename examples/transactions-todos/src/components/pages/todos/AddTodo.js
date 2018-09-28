@@ -10,14 +10,17 @@ class AddTodo extends Component {
 
   onAddClick = event  => {
     const { dispatch } = this.props
+
     if (event.keyCode !== ENTER_KEY) { return }
     event.preventDefault()
-    if (!this.input.value.trim()) { return }
+    if (!this.$input.value.trim()) { return }
+
     dispatch(requestData('POST', 'todos', {
-      body: [{ text: this.input.value }],
+      body: { text: this.$input.value },
       normalizer: todosNormalizer
     }))
-    this.input.value = ''
+
+    this.$input.value = ''
   }
 
   render () {
@@ -35,6 +38,4 @@ class AddTodo extends Component {
   }
 }
 
-export default connect(
-  state => ({ todos: state.data.todos })
-)(AddTodo)
+export default connect()(AddTodo)
