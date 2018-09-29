@@ -111,8 +111,4 @@ class TodoItem extends Component {
   }
 }
 
-export default connect(
-  (state, ownProps) => ({
-
-  })
-)(TodoItem)
+export default connect()(TodoItem)
