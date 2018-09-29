@@ -17,6 +17,8 @@ class VisibleTodosList extends Component {
     const activeTodoCount = todos.reduce((accum, todo) => {
       return todo.completed ? accum : accum + 1
     }, 0)
+
+    
     return (
       <section className='main'>
         <input
