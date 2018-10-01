@@ -11,7 +11,7 @@ describe('createCachedSelector', () => {
     expect(result).toEqual(expected)
 
   })
-  it('should return ???  the seach from state', () => {
+  it('should return an empty object when there is not search query in the state', () => {
     const state = {}
     const search = ''
     const expected = ''
