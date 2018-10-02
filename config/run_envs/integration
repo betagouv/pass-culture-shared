@@ -1,2 +1,2 @@
-API_URL='https://pass-culture-api-integration.scalingo.io'
+API_URL='https://backend.passculture-integration.beta.gouv.fr'
 NODE_ENV="production"
