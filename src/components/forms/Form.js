@@ -76,6 +76,7 @@ class _Form extends Component {
         mergePatch[key] = ''
       }
     })
+    console.log('patch', patch, 'mergePatch', mergePatch)
     if (Object.keys(mergePatch).length === 0) {
       return
     }

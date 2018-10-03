@@ -6,19 +6,26 @@ import { optionify } from '../../utils/form'
 
 class SelectInput extends Component {
   componentDidMount() {
-    this.handleUniqueSelectOption()
+    this.handleSpecialOptions()
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.options !== this.props.options) {
-      this.handleUniqueSelectOption()
+      this.handleSpecialOptions()
     }
   }
 
-  handleUniqueSelectOption = () => {
+  handleSpecialOptions = () => {
     const { onChange: fieldOnChange, options, optionValue } = this.props
     if (options && options.length === 1) {
       fieldOnChange(options[0][optionValue])
+      return
+    }
+
+    console.log('qdqdq', options.length)
+    if (!options || options.length === 0) {
+      console.log('ON Y VA', this.props.name)
+      fieldOnChange('')
     }
   }
 
