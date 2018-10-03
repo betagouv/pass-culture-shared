@@ -4994,9 +4994,9 @@ pascalcase@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
 
-pass-culture-shared@0.0.46:
-  version "0.0.46"
-  resolved "https://registry.yarnpkg.com/pass-culture-shared/-/pass-culture-shared-0.0.46.tgz#32e6f1ffe0e7c32f525d967aa278c68f7db7c42f"
+pass-culture-shared@0.0.59:
+  version "0.0.59"
+  resolved "https://registry.yarnpkg.com/pass-culture-shared/-/pass-culture-shared-0.0.59.tgz#61037cbcd14bd8ba599edf1c2d5f8ba5622257dd"
   dependencies:
     lodash.get "^4.4.2"
     lodash.merge "^4.6.1"
@@ -5009,11 +5009,12 @@ pass-culture-shared@0.0.46:
     react "^0.14||^15.5.4||^16.1.1"
     react-autocomplete "^1.8.1"
     react-autosize-textarea "^4.0.0"
-    react-datepicker "^1.5.0"
+    react-datepicker "^1.6.0"
     react-dom "^0.14||^15.5.4||^16.1.1"
     react-dotdotdot "^1.2.3"
     react-redux "^5.0.7"
     react-router-dom "^4.3.1"
+    react-time-input "^0.0.19"
     redux "^4.0.0"
     redux-saga "^0.15.3"
     reselect "^3.0.1"
@@ -5627,7 +5628,7 @@ react-autosize-textarea@^4.0.0:
     line-height "^0.3.1"
     prop-types "^15.5.6"
 
-react-datepicker@^1.5.0:
+react-datepicker@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-1.6.0.tgz#6b7a87e949f3bbd94872554be6a0119bd908a987"
   dependencies:
@@ -5737,6 +5738,12 @@ react-router@^4.3.1:
     path-to-regexp "^1.7.0"
     prop-types "^15.6.1"
     warning "^4.0.1"
+
+react-time-input@^0.0.19:
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/react-time-input/-/react-time-input-0.0.19.tgz#7f4d72bb278505c7e31f28bcc2ad3be4a0031aa0"
+  dependencies:
+    user "0.0.0"
 
 react@^0.14||^15.5.4||^16.1.1, react@^16.4.2:
   version "16.5.2"
@@ -6934,6 +6941,10 @@ url@^0.11.0:
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
+
+user@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/user/-/user-0.0.0.tgz#f27f1b23fc511f2a8efa40db55cfba123824e02a"
 
 util-deprecate@~1.0.1:
   version "1.0.2"

@@ -2,8 +2,6 @@ const todos = [
   {
     completed: false,
     id: "58069f7be1eea509953a580a",
-    lastPutDate: "2016-10-22T22:54:14.018Z",
-    postedDate: "2016-10-22T22:54:14.018Z",
     tags:[
       {
         color: "red",
@@ -25,15 +23,11 @@ const todos = [
   {
     completed: false,
     id: "5806a1a2ce6a740cb17deee4",
-    lastPutDate: "2016-10-22T22:54:14.018Z",
-    postedDate: "2016-10-22T22:54:14.018Z",
     text: "read Marx for good"
   },
   {
     completed: true,
     id: "5806a3688cea1b0cca4eb238",
-    lastPutDate: "2016-10-22T22:54:14.018Z",
-    postedDate: "2016-10-22T22:54:14.018Z",
     tags: [
       {
         color: "blue",

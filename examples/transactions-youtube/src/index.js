@@ -6,8 +6,8 @@ import './utils/init'
 import Root from './Root'
 
 const initApp = () => {
-    ReactDOM.render(<Root />, document.getElementById('root'))
-    registerCacheWorker()
+  ReactDOM.render(<Root />, document.getElementById('root'))
+  registerCacheWorker()
 }
 
 initApp()

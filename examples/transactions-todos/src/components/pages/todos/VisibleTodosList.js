@@ -1,35 +1,30 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import TodoItem from '../../items/TodoItem'
 
 class VisibleTodosList extends Component {
 
   onToggleAllTodosClick = () => {
-
+    // TODO
   }
 
   render () {
     const {
-      todos,
-      onCancelTodoClick,
-      onDestroyTodoClick,
-      onEditTodoClick,
-      onSaveTodoClick,
-      onToggleTodoClick,
-      onToggleAllTodosClick
+      todos
     } = this.props
     const activeTodoCount = todos.reduce((accum, todo) => {
       return todo.completed ? accum : accum + 1
     }, 0)
+
+    
     return (
       <section className='main'>
         <input
           className='toggle-all'
           type='checkbox'
-          onChange={() => onToggleAllTodosClick(
-            todos.map(todo => todo.id), activeTodoCount === 0)
-          }
+          onChange={this.onToggleAllTodosClick}
           checked={activeTodoCount === 0}
         />
         <ul className='todo-list'>
@@ -37,12 +32,6 @@ class VisibleTodosList extends Component {
             <TodoItem
               key={todo.id}
               todo={todo}
-              onCancel={() => onCancelTodoClick(todo.id)}
-              onClick={() => onToggleTodoClick(todo.id)}
-              onEdit={() => onEditTodoClick(todo.id)}
-              onDestroy={() => onDestroyTodoClick(todo.id)}
-              onToggle={() => onToggleTodoClick(todo.id, todo.completed)}
-              onSave={(text) => onSaveTodoClick(todo.id, text)}
             />
           )}
         </ul>
@@ -52,12 +41,6 @@ class VisibleTodosList extends Component {
 }
 
 VisibleTodosList.propTypes = {
-  onCancelTodoClick: PropTypes.func.isRequired,
-  onDestroyTodoClick: PropTypes.func.isRequired,
-  onEditTodoClick: PropTypes.func.isRequired,
-  onSaveTodoClick: PropTypes.func.isRequired,
-  onToggleTodoClick: PropTypes.func.isRequired,
-  onToggleAllTodosClick: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
@@ -65,4 +48,10 @@ VisibleTodosList.propTypes = {
   }).isRequired).isRequired
 }
 
-export default VisibleTodosList
+function mapStateTopProps (state) {
+  return {
+    todos: state.data.todos
+  }
+}
+
+export default connect(mapStateTopProps)(VisibleTodosList)

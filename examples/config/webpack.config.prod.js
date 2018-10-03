@@ -3,6 +3,7 @@
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -90,7 +91,7 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -121,7 +122,7 @@ module.exports = {
             options: {
               formatter: eslintFormatter,
               eslintPath: require.resolve('eslint'),
-              
+
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -149,11 +150,12 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              
+
               compact: true,
             },
           },
           // The notation here is somewhat confusing.
+          // "sass" loader applies for our SCSS.
           // "postcss" loader applies autoprefixer to our CSS.
           // "css" loader resolves paths in CSS and adds assets as dependencies.
           // "style" loader normally turns CSS into JS modules injecting <style>,
@@ -166,7 +168,8 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /\.css$/,
+            test: /\.s?css$/,
+            exclude: /node_modules/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
@@ -205,6 +208,7 @@ module.exports = {
                         ],
                       },
                     },
+                    require.resolve('sass-loader'),
                   ],
                 },
                 extractTextPluginOptions
@@ -234,6 +238,18 @@ module.exports = {
     ],
   },
   plugins: [
+    // given https://stackoverflow.com/questions/47718289/view-download-pdf-files-in-react-router-4
+    // the register cache service worker apparently works bad
+    // to redirect build assets (like images, pdf...)
+    // when react router is set
+    // we need here to force them their copy
+    // in order to make the sw cache aware of them
+    new CopyWebpackPlugin(
+      ['bmp', 'pdf', 'jpg', 'jpeg', 'png'].map(extension => ({
+        from: path.resolve(`${paths.appPublic}/**/*.${extension}`),
+        to: path.resolve(`${paths.appBuild}/**/*.${extension}`),
+      }))
+    ),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">

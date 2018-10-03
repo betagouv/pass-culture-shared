@@ -1,13 +1,13 @@
 import { watchDataActions } from 'pass-culture-shared'
 import { all } from 'redux-saga/effects'
 
-import { API_URL } from '../utils/config'
+import fetchData from '../server/fetchData'
 
 function* rootSaga() {
   yield all([
     watchDataActions({
-      timeout: 10000,
-      url: API_URL,
+      // special local fake server for the demo
+      fetchData
     })
   ])
 }
