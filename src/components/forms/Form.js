@@ -76,7 +76,7 @@ class _Form extends Component {
         mergePatch[key] = ''
       }
     })
-    console.log('patch', patch, 'mergePatch', mergePatch)
+
     if (Object.keys(mergePatch).length === 0) {
       return
     }
@@ -229,11 +229,13 @@ class _Form extends Component {
               ? baseValue
               : ''
 
+        const id = `${name}-${c.props.name}`
+
         const newChild = React.cloneElement(
           c,
-          Object.assign({
+          {
             errors: get(errorsPatch, c.props.name),
-            id: `${name}-${c.props.name}`,
+            id,
             formName: name,
             InputComponent,
             layout,
@@ -243,7 +245,7 @@ class _Form extends Component {
             size,
             type,
             value,
-          })
+          }
         )
 
         if (newChild.props.required) {

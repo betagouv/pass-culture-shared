@@ -50,8 +50,6 @@ class Field extends Component {
       ? ' '
       : value
 
-    console.log('newStoreValue', newStoreValue)
-
     const storedValue = storeValue(
       newStoreValue,
       this.props

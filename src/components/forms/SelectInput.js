@@ -21,12 +21,6 @@ class SelectInput extends Component {
       fieldOnChange(options[0][optionValue])
       return
     }
-
-    console.log('qdqdq', options.length)
-    if (!options || options.length === 0) {
-      console.log('ON Y VA', this.props.name)
-      fieldOnChange('')
-    }
   }
 
   onChange = event => {
