@@ -27,7 +27,6 @@ class InfiniteScroller extends Component {
     ),
     renderFinished: () => (
       <li style={{ justifyContent: 'center' }}>
-        C'est fini !
       </li>
     ),
     renderErrors: errors => (
