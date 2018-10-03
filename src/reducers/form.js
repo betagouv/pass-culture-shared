@@ -44,16 +44,27 @@ export const form = (state = initialState, action) => {
   if (action.type === RESET_FORM) {
     return initialState
   }
-  
+
   return state
 }
 
-export const mergeForm = (name, patch, config) => ({
-  type: `MERGE_FORM_${name.toUpperCase()}`,
-  name,
-  patch,
-  config,
-})
+export const mergeForm = (name, patch, config) => {
+
+  let type = `MERGE_FORM_${name.toUpperCase()}`
+
+  const patchKeys = patch && Object.keys(patch)
+  if (patchKeys && patchKeys.length === 1) {
+    const singleKey = patchKeys[0]
+    type = `${type}_${singleKey.toUpperCase()}`
+  }
+
+  return {
+    type,
+    name,
+    patch,
+    config,
+  }
+}
 
 export const resetForm = () => ({
   type: RESET_FORM,

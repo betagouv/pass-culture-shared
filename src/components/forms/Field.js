@@ -44,8 +44,14 @@ class Field extends Component {
 
     const storeValue = get(InputComponent, 'storeValue', this.props.storeValue)
 
+    const isValueChangedToEmptyString = value === '' && this.props.value
+
+    const newStoreValue = isValueChangedToEmptyString
+      ? ' '
+      : value
+
     const storedValue = storeValue(
-      value === '' && this.props.value ? ' ' : value,
+      newStoreValue,
       this.props
     )
 
