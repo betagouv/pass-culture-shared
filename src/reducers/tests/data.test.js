@@ -21,7 +21,6 @@ import { assignData, createData, failData, requestData, resetData, successData, 
           // when
           const updatedState = createData(state, action)
 
-          console.log('updatedState ---->', updatedState)
           const expected = {}
 
           // then
