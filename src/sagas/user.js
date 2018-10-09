@@ -43,29 +43,29 @@ function* fromWatchSuccessPatchUsers(action) {
 export function* watchUserActions() {
   yield takeEvery(
     ({ type }) =>
-      /REQUEST_DATA_POST_USERS\/SIGN(.*)/.test(type) ||
-      /REQUEST_DATA_GET_USERS\/CURRENT(.*)/.test(type),
+      /REQUEST_DATA_POST_\/?USERS\/SIGN(.*)/.test(type) ||
+      /REQUEST_DATA_GET_\/?USERS\/CURRENT(.*)/.test(type),
     fromWatchRequestSignActions
   )
   yield takeEvery(
     ({ type }) =>
-      /FAIL_DATA_POST_USERS\/SIGN(.*)/.test(type) ||
-      /FAIL_DATA_GET_USERS\/CURRENT(.*)/.test(type),
+      /FAIL_DATA_POST_\/?USERS\/SIGN(.*)/.test(type) ||
+      /FAIL_DATA_GET_\/?USERS\/CURRENT(.*)/.test(type),
     fromWatchFailSignActions
   )
   yield takeEvery(
     ({ type }) =>
-      /SUCCESS_DATA_POST_USERS\/SIGN(.*)/.test(type) ||
-      /SUCCESS_DATA_GET_USERS\/CURRENT(.*)/.test(type),
+      /SUCCESS_DATA_POST_\/?USERS\/SIGN(.*)/.test(type) ||
+      /SUCCESS_DATA_GET_\/?USERS\/CURRENT(.*)/.test(type),
     fromWatchSuccessSignActions
   )
   yield takeEvery(
     ({ type }) =>
-      /SUCCESS_DATA_PATCH_USERS/.test(type),
+      /SUCCESS_DATA_PATCH_\/?USERS/.test(type),
     fromWatchSuccessPatchUsers
   )
   yield takeEvery(
-    ({ type }) => /SUCCESS_DATA_GET_USERS\/SIGNOUT(.*)/.test(type),
+    ({ type }) => /SUCCESS_DATA_GET_\/?USERS\/SIGNOUT(.*)/.test(type),
     fromWatchSuccessGetSignoutActions
   )
 }
