@@ -33,8 +33,6 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
       // RESULT
       if (fetchResult) {
 
-        console.log('')
-
         // PASSING CONFIG
         const { ok, status } = fetchResult
         Object.assign(config, { ok, status })
