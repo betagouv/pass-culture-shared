@@ -128,6 +128,7 @@ class Field extends Component {
 
   renderLayout() {
     const {
+      className,
       id,
       isExpanded,
       label,
@@ -149,7 +150,7 @@ class Field extends Component {
       return (
         <div className={classnames(`field field-${type} is-horizontal`, {
           'readonly': readOnly
-        })}>
+        }, className)}>
           {label && (
             <div className={classnames(`field-label is-${size}`, {
               'readonly': readOnly
@@ -180,7 +181,7 @@ class Field extends Component {
     if (layout === 'vertical') {
       if (type === 'checkbox') {
         return (
-          <div className="field field-checkbox">
+          <div className={classnames("field field-checkbox", className)}>
             <label className={classnames({ required })} htmlFor={id}>
               {$input}
               {label}
@@ -192,7 +193,7 @@ class Field extends Component {
 
       const { sublabel } = this.props
       return (
-        <div className={`field field-${type}`}>
+        <div className={classnames(`field field-${type}`, className)}>
           {label && (
             <label className="label" htmlFor={id}>
               <h3
