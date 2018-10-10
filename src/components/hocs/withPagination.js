@@ -62,6 +62,14 @@ const withPagination = (config = {}) => WrappedComponent => {
 
     }
 
+    componentDidUpdate () {
+      const { search } = this.props
+      const { page } = this.state
+      if (!search.page && page && page !== 1) {
+        this.setState({ page: 1 })
+      }
+    }
+
     static getDerivedStateFromProps(nextProps, prevState) {
 
       const windowQuery = {}
