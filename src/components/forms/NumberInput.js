@@ -12,7 +12,8 @@ class NumberInput extends Component {
       return ""
     }
 
-    if (this.props.step < 1) {
+    // FIXME first test should be handled with defautProps
+    if (this.props.step && this.props.step < 1) {
       return parseFloat(value)
     }
 
