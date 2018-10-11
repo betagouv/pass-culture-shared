@@ -7,12 +7,21 @@ class NumberInput extends Component {
     return value === 0 ? 0 : value
   }
 
+  formatValue = value => {
+    if (!value || isNaN(Number(value))) {
+      return ""
+    }
+
+    if (this.props.step < 1) {
+      return parseFloat(value)
+    }
+
+    return parseInt(value, 10)
+  }
+
   onChange = event => {
     const { onChange: fieldOnChange } = this.props
-    const value = event.target.value
-      ? parseInt(event.target.value, 10) 
-      : 0
-    event.target.value = value
+    const value = this.formatValue(event.target.value)
     fieldOnChange(value, { event })
   }
 
