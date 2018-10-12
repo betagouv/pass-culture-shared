@@ -7,7 +7,7 @@ import Icon from '../Icon'
 class DateInput extends Component {
   onChange = date => {
     const { onChange: fieldOnChange } = this.props
-    const value = date.toISOString()
+    const value = date ? date.toISOString() : { [this.props.name]: null }
     fieldOnChange(value, { event: { target: { value } } })
   }
 
