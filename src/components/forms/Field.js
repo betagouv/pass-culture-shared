@@ -156,7 +156,7 @@ class Field extends Component {
             })}>
               <label htmlFor={id} className="label">
                 <span
-                  className={`subtitle ${classnames({ required, readOnly })}`}>
+                  className={`field-subtitle ${classnames({ required, readOnly })}`}>
                   {label}&nbsp;:
                 </span>
               </label>
