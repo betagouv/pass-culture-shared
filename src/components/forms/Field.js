@@ -67,25 +67,25 @@ class Field extends Component {
     if (get(errors, 'length')) {
       return errors.map((e, index) => (
         <p
-          className="help is-danger columns is-vcentered"
+          className="help is-danger"
           id={`${id}-error`}
           key={index}>
-          <span className="column is-narrow">
+          <span className="">
             <Icon
               svg="picto-warning"
               alt="Attention"
             />
           </span>
-          <span className="column is-paddingless is-narrow"> {e} </span>
+          <span className=""> {e} </span>
         </p>
       ))
     }
     return (
       <p
-        className="help is-danger columns"
+        className="help"
         id={`${id}-error`}>
         <Icon
-          className="column is-1 is-invisible is-paddingless"
+          className="is-invisible"
           svg="picto-warning"
           alt="Attention"
         />
@@ -120,7 +120,7 @@ class Field extends Component {
     }
 
     return (
-      <span className="has-text-weight-light is-size-7" >
+      <span className="" >
         {get(value, 'length', 0)} / {maxLength} caractères
       </span>
     )
@@ -135,7 +135,6 @@ class Field extends Component {
       layout,
       required,
       readOnly,
-      size,
       sublabel,
       type,
     } = this.props
@@ -152,7 +151,7 @@ class Field extends Component {
           'readonly': readOnly
         }, className)}>
           {label && (
-            <div className={classnames(`field-label is-${size}`, {
+            <div className={classnames(`field-label`, {
               'readonly': readOnly
             })}>
               <label htmlFor={id} className="label">
@@ -170,7 +169,7 @@ class Field extends Component {
                 'is-expanded': isExpanded,
               })}>
               {$input}
-              {sublabel && <p className="has-text-weight-light is-size-7">{sublabel}</p>}
+              {sublabel && <p className="">{sublabel}</p>}
             </div>
             {$errors}
           </div>

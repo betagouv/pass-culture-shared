@@ -13,7 +13,6 @@ const BasicInput = props => {
     renderInfo,
     required,
     type,
-    size,
     value,
   } = props
 
@@ -23,7 +22,7 @@ const BasicInput = props => {
         aria-describedby={props['aria-describedby']}
         autoComplete={autoComplete}
         checked={checked}
-        className={className || `input is-${size}`}
+        className={className || 'input'}
         disabled={disabled}
         id={id}
         name={name}
