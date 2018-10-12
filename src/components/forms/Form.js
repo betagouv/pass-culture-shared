@@ -9,8 +9,8 @@ import { compose } from 'redux'
 import { blockersByName } from '../hocs/withBlock'
 import { requestData } from '../../reducers/data'
 import { removeErrors } from '../../reducers/errors'
-import { mergeForm } from '../../reducers/form'
-import { closeModal, showModal } from '../../reducers/modal'
+import { mergeForm, resetForm } from '../../reducers/form'
+import { showModal } from '../../reducers/modal'
 import { closeNotification, showNotification } from '../../reducers/notification'
 import { recursiveMap } from '../../utils/react'
 import { pluralize } from '../../utils/string'
@@ -53,13 +53,11 @@ class _Form extends Component {
 
   onMergeForm = (patch, config) => {
     const {
-      closeNotification,
+      dispatch,
       formPatch,
-      mergeForm,
       name,
       notification,
       patch: basePatch,
-      removeErrors,
     } = this.props
     const { hasAtLeastOneTargetValue } = this.state
 
@@ -87,20 +85,20 @@ class _Form extends Component {
         get(notification, 'type') === 'success'
       )
     ) {
-      closeNotification()
+      dispatch(closeNotification())
     }
-    removeErrors(name)
-    mergeForm(name, mergePatch, config)
+    dispatch(removeErrors(name))
+    dispatch(mergeForm(name, mergePatch, config))
   }
 
   onSubmit = e => {
     e && e.preventDefault()
     const {
       action,
+      dispatch,
       formPatch,
       formatPatch,
       name,
-      requestData,
       storePath,
     } = this.props
 
@@ -109,24 +107,24 @@ class _Form extends Component {
       isLoading: true
     })
 
-    requestData(this.state.method, action.replace(/^\//g, ''), {
+    dispatch(requestData(this.state.method, action.replace(/^\//g, ''), {
       body: formatPatch(formPatch),
       encode: formPatch instanceof FormData ? 'multipart/form-data' : null,
       handleFail: this.handleFail,
       handleSuccess: this.handleSuccess,
       key: storePath, // key is a reserved prop name
       name,
-    })
+    }))
   }
 
   handleFail = (state, action) => {
     const {
+      dispatch,
       handleFailNotification,
       handleFailRedirect,
       handleFail,
       history,
       name,
-      showNotification,
     } = this.props
 
     this.setState({ isLoading: false })
@@ -137,11 +135,11 @@ class _Form extends Component {
     }
 
     handleFailNotification &&
-      showNotification({
+      dispatch(showNotification({
         name,
         text: handleFailNotification(state, action),
         type: 'danger',
-      })
+      }))
 
     handleFailRedirect &&
       history.push(handleFailRedirect(state, action))
@@ -149,12 +147,12 @@ class _Form extends Component {
 
   handleSuccess = (state, action) => {
     const {
+      dispatch,
       handleSuccessNotification,
       handleSuccessRedirect,
       handleSuccess,
       history,
       name,
-      showNotification,
     } = this.props
 
     this.setState({ isLoading: false })
@@ -165,11 +163,11 @@ class _Form extends Component {
     }
 
     handleSuccessNotification &&
-      showNotification({
+      dispatch(showNotification({
         name,
         text: handleSuccessNotification(state, action),
         type: 'success',
-      })
+      }))
 
     handleSuccessRedirect &&
       history.push(handleSuccessRedirect(state, action))
@@ -328,12 +326,10 @@ class _Form extends Component {
 
   resetPatch = () => {
     const {
-      closeNotification,
+      dispatch,
       name,
-      mergeForm,
       notification,
       patch,
-      removeErrors,
     } = this.props
 
     if (
@@ -342,35 +338,31 @@ class _Form extends Component {
         get(notification, 'type') === 'success'
       )
     ) {
-      closeNotification()
+      dispatch(closeNotification())
     }
-    removeErrors(name)
-    mergeForm(name, patch)
+    dispatch(removeErrors(name))
+    dispatch(mergeForm(name, patch))
   }
 
   handleHistoryBlock () {
     const {
-      BlockComponent
+      BlockComponent,
+      dispatch
     } = this.props
 
     if (BlockComponent) {
       blockersByName.form = (nextLocation, unblock) => {
-        const {
-          readOnly,
-          showModal
-        } = this.props
-        const {
-          hasAtLeastOneTargetValue
-        } = this.state
+        const { readOnly } = this.props
+        const { hasAtLeastOneTargetValue } = this.state
 
         // NO NEED TO BLOCK IF THE FORM IS READONLY OR WITH NO INTERACTION FROM USER
         if (readOnly || !hasAtLeastOneTargetValue) {
           return false
         }
 
-        showModal(<BlockComponent
+        dispatch(showModal(<BlockComponent
           nextLocation={nextLocation}
-          unblock={unblock} />, { isUnclosable: true })
+          unblock={unblock} />, { isUnclosable: true }))
 
         return true
       }
@@ -408,8 +400,9 @@ class _Form extends Component {
   }
 
   componentWillUnmount () {
-    const { BlockComponent } = this.props
+    const { BlockComponent, dispatch } = this.props
     BlockComponent && blockersByName.form && delete blockersByName.form
+    dispatch(resetForm())
   }
 
   render() {
@@ -432,24 +425,17 @@ class _Form extends Component {
   }
 }
 
+function mapStateToProps (state, ownProps) {
+  return {
+    formPatch: get(state, `form.${ownProps.name}`),
+    notification: state.notification,
+    errorsPatch: get(state, `errors.${ownProps.name}`),
+  }
+}
+
 const Form = compose(
   withRouter,
-  connect(
-    (state, ownProps) => ({
-      formPatch: get(state, `form.${ownProps.name}`),
-      notification: state.notification,
-      errorsPatch: get(state, `errors.${ownProps.name}`),
-    }),
-    {
-      closeModal,
-      closeNotification,
-      mergeForm,
-      removeErrors,
-      requestData,
-      showModal,
-      showNotification,
-    }
-  )
+  connect(mapStateToProps)
 )(_Form)
 
 // WE NEED TO SHORT PASS THEM BECAUSE OF
