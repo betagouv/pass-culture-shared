@@ -7,7 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 
 
 import App from './App'
-import NoPage from './components/pages/NoPage'
+import NoPage from './_f_pages/NoPage'
 import persistor from './utils/persistor'
 import routes from './utils/routes'
 import store from './utils/store'

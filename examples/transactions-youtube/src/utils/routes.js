@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router'
 
-import ChannelsPage from '../components/pages/ChannelsPage'
+import ChannelsPage from '../_f_pages/ChannelsPage'
 
 const routes = [
     {
