@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router'
 
-import TodosPage from '../components/pages/TodosPage'
+import TodosPage from '../_f_pages/TodosPage'
 
 const routes = [
     {
