@@ -1,22 +1,39 @@
-import React, { PureComponent } from 'react'
+import React, { Fragment, PureComponent } from 'react'
 
 class FileInput extends PureComponent {
+  constructor () {
+    super()
+    this.state = {
+      fileName: null
+    }
+  }
+
   onChange = event => {
     event.persist()
+    console.log('event', event.target.value)
+    const fileName = event.target.value.replace("C:\\fakepath\\", "")
+    this.setState({ fileName })
     this.props.onChange(this.$uploadInput.files[0], { event })
   }
 
   render() {
+    const { fileName } = this.state
     return (
-      <label className="button is-primary is-outlined">
-        Choisir un fichier{' '}
-        <input
-          hidden
-          onChange={this.onChange}
-          ref={$element => (this.$uploadInput = $element)}
-          type="file"
-        />
-      </label>
+      <Fragment>
+        <label className="button is-primary is-outlined mr12">
+          Choisir un fichier{' '}
+          <input
+            hidden
+            onChange={this.onChange}
+            ref={$element => (this.$uploadInput = $element)}
+            type="file"
+          />
+
+        </label>
+        <span>
+          {fileName}
+        </span>
+      </Fragment>
     )
   }
 }

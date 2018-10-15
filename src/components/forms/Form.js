@@ -199,7 +199,7 @@ class _Form extends Component {
       readOnly,
       size,
     } = this.props
-    const { isEditing, isLoading } = this.state
+    const { isEditing, isFormData, isLoading } = this.state
 
     let requiredFields = []
 
@@ -216,7 +216,7 @@ class _Form extends Component {
         if (!InputComponent)
           console.error('Component not found for type:', type)
 
-        if (type === "file") {
+        if (!isFormData && type === "file") {
           this.setState({ isFormData: true })
         }
 
