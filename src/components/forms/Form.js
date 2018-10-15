@@ -115,7 +115,7 @@ class _Form extends Component {
     let body = formatPatch(formPatch)
     if (isFormData) {
       const bodyFormData = new FormData()
-      Object.keys(body).forEach(key => bodyFormData[key] = body[key])
+      Object.keys(body).forEach(key => bodyFormData.append(key, body[key]))
       body = bodyFormData
     }
 
