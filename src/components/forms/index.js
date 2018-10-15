@@ -3,6 +3,7 @@ import CancelButton from './CancelButton'
 import CheckboxInput from './CheckboxInput'
 import DateInput from './DateInput'
 import Field from './Field'
+import FileInput from './FileInput'
 import Form from './Form'
 import HiddenInput from './HiddenInput'
 import NumberInput from './NumberInput'
@@ -18,6 +19,7 @@ Form.inputsByType = {
   checkbox: CheckboxInput,
   date: DateInput,
   email: TextInput,
+  file: FileInput,
   hidden: HiddenInput,
   number: NumberInput,
   password: PasswordInput,
@@ -33,6 +35,7 @@ export {
   CheckboxInput,
   DateInput,
   Field,
+  FileInput,
   Form,
   HiddenInput,
   NumberInput,

@@ -21,6 +21,7 @@ class _Form extends Component {
     this.state = {
       hasAtLeastOneTargetValue: false,
       isEditing: false,
+      isFormData: true,
       isLoading: false,
       method: null,
     }
@@ -103,15 +104,26 @@ class _Form extends Component {
       requestData,
       storePath,
     } = this.props
+    const { isFormData } = this.state
 
     this.setState({
       hasAtLeastOneTargetValue: false,
       isLoading: true
     })
 
+
+    let body = formatPatch(formPatch)
+    if (isFormData) {
+      const bodyFormData = new FormData()
+      Object.keys(body).forEach(key => bodyFormData[key] = body[key])
+      body = bodyFormData
+    }
+
     requestData(this.state.method, action.replace(/^\//g, ''), {
-      body: formatPatch(formPatch),
-      encode: formPatch instanceof FormData ? 'multipart/form-data' : null,
+      body,
+      encode: body instanceof FormData
+        ? 'multipart/form-data'
+        : null,
       handleFail: this.handleFail,
       handleSuccess: this.handleSuccess,
       key: storePath, // key is a reserved prop name
@@ -203,6 +215,10 @@ class _Form extends Component {
         const InputComponent = Form.inputsByType[type]
         if (!InputComponent)
           console.error('Component not found for type:', type)
+
+        if (type === "file") {
+          this.setState({ isFormData: true })
+        }
 
         const onChange = (value, config) => {
 
