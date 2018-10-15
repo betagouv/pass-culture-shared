@@ -17,7 +17,17 @@ class FileInput extends PureComponent {
   }
 
   render() {
+    const { readOnly, uploaded } = this.props
     const { fileName } = this.state
+
+    if (readOnly) {
+      return (
+        <input className="input" readOnly value={uploaded
+        ? "[enregistré]"
+        : "[pas enregistré]"}/>
+      )
+    }
+
     return (
       <Fragment>
         <label className="button is-primary is-outlined mr12">
@@ -28,7 +38,6 @@ class FileInput extends PureComponent {
             ref={$element => (this.$uploadInput = $element)}
             type="file"
           />
-
         </label>
         <span>
           {fileName}
