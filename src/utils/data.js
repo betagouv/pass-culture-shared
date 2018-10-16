@@ -7,7 +7,7 @@ const successStatusCodes = [200, 201, 202, 203, 205, 206, 207, 208, 210, 226]
 
 export async function fetchData(method, path, config = {}) {
   // unpack
-  const { body, encode, token, url } = config
+  const { body, token, url } = config
 
   // init
   const init = {
@@ -21,16 +21,21 @@ export async function fetchData(method, path, config = {}) {
     'X-Request-ID': uuid(),
   }
 
+
+  console.log('ben alors', method)
+
   if (method && method !== 'GET' && method !== 'DELETE') {
-    // encode
-    if (encode !== 'multipart/form-data') {
+
+    // default config is json data
+    // so here we avoid special formData case 'multipart/form-data'
+    const isFormDataBody = body instanceof FormData
+    if (!isFormDataBody) {
       Object.assign(init.headers, {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       })
     }
 
-    // body
     init.body =
       init.headers['Content-Type'] === 'application/json'
         ? JSON.stringify(body || {})

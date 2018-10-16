@@ -15,6 +15,16 @@ import { closeNotification, showNotification } from '../../reducers/notification
 import { recursiveMap } from '../../utils/react'
 import { pluralize } from '../../utils/string'
 
+const defaultFormatPatch = patch => {
+  const fileValue = Object.values(patch).find(value => value instanceof File)
+  if (fileValue) {
+    const formData = new FormData()
+    Object.keys(patch).forEach(key => formData.append(key, patch[key]))
+    return formData
+  }
+  return patch
+}
+
 class _Form extends Component {
   constructor(props) {
     super(props)
@@ -29,7 +39,7 @@ class _Form extends Component {
   static defaultProps = {
     errorsPatch: {},
     failNotification: "Formulaire non validé",
-    formatPatch: data => data,
+    formatPatch: defaultFormatPatch,
     formPatch: {},
     successNotification: "Formulaire non validé",
     Tag: 'form',
@@ -100,6 +110,7 @@ class _Form extends Component {
       formPatch,
       formatPatch,
       name,
+      normalizer,
       requestData,
       storePath,
     } = this.props
@@ -109,26 +120,15 @@ class _Form extends Component {
       isLoading: true
     })
 
-
-    console.log('formPatch', formPatch)
-
-    let body = formatPatch(formPatch)
-    const fileValue = Object.values(body).find(value => value instanceof File)
-    if (fileValue) {
-      const bodyFormData = new FormData()
-      Object.keys(body).forEach(key => bodyFormData.append(key, body[key]))
-      body = bodyFormData
-    }
+    const body = formatPatch(formPatch)
 
     requestData(this.state.method, action.replace(/^\//g, ''), {
       body,
-      encode: body instanceof FormData
-        ? 'multipart/form-data'
-        : null,
       handleFail: this.handleFail,
       handleSuccess: this.handleSuccess,
       key: storePath, // key is a reserved prop name
       name,
+      normalizer
     })
   }
 
@@ -223,8 +223,9 @@ class _Form extends Component {
 
           const valuePatch = { [patchKey]: value }
 
+          // SPECIAL SET WITH SLUG KEY
           if (c.props.setKey) {
-            newPatch = {}
+            newPatch = { _isMergingObject: true }
             set(newPatch, c.props.setKey, valuePatch)
           } else {
             newPatch = valuePatch

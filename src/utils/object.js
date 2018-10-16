@@ -1,3 +1,6 @@
-export function isObject(item) {
-  return item && typeof item === 'object' && !Array.isArray(item)
+export function isPlainObject(item) {
+  return item &&
+    typeof item === 'object' &&
+    !Array.isArray(item) &&
+    !item instanceof File
 }
