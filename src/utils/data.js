@@ -21,9 +21,6 @@ export async function fetchData(method, path, config = {}) {
     'X-Request-ID': uuid(),
   }
 
-
-  console.log('ben alors', method)
-
   if (method && method !== 'GET' && method !== 'DELETE') {
 
     // default config is json data
