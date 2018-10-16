@@ -21,7 +21,6 @@ class _Form extends Component {
     this.state = {
       hasAtLeastOneTargetValue: false,
       isEditing: false,
-      isFormData: true,
       isLoading: false,
       method: null,
     }
@@ -104,7 +103,6 @@ class _Form extends Component {
       requestData,
       storePath,
     } = this.props
-    const { isFormData } = this.state
 
     this.setState({
       hasAtLeastOneTargetValue: false,
@@ -112,8 +110,11 @@ class _Form extends Component {
     })
 
 
+    console.log('formPatch', formPatch)
+
     let body = formatPatch(formPatch)
-    if (isFormData) {
+    const fileValue = Object.values(body).find(value => value instanceof File)
+    if (fileValue) {
       const bodyFormData = new FormData()
       Object.keys(body).forEach(key => bodyFormData.append(key, body[key]))
       body = bodyFormData
@@ -199,7 +200,7 @@ class _Form extends Component {
       readOnly,
       size,
     } = this.props
-    const { isEditing, isFormData, isLoading } = this.state
+    const { isEditing, isLoading } = this.state
 
     let requiredFields = []
 
@@ -216,23 +217,17 @@ class _Form extends Component {
         if (!InputComponent)
           console.error('Component not found for type:', type)
 
-        if (!isFormData && type === "file") {
-          this.setState({ isFormData: true })
-        }
-
         const onChange = (value, config) => {
 
           let newPatch
 
-          const setValue = typeof value === 'object'
-            ? value
-            : { [patchKey]: value }
+          const valuePatch = { [patchKey]: value }
 
           if (c.props.setKey) {
             newPatch = {}
-            set(newPatch, c.props.setKey, setValue)
+            set(newPatch, c.props.setKey, valuePatch)
           } else {
-            newPatch = setValue
+            newPatch = valuePatch
           }
 
           this.onMergeForm(newPatch, config)
@@ -256,6 +251,7 @@ class _Form extends Component {
             InputComponent,
             layout,
             onChange,
+            onMergeForm: this.onMergeForm,
             patchKey,
             readOnly: c.props.readOnly || readOnly,
             size,

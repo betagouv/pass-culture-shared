@@ -9,11 +9,11 @@ class FileInput extends PureComponent {
   }
 
   onChange = event => {
+    const { onChange: onFieldChange } = this.props
     event.persist()
-    console.log('event', event.target.value)
     const fileName = event.target.value.replace("C:\\fakepath\\", "")
     this.setState({ fileName })
-    this.props.onChange(this.$uploadInput.files[0], { event })
+    onFieldChange(this.$uploadInput.files[0], { event })
   }
 
   render() {
@@ -31,7 +31,7 @@ class FileInput extends PureComponent {
     return (
       <Fragment>
         <label className="button is-primary is-outlined mr12">
-          Choisir un fichier{' '}
+          Choisir un {uploaded && 'autre'} fichier{' '}
           <input
             hidden
             onChange={this.onChange}
