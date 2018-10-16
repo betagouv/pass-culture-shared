@@ -15,6 +15,8 @@ const BasicInput = props => {
     type,
     size,
     value,
+    min,
+    step,
   } = props
 
   return (
@@ -32,6 +34,8 @@ const BasicInput = props => {
         readOnly={readOnly}
         type={type}
         value={value}
+        min={min}
+        step={step}
       />
       {renderInfo && renderInfo()}
     </Fragment>
