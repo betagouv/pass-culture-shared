@@ -1,6 +1,6 @@
 import merge from 'lodash.merge'
 
-import { isObject } from '../utils/object'
+import { isPlainObject } from '../utils/object'
 
 const initialState = {}
 
@@ -26,10 +26,12 @@ export const form = (state = initialState, action) => {
         continue
       }
 
-      // IF THE VALUE IS AN OBJECT, WE MERGE IT WITH THE PREVIOUS
+      // IF THE VALUE IS A PLAIN OBJECT, WE MERGE IT WITH THE PREVIOUS
       // VALUE, ELSE WE JUST SET IT
-      if (isObject(nextValue)) {
+      //if (isPlainObject(nextValue)) {
+      if (nextValue && nextValue._isMergingObject) {
         nextPatch[key] = merge({}, nextPatch[key], nextValue)
+        delete nextPatch[key]._isMergingObject
       } else {
         nextPatch[key] = nextValue
       }

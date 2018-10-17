@@ -15,6 +15,16 @@ import { closeNotification, showNotification } from '../../reducers/notification
 import { recursiveMap } from '../../utils/react'
 import { pluralize } from '../../utils/string'
 
+const defaultFormatPatch = patch => {
+  const fileValue = Object.values(patch).find(value => value instanceof File)
+  if (fileValue) {
+    const formData = new FormData()
+    Object.keys(patch).forEach(key => formData.append(key, patch[key]))
+    return formData
+  }
+  return patch
+}
+
 class _Form extends Component {
   constructor(props) {
     super(props)
@@ -29,7 +39,7 @@ class _Form extends Component {
   static defaultProps = {
     errorsPatch: {},
     failNotification: "Formulaire non validé",
-    formatPatch: data => data,
+    formatPatch: defaultFormatPatch,
     formPatch: {},
     successNotification: "Formulaire non validé",
     Tag: 'form',
@@ -100,6 +110,7 @@ class _Form extends Component {
       formPatch,
       formatPatch,
       name,
+      normalizer,
       requestData,
       storePath,
     } = this.props
@@ -109,13 +120,15 @@ class _Form extends Component {
       isLoading: true
     })
 
+    const body = formatPatch(formPatch)
+
     requestData(this.state.method, action.replace(/^\//g, ''), {
-      body: formatPatch(formPatch),
-      encode: formPatch instanceof FormData ? 'multipart/form-data' : null,
+      body,
       handleFail: this.handleFail,
       handleSuccess: this.handleSuccess,
       key: storePath, // key is a reserved prop name
       name,
+      normalizer
     })
   }
 
@@ -208,15 +221,14 @@ class _Form extends Component {
 
           let newPatch
 
-          const setValue = typeof value === 'object'
-            ? value
-            : { [patchKey]: value }
+          const valuePatch = { [patchKey]: value }
 
+          // SPECIAL SET WITH SLUG KEY
           if (c.props.setKey) {
-            newPatch = {}
-            set(newPatch, c.props.setKey, setValue)
+            newPatch = { _isMergingObject: true }
+            set(newPatch, c.props.setKey, valuePatch)
           } else {
-            newPatch = setValue
+            newPatch = valuePatch
           }
 
           this.onMergeForm(newPatch, config)
@@ -240,6 +252,7 @@ class _Form extends Component {
             InputComponent,
             layout,
             onChange,
+            onMergeForm: this.onMergeForm,
             patchKey,
             readOnly: c.props.readOnly || readOnly,
             size,
