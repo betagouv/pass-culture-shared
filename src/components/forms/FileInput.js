@@ -8,12 +8,21 @@ class FileInput extends PureComponent {
     }
   }
 
+  getFileName(input) {
+    if (input.files.length === 0) {
+      return ""
+    }
+
+    return input.files[0].name
+  }
+
   onChange = event => {
     const { onChange: onFieldChange } = this.props
     event.persist()
-    const fileName = event.target.value.replace("C:\\fakepath\\", "")
+
+    const fileName = this.getFileName(event.target)
     this.setState({ fileName })
-    onFieldChange(this.$uploadInput.files[0], { event })
+    onFieldChange(event.target.files[0], { event })
   }
 
   render() {
