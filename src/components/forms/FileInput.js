@@ -20,8 +20,7 @@ class FileInput extends PureComponent {
     const { onChange: onFieldChange } = this.props
     event.persist()
 
-    const fileName = this.getFileName(event.target)
-    this.setState({ fileName })
+    this.setState({ fileName: this.getFileName(event.target) })
     onFieldChange(event.target.files[0], { event })
   }
 
@@ -44,7 +43,6 @@ class FileInput extends PureComponent {
           <input
             hidden
             onChange={this.onChange}
-            ref={$element => (this.$uploadInput = $element)}
             type="file"
           />
         </label>
