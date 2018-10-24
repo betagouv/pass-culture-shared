@@ -100,6 +100,7 @@ class _Form extends Component {
       closeNotification()
     }
     removeErrors(name)
+
     mergeForm(name, mergePatch, config)
   }
 
@@ -223,15 +224,18 @@ class _Form extends Component {
 
           const valuePatch = { [patchKey]: value }
 
+          const mergeConfig = Object.assign({}, config)
+
           // SPECIAL SET WITH SLUG KEY
           if (c.props.setKey) {
-            newPatch = { _isMergingObject: true }
+            mergeConfig.isMergingObject = true
+            newPatch = {}
             set(newPatch, c.props.setKey, valuePatch)
           } else {
             newPatch = valuePatch
           }
 
-          this.onMergeForm(newPatch, config)
+          this.onMergeForm(newPatch, mergeConfig)
         }
 
         const value =
