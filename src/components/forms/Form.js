@@ -15,15 +15,7 @@ import { closeNotification, showNotification } from '../../reducers/notification
 import { recursiveMap } from '../../utils/react'
 import { pluralize } from '../../utils/string'
 
-const defaultFormatPatch = patch => {
-  const fileValue = Object.values(patch).find(value => value instanceof File)
-  if (fileValue) {
-    const formData = new FormData()
-    Object.keys(patch).forEach(key => formData.append(key, patch[key]))
-    return formData
-  }
-  return patch
-}
+const defaultFormatPatch = patch => patch
 
 class _Form extends Component {
   constructor(props) {

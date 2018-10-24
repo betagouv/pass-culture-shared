@@ -5,11 +5,10 @@ const { NAME, VERSION } = process.env
 
 const successStatusCodes = [200, 201, 202, 203, 205, 206, 207, 208, 210, 226]
 
+
 export async function fetchData(method, path, config = {}) {
-  // unpack
   const { body, token, url } = config
 
-  // init
   const init = {
     method,
     credentials: 'include',
@@ -23,9 +22,18 @@ export async function fetchData(method, path, config = {}) {
 
   if (method && method !== 'GET' && method !== 'DELETE') {
 
-    // default config is json data
-    // so here we avoid special formData case 'multipart/form-data'
-    const isFormDataBody = body instanceof FormData
+    let formatBody = body
+    if (formatBody) {
+      const fileValue = Object.values(body)
+                              .find(value => value instanceof File)
+      if (fileValue) {
+        const formData = new FormData()
+        Object.keys(formatBody).forEach(key => formData.append(key, patch[key]))
+        formatBody = formData
+      }
+    }
+
+    const isFormDataBody = formatBody instanceof FormData
     if (!isFormDataBody) {
       Object.assign(init.headers, {
         Accept: 'application/json',
