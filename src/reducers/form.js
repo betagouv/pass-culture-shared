@@ -28,7 +28,7 @@ export const form = (state = initialState, action) => {
 
       // IF THE VALUE IS A PLAIN OBJECT, WE MERGE IT WITH THE PREVIOUS
       // VALUE, ELSE WE JUST SET IT
-      if (action.config.isMergingObject) {
+      if (action.config && action.config.isMergingObject) {
         nextPatch[key] = merge({}, nextPatch[key], nextValue)
       } else {
         nextPatch[key] = nextValue
