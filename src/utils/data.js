@@ -23,7 +23,8 @@ export async function fetchData(method, path, config = {}) {
   if (method && method !== 'GET' && method !== 'DELETE') {
 
     let formatBody = body
-    if (formatBody) {
+    let isFormDataBody = formatBody instanceof FormData
+    if (formatBody && !isFormDataBody) {
       const fileValue = Object.values(body)
                               .find(value => value instanceof File)
       if (fileValue) {
@@ -31,9 +32,10 @@ export async function fetchData(method, path, config = {}) {
         Object.keys(formatBody).forEach(key => formData.append(key, patch[key]))
         formatBody = formData
       }
+
+      isFormDataBody = true
     }
 
-    const isFormDataBody = formatBody instanceof FormData
     if (!isFormDataBody) {
       Object.assign(init.headers, {
         Accept: 'application/json',
