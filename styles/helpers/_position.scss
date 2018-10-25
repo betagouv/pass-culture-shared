@@ -5,3 +5,28 @@
 .is-relative {
   position: relative;
 }
+
+@each $intSize in $intSizes {
+  $sides: (all, topbottom, leftright, top, left, right, bottom);
+
+  // convert value to SASS variables with unit
+  $pixelValue: number-to-pixel($intSize);
+
+  @each $side in $sides {
+    .l#{$intSize} {
+      @include rem(left, $pixelValue);
+    }
+
+    .r#{$intSize} {
+      @include rem(right, $pixelValue);
+    }
+
+    .t#{$intSize} {
+      @include rem(top, $pixelValue);
+    }
+
+    .b#{$intSize} {
+      @include rem(bottom, $pixelValue);
+    }
+  }
+}
