@@ -31,9 +31,9 @@ export async function fetchData(method, path, config = {}) {
         const formData = new FormData()
         Object.keys(formatBody).forEach(key => formData.append(key, patch[key]))
         formatBody = formData
-      }
 
-      isFormDataBody = true
+        isFormDataBody = true
+      }
     }
 
     if (!isFormDataBody) {
