@@ -2,59 +2,49 @@ import {
   getRequestErrorString,
   objectToQueryString,
   pluralize,
-  queryStringToObject
+  queryStringToObject,
 } from '../string'
 
 describe('getRequestErrorString', () => {
-
   const arrayOfObject1 = {
-    errors: [
-      {global: "toto"},
-    ]
+    errors: [{ global: 'toto' }],
   }
 
   const arrayOfObject2 = {
-    errors: [
-      {global: "toto"},
-      {booking: "titi"},
-    ]
+    errors: [{ global: 'toto' }, { booking: 'titi' }],
   }
 
   const objectWithArrays1 = {
     errors: {
-      global: ["toto"],
+      global: ['toto'],
     },
   }
 
   const objectWithArrays2 = {
     errors: {
-      global: ["toto", "titi"],
-      booking: ["tata"],
+      global: ['toto', 'titi'],
+      booking: ['tata'],
     },
   }
 
   const noErrror = {}
 
-  test("parse array of objects", () => {
-    expect(getRequestErrorString(arrayOfObject1)).toBe("toto")
-    expect(getRequestErrorString(arrayOfObject2)).toBe("toto titi")
+  test('parse array of objects', () => {
+    expect(getRequestErrorString(arrayOfObject1)).toBe('toto')
+    expect(getRequestErrorString(arrayOfObject2)).toBe('toto titi')
   })
 
-
-  test("parse hash with arrays", () => {
-    expect(getRequestErrorString(objectWithArrays1)).toBe("toto")
-    expect(getRequestErrorString(objectWithArrays2)).toBe("toto titi tata")
+  test('parse hash with arrays', () => {
+    expect(getRequestErrorString(objectWithArrays1)).toBe('toto')
+    expect(getRequestErrorString(objectWithArrays2)).toBe('toto titi tata')
   })
 
-
-  test("parse empty error", () => {
-    expect(getRequestErrorString(noErrror)).toBe("")
+  test('parse empty error', () => {
+    expect(getRequestErrorString(noErrror)).toBe('')
   })
-
 })
 
 describe('pluralize', () => {
-
   it('should return string with plural if many offers', () => {
     const plural = 'offres'
     expect(pluralize('offres', 5)).toEqual(plural)
@@ -79,11 +69,9 @@ describe('pluralize', () => {
     const singular = '1 offre'
     expect(pluralize(1, 'offres')).toEqual(singular)
   })
-
 })
 
 describe('objectToQueryString', () => {
-
   it('should return an empty string when it receive an empty object', () => {
     const fakeObject = {}
     expect(objectToQueryString(fakeObject)).toEqual('')
@@ -94,9 +82,11 @@ describe('objectToQueryString', () => {
       keywords: 'fakeWords',
       distance: 'fakeDistance',
       from_date: 'fakeDistance',
-      type: 'fakeDistance'
+      type: 'fakeDistance',
     }
-    expect(objectToQueryString(fakeObject)).toEqual('keywords=fakeWords&distance=fakeDistance&from_date=fakeDistance&type=fakeDistance')
+    expect(objectToQueryString(fakeObject)).toEqual(
+      'keywords=fakeWords&distance=fakeDistance&from_date=fakeDistance&type=fakeDistance'
+    )
   })
   it('should return an empty fakeObject when it receive an object with a value that is null', () => {
     const fakeObject = {
@@ -125,13 +115,15 @@ describe('objectToQueryString', () => {
 
   it('should return a string when given an object', () => {
     const location = {
-      "distance": "50",
-      "latitude": "48.863779099999995",
-      "longitude": "2.3374663",
-      "mots-cles": "conspiration",
-      "page": "1"
+      distance: '50',
+      latitude: '48.863779099999995',
+      longitude: '2.3374663',
+      'mots-cles': 'conspiration',
+      page: '1',
     }
-    expect(objectToQueryString(location)).toEqual("distance=50&latitude=48.863779099999995&longitude=2.3374663&mots-cles=conspiration&page=1")
+    expect(objectToQueryString(location)).toEqual(
+      'distance=50&latitude=48.863779099999995&longitude=2.3374663&mots-cles=conspiration&page=1'
+    )
   })
 })
 
@@ -151,13 +143,14 @@ describe('queryStringToObject', () => {
     expect(queryStringToObject(queryString)).toEqual({})
   })
   it('should return an empty object when given a string with query params', () => {
-    const queryString = "distance=50&latitude=48.863779099999995&longitude=2.3374663&mots-cles=conspiration&page=1"
+    const queryString =
+      'distance=50&latitude=48.863779099999995&longitude=2.3374663&mots-cles=conspiration&page=1'
     const expected = {
-      "distance": "50",
-      "latitude": "48.863779099999995",
-      "longitude": "2.3374663",
-      "mots-cles": "conspiration",
-      "page": "1"
+      distance: '50',
+      latitude: '48.863779099999995',
+      longitude: '2.3374663',
+      'mots-cles': 'conspiration',
+      page: '1',
     }
     expect(queryStringToObject(queryString)).toEqual(expected)
   })

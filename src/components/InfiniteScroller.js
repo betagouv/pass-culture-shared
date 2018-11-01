@@ -25,15 +25,12 @@ class InfiniteScroller extends Component {
     renderLoading: () => (
       <Spinner Tag="li" style={{ justifyContent: 'center' }} />
     ),
-    renderFinished: () => (
-      <li style={{ justifyContent: 'center' }}>
-      </li>
-    ),
+    renderFinished: () => <li style={{ justifyContent: 'center' }} />,
     renderErrors: errors => (
       <li className="notification is-danger">
         {get(errors, 'global') && get(errors, 'global').join(' ')}
       </li>
-    )
+    ),
   }
 
   scrollWatch = e => {

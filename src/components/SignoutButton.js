@@ -43,7 +43,7 @@ class SignoutButton extends Component {
       requestData('GET', 'users/signout', {
         handleFail: this.handleFail,
         handleSuccess: this.handleSuccess,
-        name: 'signout'
+        name: 'signout',
       })
     )
     dispatch(closeModal())
@@ -59,7 +59,4 @@ class SignoutButton extends Component {
   }
 }
 
-export default compose(
-  withRouter,
-  connect()
-)(SignoutButton)
+export default compose(withRouter, connect())(SignoutButton)

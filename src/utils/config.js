@@ -20,9 +20,6 @@ function getMobileOperatingSystem() {
 }
 export const MOBILE_OS = getMobileOperatingSystem()
 
-
-
-
 let calculatedLocalhost
 if (typeof window !== 'undefined') {
   calculatedLocalhost =
@@ -35,9 +32,6 @@ if (typeof window !== 'undefined') {
     )
 }
 export const IS_LOCALHOST = Boolean(calculatedLocalhost)
-
-
-
 
 let CALC_ROOT_PATH = ''
 if (typeof window !== 'undefined' && window.cordova) {

@@ -8,7 +8,7 @@ export const tracker = (state = initialState, action) => {
     action.method.toUpperCase() === 'GET'
   ) {
     return Object.assign({}, state, {
-      [action.path]: moment()
+      [action.path]: moment(),
     })
   }
   return state

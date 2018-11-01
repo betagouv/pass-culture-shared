@@ -1,16 +1,16 @@
 import React, { Fragment, PureComponent } from 'react'
 
 class FileInput extends PureComponent {
-  constructor () {
+  constructor() {
     super()
     this.state = {
-      fileName: null
+      fileName: null,
     }
   }
 
   getFileName(input) {
     if (input.files.length === 0) {
-      return ""
+      return ''
     }
 
     return input.files[0].name
@@ -30,9 +30,11 @@ class FileInput extends PureComponent {
 
     if (readOnly) {
       return (
-        <input className="input" readOnly value={uploaded
-        ? "[enregistré]"
-        : "[pas enregistré]"}/>
+        <input
+          className="input"
+          readOnly
+          value={uploaded ? '[enregistré]' : '[pas enregistré]'}
+        />
       )
     }
 
@@ -40,15 +42,9 @@ class FileInput extends PureComponent {
       <Fragment>
         <label className="button is-primary is-outlined mr12">
           Choisir un {uploaded && 'autre'} fichier{' '}
-          <input
-            hidden
-            onChange={this.onChange}
-            type="file"
-          />
+          <input hidden onChange={this.onChange} type="file" />
         </label>
-        <span>
-          {fileName}
-        </span>
+        <span>{fileName}</span>
       </Fragment>
     )
   }

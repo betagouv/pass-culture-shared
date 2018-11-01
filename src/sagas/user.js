@@ -60,8 +60,7 @@ export function* watchUserActions() {
     fromWatchSuccessSignActions
   )
   yield takeEvery(
-    ({ type }) =>
-      /SUCCESS_DATA_PATCH_\/?USERS/.test(type),
+    ({ type }) => /SUCCESS_DATA_PATCH_\/?USERS/.test(type),
     fromWatchSuccessPatchUsers
   )
   yield takeEvery(

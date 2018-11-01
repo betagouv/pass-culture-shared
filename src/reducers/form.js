@@ -8,11 +8,9 @@ export const RESET_FORM = 'RESET_FORM'
 
 export const form = (state = initialState, action) => {
   if (/MERGE_FORM_(.*)/.test(action.type)) {
-
     const nextPatch = Object.assign({}, state[action.name])
 
-    for (let key of Object.keys((action.patch || {}))) {
-
+    for (let key of Object.keys(action.patch || {})) {
       const nextValue = action.patch[key]
 
       // THE CASE WHERE THE USER DELETED ALL THE CARACTERS
@@ -33,7 +31,6 @@ export const form = (state = initialState, action) => {
       } else {
         nextPatch[key] = nextValue
       }
-
     }
 
     return Object.assign({}, state, {
@@ -49,7 +46,6 @@ export const form = (state = initialState, action) => {
 }
 
 export const mergeForm = (name, patch, config) => {
-
   let type = `MERGE_FORM_${name.toUpperCase()}`
 
   const patchKeys = patch && Object.keys(patch)

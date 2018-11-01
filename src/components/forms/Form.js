@@ -11,7 +11,10 @@ import { requestData } from '../../reducers/data'
 import { removeErrors } from '../../reducers/errors'
 import { mergeForm } from '../../reducers/form'
 import { closeModal, showModal } from '../../reducers/modal'
-import { closeNotification, showNotification } from '../../reducers/notification'
+import {
+  closeNotification,
+  showNotification,
+} from '../../reducers/notification'
 import { recursiveMap } from '../../utils/react'
 import { pluralize } from '../../utils/string'
 
@@ -30,10 +33,10 @@ class _Form extends Component {
 
   static defaultProps = {
     errorsPatch: {},
-    failNotification: "Formulaire non validé",
+    failNotification: 'Formulaire non validé',
     formatPatch: defaultFormatPatch,
     formPatch: {},
-    successNotification: "Formulaire non validé",
+    successNotification: 'Formulaire non validé',
     Tag: 'form',
   }
 
@@ -84,10 +87,9 @@ class _Form extends Component {
     }
 
     if (
-      get(notification, 'name') === name && (
-        get(notification, 'type') === 'danger' ||
-        get(notification, 'type') === 'success'
-      )
+      get(notification, 'name') === name &&
+      (get(notification, 'type') === 'danger' ||
+        get(notification, 'type') === 'success')
     ) {
       closeNotification()
     }
@@ -110,7 +112,7 @@ class _Form extends Component {
 
     this.setState({
       hasAtLeastOneTargetValue: false,
-      isLoading: true
+      isLoading: true,
     })
 
     const body = formatPatch(formPatch)
@@ -121,7 +123,7 @@ class _Form extends Component {
       handleSuccess: this.handleSuccess,
       key: storePath, // key is a reserved prop name
       name,
-      normalizer
+      normalizer,
     })
   }
 
@@ -149,8 +151,7 @@ class _Form extends Component {
         type: 'danger',
       })
 
-    handleFailRedirect &&
-      history.push(handleFailRedirect(state, action))
+    handleFailRedirect && history.push(handleFailRedirect(state, action))
   }
 
   handleSuccess = (state, action) => {
@@ -177,8 +178,7 @@ class _Form extends Component {
         type: 'success',
       })
 
-    handleSuccessRedirect &&
-      history.push(handleSuccessRedirect(state, action))
+    handleSuccessRedirect && history.push(handleSuccessRedirect(state, action))
   }
 
   childrenWithProps = () => {
@@ -211,7 +211,6 @@ class _Form extends Component {
           console.error('Component not found for type:', type)
 
         const onChange = (value, config) => {
-
           let newPatch
 
           const valuePatch = { [patchKey]: value }
@@ -239,23 +238,20 @@ class _Form extends Component {
 
         const id = `${name}-${c.props.name}`
 
-        const newChild = React.cloneElement(
-          c,
-          {
-            errors: get(errorsPatch, c.props.name),
-            id,
-            formName: name,
-            InputComponent,
-            layout,
-            onChange,
-            onMergeForm: this.onMergeForm,
-            patchKey,
-            readOnly: c.props.readOnly || readOnly,
-            size,
-            type,
-            value,
-          }
-        )
+        const newChild = React.cloneElement(c, {
+          errors: get(errorsPatch, c.props.name),
+          id,
+          formName: name,
+          InputComponent,
+          layout,
+          onChange,
+          onMergeForm: this.onMergeForm,
+          patchKey,
+          readOnly: c.props.readOnly || readOnly,
+          size,
+          type,
+          value,
+        })
 
         if (newChild.props.required) {
           requiredFields = requiredFields.concat(newChild)
@@ -275,14 +271,12 @@ class _Form extends Component {
                   return false
                 }
 
-                const disablingFields = requiredFields.filter(
-                  f => {
-                    if (f.props.disabling && f.props.disabling()) {
-                      return true
-                    }
-                    return false
+                const disablingFields = requiredFields.filter(f => {
+                  if (f.props.disabling && f.props.disabling()) {
+                    return true
                   }
-                )
+                  return false
+                })
 
                 if (disablingFields.length > 0) {
                   return true
@@ -301,14 +295,19 @@ class _Form extends Component {
 
                 if (missingFields.length === 0) return
 
-                const missingText = missingFields.map(f =>
-                  (typeof (f.props.label || f.props.title) !== 'string'
-                    ? f.props.name
-                    : f.props.label || f.props.title || '').toLowerCase())
-                                                 .join(', ')
+                const missingText = missingFields
+                  .map(f =>
+                    (typeof (f.props.label || f.props.title) !== 'string'
+                      ? f.props.name
+                      : f.props.label || f.props.title || ''
+                    ).toLowerCase()
+                  )
+                  .join(', ')
 
-                return `Champs ${pluralize('non-valide', missingFields.length)}&nbsp;:&nbsp;${
-                  missingText}`
+                return `Champs ${pluralize(
+                  'non-valide',
+                  missingFields.length
+                )}&nbsp;:&nbsp;${missingText}`
               },
             },
             this.props.Tag !== 'form' || !this.props.onSubmit
@@ -346,10 +345,9 @@ class _Form extends Component {
     } = this.props
 
     if (
-      get(notification, 'name') === name && (
-        get(notification, 'type') === 'danger' ||
-        get(notification, 'type') === 'success'
-      )
+      get(notification, 'name') === name &&
+      (get(notification, 'type') === 'danger' ||
+        get(notification, 'type') === 'success')
     ) {
       closeNotification()
     }
@@ -357,29 +355,23 @@ class _Form extends Component {
     mergeForm(name, patch)
   }
 
-  handleHistoryBlock () {
-    const {
-      BlockComponent
-    } = this.props
+  handleHistoryBlock() {
+    const { BlockComponent } = this.props
 
     if (BlockComponent) {
       blockersByName.form = (nextLocation, unblock) => {
-        const {
-          readOnly,
-          showModal
-        } = this.props
-        const {
-          hasAtLeastOneTargetValue
-        } = this.state
+        const { readOnly, showModal } = this.props
+        const { hasAtLeastOneTargetValue } = this.state
 
         // NO NEED TO BLOCK IF THE FORM IS READONLY OR WITH NO INTERACTION FROM USER
         if (readOnly || !hasAtLeastOneTargetValue) {
           return false
         }
 
-        showModal(<BlockComponent
-          nextLocation={nextLocation}
-          unblock={unblock} />, { isUnclosable: true })
+        showModal(
+          <BlockComponent nextLocation={nextLocation} unblock={unblock} />,
+          { isUnclosable: true }
+        )
 
         return true
       }
@@ -391,14 +383,8 @@ class _Form extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {
-      isAutoSubmit,
-      location,
-      readOnly
-    } = this.props
-    const {
-      hasAtLeastOneTargetValue
-    } = this.state
+    const { isAutoSubmit, location, readOnly } = this.props
+    const { hasAtLeastOneTargetValue } = this.state
 
     if (prevProps.readOnly !== readOnly) {
       this.handleHistoryBlock()
@@ -409,14 +395,14 @@ class _Form extends Component {
 
     if (
       isAutoSubmit &&
-      hasAtLeastOneTargetValue && !prevState.hasAtLeastOneTargetValue
+      hasAtLeastOneTargetValue &&
+      !prevState.hasAtLeastOneTargetValue
     ) {
       this.onSubmit()
     }
-
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     const { BlockComponent } = this.props
     BlockComponent && blockersByName.form && delete blockersByName.form
   }
@@ -465,6 +451,5 @@ const Form = compose(
 // THE compose withRouter, connect
 Form.defaultProps = _Form.defaultProps
 Form.inputsByType = _Form.inputsByType
-
 
 export default Form

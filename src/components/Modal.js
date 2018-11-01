@@ -131,9 +131,8 @@ class Modal extends Component {
                 <Icon svg="ico-close-b" />
               </button>
             )}
-          {$modal && $modal.type && (
-            <div className="modal-content">{$modal}</div>
-          )}
+          {$modal &&
+            $modal.type && <div className="modal-content">{$modal}</div>}
         </div>
       </div>
     )

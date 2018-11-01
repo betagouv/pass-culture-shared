@@ -14,7 +14,6 @@ import TextareaInput from './TextareaInput'
 import TextInput from './TextInput'
 import TimeInput from './TimeInput'
 
-
 Form.inputsByType = {
   checkbox: CheckboxInput,
   date: DateInput,

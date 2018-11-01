@@ -8,8 +8,8 @@ class NumberInput extends Component {
   }
 
   formatValue = value => {
-    if (!value || isNaN(Number(value))) {
-      return ""
+    if (!value || isNaN(Number(value))) {
+      return ''
     }
 
     // FIXME first test should be handled with defautProps

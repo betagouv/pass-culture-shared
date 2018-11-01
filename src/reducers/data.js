@@ -13,9 +13,7 @@ export const createData = (initialState = {}) => (
   if (action.type === RESET_DATA) {
     return initialState
   }
-  if (
-    /SUCCESS_DATA_(DELETE|GET|POST|PUT|PATCH)_(.*)/.test(action.type)
-  ) {
+  if (/SUCCESS_DATA_(DELETE|GET|POST|PUT|PATCH)_(.*)/.test(action.type)) {
     // unpack config
     const key =
       action.config.key ||

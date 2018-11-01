@@ -39,30 +39,21 @@ class Field extends Component {
   }
 
   onChange = (value, config) => {
-
     const { InputComponent, onChange: formOnChange } = this.props
 
     const storeValue = get(InputComponent, 'storeValue', this.props.storeValue)
 
     const isValueChangedToEmptyString = value === '' && this.props.value
 
-    const newStoreValue = isValueChangedToEmptyString
-      ? ' '
-      : value
+    const newStoreValue = isValueChangedToEmptyString ? ' ' : value
 
-    const storedValue = storeValue(
-      newStoreValue,
-      this.props
-    )
+    const storedValue = storeValue(newStoreValue, this.props)
 
     formOnChange(storedValue, Object.assign({}, this.props, config))
   }
 
   renderErrors = () => {
-    const {
-      id,
-      errors,
-    } = this.props
+    const { id, errors } = this.props
 
     if (get(errors, 'length')) {
       return errors.map((e, index) => (
@@ -71,19 +62,14 @@ class Field extends Component {
           id={`${id}-error`}
           key={index}>
           <span className="column is-narrow">
-            <Icon
-              svg="picto-warning"
-              alt="Attention"
-            />
+            <Icon svg="picto-warning" alt="Attention" />
           </span>
           <span className="column is-paddingless is-narrow"> {e} </span>
         </p>
       ))
     }
     return (
-      <p
-        className="help is-danger columns"
-        id={`${id}-error`}>
+      <p className="help is-danger columns" id={`${id}-error`}>
         <Icon
           className="column is-1 is-invisible is-paddingless"
           svg="picto-warning"
@@ -110,17 +96,13 @@ class Field extends Component {
   }
 
   renderDisplayLength = () => {
-    const {
-      displayMaxLength,
-      maxLength,
-      value
-    } = this.props
+    const { displayMaxLength, maxLength, value } = this.props
     if (!displayMaxLength) {
       return
     }
 
     return (
-      <span className="has-text-weight-light is-size-7" >
+      <span className="has-text-weight-light is-size-7">
         {get(value, 'length', 0)} / {maxLength} caractères
       </span>
     )
@@ -148,13 +130,19 @@ class Field extends Component {
 
     if (layout === 'horizontal') {
       return (
-        <div className={classnames(`field field-${type} is-horizontal`, {
-          'readonly': readOnly
-        }, className)}>
+        <div
+          className={classnames(
+            `field field-${type} is-horizontal`,
+            {
+              readonly: readOnly,
+            },
+            className
+          )}>
           {label && (
-            <div className={classnames(`field-label is-${size}`, {
-              'readonly': readOnly
-            })}>
+            <div
+              className={classnames(`field-label is-${size}`, {
+                readonly: readOnly,
+              })}>
               <label htmlFor={id} className="label">
                 <span
                   className={`subtitle ${classnames({ required, readOnly })}`}>
@@ -170,7 +158,9 @@ class Field extends Component {
                 'is-expanded': isExpanded,
               })}>
               {$input}
-              {sublabel && <p className="has-text-weight-light is-size-7">{sublabel}</p>}
+              {sublabel && (
+                <p className="has-text-weight-light is-size-7">{sublabel}</p>
+              )}
             </div>
             {$errors}
           </div>
@@ -181,7 +171,7 @@ class Field extends Component {
     if (layout === 'vertical') {
       if (type === 'checkbox') {
         return (
-          <div className={classnames("field field-checkbox", className)}>
+          <div className={classnames('field field-checkbox', className)}>
             <label className={classnames({ required })} htmlFor={id}>
               {$input}
               {label}

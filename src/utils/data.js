@@ -5,7 +5,6 @@ const { NAME, VERSION } = process.env
 
 const successStatusCodes = [200, 201, 202, 203, 205, 206, 207, 208, 210, 226]
 
-
 export async function fetchData(method, path, config = {}) {
   const { body, token, url } = config
 
@@ -21,12 +20,10 @@ export async function fetchData(method, path, config = {}) {
   }
 
   if (method && method !== 'GET' && method !== 'DELETE') {
-
     let formatBody = body
     let isFormDataBody = formatBody instanceof FormData
     if (formatBody && !isFormDataBody) {
-      const fileValue = Object.values(body)
-                              .find(value => value instanceof File)
+      const fileValue = Object.values(body).find(value => value instanceof File)
       if (fileValue) {
         const formData = new FormData()
         Object.keys(formatBody).forEach(key => formData.append(key, patch[key]))
@@ -62,18 +59,14 @@ export async function fetchData(method, path, config = {}) {
   const fetchResult = await fetch(fetchUrl, init)
 
   // prepare result
-  const {
-    ok,
-    status
-  } = fetchResult
+  const { ok, status } = fetchResult
   const result = {
     ok,
-    status
+    status,
   }
 
   // check
   if (successStatusCodes.includes(status)) {
-
     // TODO: do we need that here precisely ?
     if (window.cordova) {
       window.cordova.plugins.CookieManagementPlugin.flush()
@@ -81,11 +74,13 @@ export async function fetchData(method, path, config = {}) {
 
     // warn
     if (!fetchResult.json) {
-      console.warn(`fetch is a success but expected a json format for the fetchResult of ${fetchUrl}`)
+      console.warn(
+        `fetch is a success but expected a json format for the fetchResult of ${fetchUrl}`
+      )
       result.errors = [
         {
-          global: ["Le serveur ne renvoit pas de la donnée au bon format"]
-        }
+          global: ['Le serveur ne renvoit pas de la donnée au bon format'],
+        },
       ]
       return result
     }
@@ -103,11 +98,13 @@ export async function fetchData(method, path, config = {}) {
 
   // warn
   if (!fetchResult.json) {
-    console.warn(`fetch returns ${status} but we still expected a json format for the fetchResult of ${fetchUrl}`)
+    console.warn(
+      `fetch returns ${status} but we still expected a json format for the fetchResult of ${fetchUrl}`
+    )
     result.errors = [
       {
-        global: ["Le serveur ne renvoit pas de la donnée au bon format"]
-      }
+        global: ['Le serveur ne renvoit pas de la donnée au bon format'],
+      },
     ]
     return result
   }
@@ -116,7 +113,6 @@ export async function fetchData(method, path, config = {}) {
   result.errors = await fetchResult.json()
   return result
 }
-
 
 export function getNextState(state, method, patch, config = {}) {
   // UNPACK
@@ -145,7 +141,6 @@ export function getNextState(state, method, patch, config = {}) {
     }
     let nextData = uniqBy(
       data.map((datum, index) => {
-
         // CLONE
         let nextDatum = Object.assign(
           // FORCE TO GIVE AN ID
