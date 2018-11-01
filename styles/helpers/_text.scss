@@ -1,7 +1,9 @@
-@each $intSize in $intSizes {
-  $pixelValue: number-to-pixel($intSize);
+$textIntSizes: () !default;
 
-  .fs#{$intSize} {
+@each $textIntSize in $textIntSizes {
+  $pixelValue: number-to-pixel($textIntSize);
+
+  .fs#{$textIntSize} {
     @include font-size-to-rem($pixelValue);
   }
 }

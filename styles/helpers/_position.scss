@@ -6,26 +6,28 @@
   position: relative;
 }
 
-@each $intSize in $intSizes {
+$positionIntSizes: () !default;
+
+@each $positionIntSize in $positionIntSizes {
   $sides: (all, topbottom, leftright, top, left, right, bottom);
 
   // convert value to SASS variables with unit
-  $pixelValue: number-to-pixel($intSize);
+  $pixelValue: number-to-pixel($positionIntSize);
 
   @each $side in $sides {
-    .l#{$intSize} {
+    .l#{$positionIntSize} {
       @include rem(left, $pixelValue);
     }
 
-    .r#{$intSize} {
+    .r#{$positionIntSize} {
       @include rem(right, $pixelValue);
     }
 
-    .t#{$intSize} {
+    .t#{$positionIntSize} {
       @include rem(top, $pixelValue);
     }
 
-    .b#{$intSize} {
+    .b#{$positionIntSize} {
       @include rem(bottom, $pixelValue);
     }
   }
