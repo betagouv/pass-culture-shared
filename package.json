@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "classnames": "2.2.5",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
     "lodash.set": "^4.3.2",
@@ -67,5 +68,5 @@
     "watch": "nodemon --watch src --exec \"npm run compile\"",
     "test": "yarn jest --env=jsdom"
   },
-  "version": "0.0.75"
+  "version": "0.0.77"
 }
