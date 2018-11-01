@@ -1422,6 +1422,10 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+classnames@2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
+
 classnames@^2.2.5:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
@@ -4994,10 +4998,11 @@ pascalcase@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
 
-pass-culture-shared@0.0.59:
-  version "0.0.59"
-  resolved "https://registry.yarnpkg.com/pass-culture-shared/-/pass-culture-shared-0.0.59.tgz#61037cbcd14bd8ba599edf1c2d5f8ba5622257dd"
+pass-culture-shared@0.0.79:
+  version "0.0.79"
+  resolved "https://registry.yarnpkg.com/pass-culture-shared/-/pass-culture-shared-0.0.79.tgz#9624772b1e4392fc4f5cc0fad0308fb0dd73262e"
   dependencies:
+    classnames "2.2.5"
     lodash.get "^4.4.2"
     lodash.merge "^4.6.1"
     lodash.set "^4.3.2"
