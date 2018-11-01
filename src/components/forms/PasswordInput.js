@@ -44,7 +44,9 @@ class PasswordInput extends Component {
         <div className="control">
           <button
             className="button is-rounded"
-            onClick={this.toggleHidden}>
+            onClick={this.toggleHidden}
+            type="button"
+          >
             <Icon
               svg={this.state.isPasswordHidden ? 'ico-eye close' : 'ico-eye'}
             />
