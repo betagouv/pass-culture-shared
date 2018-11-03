@@ -29,7 +29,7 @@ export async function fetchData(method, path, config = {}) {
                               .find(value => value instanceof File)
       if (fileValue) {
         const formData = new FormData()
-        Object.keys(formatBody).forEach(key => formData.append(key, patch[key]))
+        Object.keys(formatBody).forEach(key => formData.append(key, formatBody[key]))
         formatBody = formData
 
         isFormDataBody = true
