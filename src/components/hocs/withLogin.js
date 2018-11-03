@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 
+import { selectCurrentUser } from '../../selectors'
 import { requestData } from '../../reducers/data'
 
 const withLogin = (config = {}) => WrappedComponent => {
@@ -16,17 +17,17 @@ const withLogin = (config = {}) => WrappedComponent => {
     }
 
     componentDidMount = () => {
-      const { dispatch, history, location, user } = this.props
+      const { currentUser, dispatch, history, location } = this.props
       const { canRenderChildren } = this.state
 
-      // we are logged already so cool
+      // we are logged already, so it is already cool:
       // we can render children
-      if (user !== null && !canRenderChildren) {
+      if (currentUser !== null && !canRenderChildren) {
         this.setState({ canRenderChildren: true })
       }
 
       dispatch(
-        requestData('GET', `users/current`, {
+        requestData("GET", "users/current", {
           handleFail: () => {
             if (failRedirect) {
               let computedFailRedirect = failRedirect
@@ -58,10 +59,13 @@ const withLogin = (config = {}) => WrappedComponent => {
               history.push(computedSuccessRedirect)
               return
             }
-            this.setState({ canRenderChildren: true })
-          },
-        })
-      )
+            history.push(computedSuccessRedirect)
+            return
+          }
+          this.setState({ canRenderChildren: true })
+        },
+        resolve: nextDatum => Object.assign({ isCurrent: true }, nextDatum)
+      }))
     }
 
     render() {
@@ -74,16 +78,16 @@ const withLogin = (config = {}) => WrappedComponent => {
   }
 
   _withLogin.defaultProps = {
-    user: null,
+    currentUser: null,
   }
 
   _withLogin.propTypes = {
+    currentUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
-    user: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   }
 
-  return compose(withRouter, connect(state => ({ user: state.user })))(
+  return compose(withRouter, connect(state => ({ currentUser: selectCurrentUser(state) })))(
     _withLogin
   )
 }
