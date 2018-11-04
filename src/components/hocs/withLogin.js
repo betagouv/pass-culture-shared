@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 
-import { selectCurrentUser } from '../../selectors'
+import { resolveCurrentUser, selectCurrentUser } from '../../selectors'
 import { requestData } from '../../reducers/data'
 
 const withLogin = (config = {}) => WrappedComponent => {
@@ -61,8 +61,7 @@ const withLogin = (config = {}) => WrappedComponent => {
             }
             this.setState({ canRenderChildren: true })
           },
-          resolve: userFromRequest => userFromRequest &&
-            Object.assign({ isCurrent: true }, userFromRequest)
+          resolve: resolveCurrentUser
         }))
     }
 
