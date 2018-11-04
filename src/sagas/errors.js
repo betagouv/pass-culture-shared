@@ -3,7 +3,7 @@ import { put, takeEvery } from 'redux-saga/effects'
 
 import { mergeErrors } from '../reducers/errors'
 
-function* fromWatchFailDataActions(action) {
+export function* fromWatchFailDataActions(action) {
   const name = get(action, 'config.name') || action.path
   let patch = action.errors
   if (Array.isArray(action.errors)) {

@@ -15,7 +15,7 @@ const withLogin = (config = {}) => WrappedComponent => {
       this.state = { canRenderChildren: false }
     }
 
-    componentDidMount = prevProps => {
+    componentDidMount = () => {
       const { dispatch, history, location, user } = this.props
       const { canRenderChildren } = this.state
 

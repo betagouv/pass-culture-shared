@@ -1,3 +1,1 @@
-import registerCacheWorker from './cache'
-
-export { registerCacheWorker }
+export * from './cache'

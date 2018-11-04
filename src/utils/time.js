@@ -10,3 +10,5 @@ export function resolveIsNew(datum, dateKey, comparedTo) {
   }
   return datum
 }
+
+export default resolveIsNew

@@ -13,3 +13,5 @@ export const tracker = (state = initialState, action) => {
   }
   return state
 }
+
+export default tracker

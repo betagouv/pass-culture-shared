@@ -1,5 +1,6 @@
 import get from 'lodash.get'
 import classnames from 'classnames'
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
 import Spinner from './Spinner'
@@ -7,40 +8,36 @@ import Spinner from './Spinner'
 const UP = 'up'
 const DOWN = 'down'
 
-class InfiniteScroller extends Component {
+export class InfiniteScroller extends Component {
   constructor(props) {
     super(props)
     this.state = {
       errors: null,
-      isLoading: false,
       isFinished: false,
+      isLoading: false,
       lastScrollTop: 0,
     }
   }
 
-  static defaultProps = {
-    Tag: 'ul',
-    loadScrollRatio: 0.9,
-    scrollingElement: document.documentElement,
-    renderLoading: () => (
-      <Spinner Tag="li" style={{ justifyContent: 'center' }} />
-    ),
-    renderFinished: () => <li style={{ justifyContent: 'center' }} />,
-    renderErrors: errors => (
-      <li className="notification is-danger">
-        {get(errors, 'global') && get(errors, 'global').join(' ')}
-      </li>
-    ),
+  componentDidMount() {
+    const { scrollingElement } = this.props
+    window.addEventListener('scroll', this.scrollWatch)
+    this.setState({
+      lastScrollTop: scrollingElement.scrollTop,
+    })
   }
 
-  scrollWatch = e => {
-    const { isLoading, isFinished } = this.state
-    const { handleLoadMore, loadScrollRatio, scrollingElement } = this.props
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.scrollWatch)
+  }
 
+  scrollWatch = () => {
+    const { isLoading, isFinished, lastScrollTop } = this.state
+    const { handleLoadMore, loadScrollRatio, scrollingElement } = this.props
     const { scrollTop, scrollHeight, clientHeight } = scrollingElement
 
     const pageScrollRatio = scrollTop / (scrollHeight - clientHeight)
-    const scrollDirection = this.state.lastScrollTop > scrollTop ? UP : DOWN
+    const scrollDirection = lastScrollTop > scrollTop ? UP : DOWN
 
     const shouldLoadMore =
       !isFinished &&
@@ -53,32 +50,24 @@ class InfiniteScroller extends Component {
       lastScrollTop: scrollTop,
     })
 
-    shouldLoadMore && handleLoadMore(this.loadSuccess, this.loadError)
+    if (shouldLoadMore) {
+      handleLoadMore(this.loadSuccess, this.loadError)
+    }
   }
 
   loadSuccess = (state, action) => {
+    const { data } = action
     this.setState({
+      isFinished: data.length === 0, // TODO consider action.data.length < perPage
       isLoading: false,
-      isFinished: action.data.length === 0, //TODO consider action.data.length < perPage
     })
   }
 
   loadError = (state, action) => {
     this.setState({
-      isLoading: false,
       errors: action.errors,
+      isLoading: false,
     })
-  }
-
-  componentDidMount() {
-    window.addEventListener('scroll', this.scrollWatch)
-    this.setState({
-      lastScrollTop: this.props.scrollingElement.scrollTop,
-    })
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.scrollWatch)
   }
 
   render() {
@@ -101,6 +90,35 @@ class InfiniteScroller extends Component {
       </Tag>
     )
   }
+}
+
+InfiniteScroller.defaultProps = {
+  Tag: 'ul',
+  className: null,
+  handleLoadMore: null,
+  loadScrollRatio: 0.9,
+  renderErrors: errors => (
+    <li className="notification is-danger">
+      {get(errors, 'global') && get(errors, 'global').join(' ')}
+    </li>
+  ),
+  renderFinished: () => <li style={{ justifyContent: 'center' }} />,
+  renderLoading: () => (
+    <Spinner Tag="li" style={{ justifyContent: 'center' }} />
+  ),
+  scrollingElement: document.documentElement,
+}
+
+InfiniteScroller.propTypes = {
+  Tag: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  handleLoadMore: PropTypes.func,
+  loadScrollRatio: PropTypes.number,
+  renderErrors: PropTypes.func,
+  renderFinished: PropTypes.func,
+  renderLoading: PropTypes.func,
+  scrollingElement: PropTypes.node,
 }
 
 export default InfiniteScroller

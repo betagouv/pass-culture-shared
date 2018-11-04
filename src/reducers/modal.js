@@ -2,9 +2,9 @@ export const CLOSE_MODAL = 'CLOSE_MODAL'
 export const SHOW_MODAL = 'SHOW_MODAL'
 
 const initialState = {
+  $modal: null,
   config: { fromDirection: 'right' },
   isActive: false,
-  $modal: null,
 }
 
 export function modal(state = initialState, action) {
@@ -30,8 +30,8 @@ export function closeModal() {
 
 export function showModal($modal, config) {
   return {
-    config,
     $modal,
+    config,
     type: SHOW_MODAL,
   }
 }

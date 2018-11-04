@@ -9,8 +9,8 @@ export async function fetchData(method, path, config = {}) {
   const { body, token, url } = config
 
   const init = {
-    method,
     credentials: 'include',
+    method,
   }
 
   init.headers = {
@@ -26,7 +26,7 @@ export async function fetchData(method, path, config = {}) {
       const fileValue = Object.values(body).find(value => value instanceof File)
       if (fileValue) {
         const formData = new FormData()
-        Object.keys(formatBody).forEach(key => formData.append(key, patch[key]))
+        Object.keys(formatBody).forEach(key => formData.append(key, formatBody[key]))
         formatBody = formData
 
         isFormDataBody = true

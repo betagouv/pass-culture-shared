@@ -7,7 +7,8 @@ export function removeWhitespaces(string) {
 }
 
 function pluralizeWord(string, number, pluralizeWith = 's') {
-  let singular, plural
+  let plural
+  let singular
   const lastLetter = string.slice(-1)[0]
   if (lastLetter === 's' || lastLetter === 'x') {
     singular = string.slice(0, -1)
@@ -42,7 +43,7 @@ export function queryStringToObject(string = '') {
       .split('&')
       .filter(el => el)
       .reduce((result, group) => {
-        let [key, value] = group.split('=')
+        const [key, value] = group.split('=')
         return Object.assign({}, result, { [key]: value })
       }, {})
   )

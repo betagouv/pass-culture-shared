@@ -400,3 +400,5 @@ export const edd_codes = [
     ],
   },
 ]
+
+export default edd_codes

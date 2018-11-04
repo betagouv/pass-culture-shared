@@ -4,8 +4,8 @@ import { call, put, race, select, takeEvery } from 'redux-saga/effects'
 import { failData, successData } from '../reducers/data'
 import { fetchData } from '../utils/data'
 
-const fromWatchRequestDataActions = (extraConfig = {}) =>
-  function*(action) {
+export const fromWatchRequestDataActions = (extraConfig = {}) =>
+  function *watchRequestDataActions(action) {
     // UNPACK
     const { method, path } = action
 
@@ -17,7 +17,8 @@ const fromWatchRequestDataActions = (extraConfig = {}) =>
     // DATA
     try {
       // RACE
-      let fetchResult, timeoutResult
+      let fetchResult
+      let timeoutResult
       if (timeout) {
         const raceResult = yield race({
           fetchResult: call(fetch, method, path, { body, encode, url }),
@@ -72,17 +73,17 @@ const fromWatchRequestDataActions = (extraConfig = {}) =>
     }
   }
 
-function* fromWatchFailDataActions(action) {
+export function* fromWatchFailDataActions(action) {
   if (action.config.handleFail) {
-    const state = yield select(state => state)
-    yield call(action.config.handleFail, state, action)
+    const currentState = yield select(state => state)
+    yield call(action.config.handleFail, currentState, action)
   }
 }
 
-function* fromWatchSuccessDataActions(action) {
+export function* fromWatchSuccessDataActions(action) {
   if (action.config.handleSuccess) {
-    const state = yield select(state => state)
-    yield call(action.config.handleSuccess, state, action)
+    const currentState = yield select(state => state)
+    yield call(action.config.handleSuccess, currentState, action)
   }
 }
 

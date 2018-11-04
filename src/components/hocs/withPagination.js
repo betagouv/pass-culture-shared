@@ -65,7 +65,7 @@ const withPagination = (config = {}) => WrappedComponent => {
       }
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
+    static getDerivedStateFromProps(nextProps) {
       const windowQuery = {}
       Object.keys(defaultWindowQuery).forEach(key => {
         windowQuery[key] = nextProps.search[key] || defaultWindowQuery[key]
@@ -88,8 +88,9 @@ const withPagination = (config = {}) => WrappedComponent => {
     }
 
     goToNextPage = () => {
-      const page = this.props.search.page ? Number(this.props.search.page) : 1
-      this.setState(previousState => ({ page: page + 1 }))
+      const { search } = this.props
+      const page = search.page ? Number(search.page) : 1
+      this.setState(() => ({ page: page + 1 }))
     }
 
     clear = () => {

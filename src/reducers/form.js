@@ -1,7 +1,5 @@
 import merge from 'lodash.merge'
 
-import { isPlainObject } from '../utils/object'
-
 const initialState = {}
 
 export const RESET_FORM = 'RESET_FORM'
@@ -55,10 +53,10 @@ export const mergeForm = (name, patch, config) => {
   }
 
   return {
-    type,
+    config,
     name,
     patch,
-    config,
+    type,
   }
 }
 

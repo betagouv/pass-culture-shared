@@ -4,20 +4,20 @@ import { put, select, takeEvery } from 'redux-saga/effects'
 import { resetData } from '../reducers/data'
 import { setUser } from '../reducers/user'
 
-function* fromWatchRequestSignActions(action) {
+export function* fromWatchRequestSignActions() {
   yield put(setUser(false)) // false while querying
 }
 
-function* fromWatchFailSignActions(action) {
+export function* fromWatchFailSignActions() {
   yield put(setUser(null)) // null otherwise
 }
 
-function* fromWatchSuccessGetSignoutActions() {
+export function* fromWatchSuccessGetSignoutActions() {
   yield put(resetData())
   yield put(setUser(null))
 }
 
-function* fromWatchSuccessSignActions() {
+export function* fromWatchSuccessSignActions() {
   const user = yield select(state => get(state, 'data.users[0]'))
   const currentUser = yield select(state => state.user)
   if (user && !currentUser) {
@@ -27,7 +27,7 @@ function* fromWatchSuccessSignActions() {
   }
 }
 
-function* fromWatchSuccessPatchUsers(action) {
+export function* fromWatchSuccessPatchUsers(action) {
   const loggedUserId = yield select(state => get(state, 'user.id'))
 
   if (!loggedUserId) {

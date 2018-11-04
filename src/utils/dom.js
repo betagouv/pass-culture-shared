@@ -96,6 +96,7 @@ export function scrollIt(
 
     requestAnimationFrame(scroll)
   }
-
   scroll()
 }
+
+export default scrollIt
