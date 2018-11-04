@@ -1,13 +1,14 @@
+/* eslint-disable */
 import moment from 'moment'
 import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
 
-import Icon from '../Icon'
+import { Icon } from '../Icon'
 
 class DateInput extends Component {
   onChange = date => {
-    const { onChange: fieldOnChange } = this.props
-    const value = date ? date.toISOString() : { [this.props.name]: null }
+    const { name, onChange: fieldOnChange } = this.props
+    const value = date ? date.toISOString() : { [name]: null }
     fieldOnChange(value, { event: { target: { value } } })
   }
 

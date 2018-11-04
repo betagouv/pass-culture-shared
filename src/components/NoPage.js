@@ -3,7 +3,11 @@ import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 
 const renderRedirect = () => <Redirect to="/" />
-const renderRedirecting = () => <span>{'Redirecting...'}</span>
+const renderRedirecting = () => (
+  <span>
+    Redirecting...
+  </span>
+)
 
 const renderTimer = timing => (
   <span>{`You will be redirect in ${timing} seconds`}</span>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import BasicInput from './BasicInput'
-import Icon from '../Icon'
+import { Icon } from '../Icon'
 
 class PasswordInput extends Component {
   constructor(props) {
@@ -11,15 +11,11 @@ class PasswordInput extends Component {
     }
   }
 
-  static defaultProps = {
-    noPasswordToggler: false,
-  }
-
   toggleHidden = e => {
     e.preventDefault()
-    this.setState({
-      isPasswordHidden: !this.state.isPasswordHidden,
-    })
+    this.setState(previousState => ({
+      isPasswordHidden: !previousState.isPasswordHidden,
+    }))
   }
 
   onInputChange = event => {
@@ -30,10 +26,12 @@ class PasswordInput extends Component {
 
   render() {
     const { noPasswordToggler, ...otherProps } = this.props
+    const { isPasswordHidden } = this.state
+
     const input = (
       <BasicInput
         {...otherProps}
-        type={this.state.isPasswordHidden ? 'password' : 'text'}
+        type={isPasswordHidden ? 'password' : 'text'}
         onChange={this.onInputChange}
       />
     )
@@ -48,7 +46,7 @@ class PasswordInput extends Component {
             type="button"
           >
             <Icon
-              svg={this.state.isPasswordHidden ? 'ico-eye close' : 'ico-eye'}
+              svg={isPasswordHidden ? 'ico-eye close' : 'ico-eye'}
             />
             &nbsp;
           </button>
@@ -56,6 +54,10 @@ class PasswordInput extends Component {
       </div>
     )
   }
+}
+
+PasswordInput.defaultProps = {
+  noPasswordToggler: false,
 }
 
 export default PasswordInput

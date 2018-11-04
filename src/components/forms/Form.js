@@ -10,7 +10,7 @@ import { blockersByName } from '../hocs/withBlock'
 import { requestData } from '../../reducers/data'
 import { removeErrors } from '../../reducers/errors'
 import { mergeForm } from '../../reducers/form'
-import { closeModal, showModal } from '../../reducers/modal'
+import { showModal } from '../../reducers/modal'
 import {
   closeNotification,
   showNotification,
@@ -21,6 +21,9 @@ import { pluralize } from '../../utils/string'
 const defaultFormatPatch = patch => patch
 
 class _Form extends Component {
+
+  static inputsByType = {}
+
   constructor(props) {
     super(props)
     this.state = {
@@ -31,24 +34,7 @@ class _Form extends Component {
     }
   }
 
-  static defaultProps = {
-    errorsPatch: {},
-    failNotification: 'Formulaire non validé',
-    formatPatch: defaultFormatPatch,
-    formPatch: {},
-    successNotification: 'Formulaire non validé',
-    Tag: 'form',
-  }
-
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    action: PropTypes.string.isRequired,
-    patch: PropTypes.object,
-  }
-
-  static inputsByType = {}
-
-  static getDerivedStateFromProps = (props, prevState) => {
+  static getDerivedStateFromProps = props => {
     const isEditing = typeof get(props, 'patch.id') !== 'undefined'
     return {
       isEditing,
@@ -56,15 +42,44 @@ class _Form extends Component {
     }
   }
 
+  componentDidMount() {
+    this.handleHistoryBlock()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { isAutoSubmit, location, readOnly } = this.props
+    const { hasAtLeastOneTargetValue } = this.state
+
+    if (prevProps.readOnly !== readOnly) {
+      this.handleHistoryBlock()
+    }
+    if (prevProps.location.key !== location.key) {
+      this.setState({ hasAtLeastOneTargetValue: false })
+    }
+
+    if (
+      isAutoSubmit &&
+      hasAtLeastOneTargetValue &&
+      !prevState.hasAtLeastOneTargetValue
+    ) {
+      this.onSubmit()
+    }
+  }
+
+  componentWillUnmount() {
+    const { BlockComponent } = this.props
+    if (BlockComponent && blockersByName.form) {
+      delete blockersByName.form
+    }
+  }
+
   onMergeForm = (patch, config) => {
     const {
-      closeNotification,
+      dispatch,
       formPatch,
-      mergeForm,
       name,
       notification,
       patch: basePatch,
-      removeErrors,
     } = this.props
     const { hasAtLeastOneTargetValue } = this.state
 
@@ -91,24 +106,27 @@ class _Form extends Component {
       (get(notification, 'type') === 'danger' ||
         get(notification, 'type') === 'success')
     ) {
-      closeNotification()
+      dispatch(closeNotification())
     }
-    removeErrors(name)
+    dispatch(removeErrors(name))
 
-    mergeForm(name, mergePatch, config)
+    dispatch(mergeForm(name, mergePatch, config))
   }
 
-  onSubmit = e => {
-    e && e.preventDefault()
+  onSubmit = event => {
+    if (event) {
+      event.preventDefault()
+    }
     const {
       action,
+      dispatch,
       formPatch,
       formatPatch,
       name,
       normalizer,
-      requestData,
       storePath,
     } = this.props
+    const { method } = this.state
 
     this.setState({
       hasAtLeastOneTargetValue: false,
@@ -117,24 +135,24 @@ class _Form extends Component {
 
     const body = formatPatch(formPatch)
 
-    requestData(this.state.method, action.replace(/^\//g, ''), {
+    dispatch(requestData(method, action.replace(/^\//g, ''), {
       body,
       handleFail: this.handleFail,
       handleSuccess: this.handleSuccess,
       key: storePath, // key is a reserved prop name
       name,
       normalizer,
-    })
+    }))
   }
 
   handleFail = (state, action) => {
     const {
+      dispatch,
       handleFailNotification,
       handleFailRedirect,
       handleFail,
       history,
       name,
-      showNotification,
     } = this.props
 
     this.setState({ isLoading: false })
@@ -144,24 +162,27 @@ class _Form extends Component {
       return
     }
 
-    handleFailNotification &&
-      showNotification({
+    if (handleFailNotification) {
+      dispatch(showNotification({
         name,
         text: handleFailNotification(state, action),
         type: 'danger',
-      })
+      }))
+    }
 
-    handleFailRedirect && history.push(handleFailRedirect(state, action))
+    if (handleFailRedirect) {
+      history.push(handleFailRedirect(state, action))
+    }
   }
 
   handleSuccess = (state, action) => {
     const {
+      dispatch,
       handleSuccessNotification,
       handleSuccessRedirect,
       handleSuccess,
       history,
       name,
-      showNotification,
     } = this.props
 
     this.setState({ isLoading: false })
@@ -171,24 +192,29 @@ class _Form extends Component {
       return
     }
 
-    handleSuccessNotification &&
-      showNotification({
+    if (handleSuccessNotification) {
+      dispatch(showNotification({
         name,
         text: handleSuccessNotification(state, action),
         type: 'success',
-      })
+      }))
+    }
 
-    handleSuccessRedirect && history.push(handleSuccessRedirect(state, action))
+    if (handleSuccessRedirect) {
+      history.push(handleSuccessRedirect(state, action))
+    }
   }
 
   childrenWithProps = () => {
     const {
+      Tag,
       children,
       formPatch,
       errorsPatch,
       history,
       layout,
       name,
+      onSubmit,
       patch: basePatch,
       readOnly,
       size,
@@ -239,10 +265,10 @@ class _Form extends Component {
         const id = `${name}-${c.props.name}`
 
         const newChild = React.cloneElement(c, {
-          errors: get(errorsPatch, c.props.name),
-          id,
-          formName: name,
           InputComponent,
+          errors: get(errorsPatch, c.props.name),
+          formName: name,
+          id,
           layout,
           onChange,
           onMergeForm: this.onMergeForm,
@@ -265,7 +291,6 @@ class _Form extends Component {
           Object.assign(
             {
               isLoading,
-              name,
               getDisabled: () => {
                 if (isEditing) {
                   return false
@@ -293,7 +318,7 @@ class _Form extends Component {
                   f => !get(formPatch, f.props.patchKey)
                 )
 
-                if (missingFields.length === 0) return
+                if (missingFields.length === 0) return null
 
                 const missingText = missingFields
                   .map(f =>
@@ -309,8 +334,9 @@ class _Form extends Component {
                   missingFields.length
                 )}&nbsp;:&nbsp;${missingText}`
               },
+              name,
             },
-            this.props.Tag !== 'form' || !this.props.onSubmit
+            Tag !== 'form' || !onSubmit
               ? {
                   // If not a real form, need to mimic the submit behavior
                   onClick: this.onSubmit,
@@ -324,7 +350,9 @@ class _Form extends Component {
         return React.cloneElement(c, {
           onClick: () => {
             const { to } = c.props
-            to && history.push(to)
+            if (to) {
+              history.push(to)
+            }
             this.resetPatch()
           },
           type: 'button',
@@ -336,12 +364,10 @@ class _Form extends Component {
 
   resetPatch = () => {
     const {
-      closeNotification,
+      dispatch,
       name,
-      mergeForm,
       notification,
       patch,
-      removeErrors,
     } = this.props
 
     if (
@@ -349,10 +375,10 @@ class _Form extends Component {
       (get(notification, 'type') === 'danger' ||
         get(notification, 'type') === 'success')
     ) {
-      closeNotification()
+      dispatch(closeNotification())
     }
-    removeErrors(name)
-    mergeForm(name, patch)
+    dispatch(removeErrors(name))
+    dispatch(mergeForm(name, patch))
   }
 
   handleHistoryBlock() {
@@ -360,7 +386,7 @@ class _Form extends Component {
 
     if (BlockComponent) {
       blockersByName.form = (nextLocation, unblock) => {
-        const { readOnly, showModal } = this.props
+        const { dispatch, readOnly } = this.props
         const { hasAtLeastOneTargetValue } = this.state
 
         // NO NEED TO BLOCK IF THE FORM IS READONLY OR WITH NO INTERACTION FROM USER
@@ -368,43 +394,14 @@ class _Form extends Component {
           return false
         }
 
-        showModal(
+        dispatch(showModal(
           <BlockComponent nextLocation={nextLocation} unblock={unblock} />,
           { isUnclosable: true }
-        )
+        ))
 
         return true
       }
     }
-  }
-
-  componentDidMount() {
-    this.handleHistoryBlock()
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { isAutoSubmit, location, readOnly } = this.props
-    const { hasAtLeastOneTargetValue } = this.state
-
-    if (prevProps.readOnly !== readOnly) {
-      this.handleHistoryBlock()
-    }
-    if (prevProps.location.key !== location.key) {
-      this.setState({ hasAtLeastOneTargetValue: false })
-    }
-
-    if (
-      isAutoSubmit &&
-      hasAtLeastOneTargetValue &&
-      !prevState.hasAtLeastOneTargetValue
-    ) {
-      this.onSubmit()
-    }
-  }
-
-  componentWillUnmount() {
-    const { BlockComponent } = this.props
-    BlockComponent && blockersByName.form && delete blockersByName.form
   }
 
   render() {
@@ -420,36 +417,68 @@ class _Form extends Component {
         className={className}
         id={name}
         method={method}
-        onSubmit={this.onSubmit}>
+        onSubmit={this.onSubmit}
+      >
         {this.childrenWithProps()}
       </Tag>
     )
   }
 }
 
+_Form.defaultProps = {
+  BlockComponent: null,
+  Tag: 'form',
+  className: null,
+  errorsPatch: {},
+  failNotification: 'Formulaire non validé',
+  formPatch: {},
+  formatPatch: defaultFormatPatch,
+  handleFail: null,
+  handleFailNotification: null,
+  handleFailRedirect: null,
+  handleSuccess: null,
+  handleSuccessNotification: null,
+  handleSuccessRedirect: null,
+  successNotification: 'Formulaire non validé',
+}
+
+_Form.propTypes = {
+  Tag: PropTypes.string,
+  action: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  handleFail: PropTypes.func,
+  handleFailNotification: PropTypes.func,
+  handleFailRedirect: PropTypes.func,
+  handleSuccess: PropTypes.func,
+  handleSuccessNotification: PropTypes.func,
+  handleSuccessRedirect: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  patch: PropTypes.object,
+}
+
+function mapStateToProps (state, ownProps) {
+  const { name } = ownProps
+  return {
+    errorsPatch: get(state, `errors.${name}`),
+    formPatch: get(state, `form.${name}`),
+    notification: state.notification,
+  }
+}
+
 const Form = compose(
   withRouter,
-  connect(
-    (state, ownProps) => ({
-      formPatch: get(state, `form.${ownProps.name}`),
-      notification: state.notification,
-      errorsPatch: get(state, `errors.${ownProps.name}`),
-    }),
-    {
-      closeModal,
-      closeNotification,
-      mergeForm,
-      removeErrors,
-      requestData,
-      showModal,
-      showNotification,
-    }
-  )
+  connect(mapStateToProps)
 )(_Form)
+
 
 // WE NEED TO SHORT PASS THEM BECAUSE OF
 // THE compose withRouter, connect
 Form.defaultProps = _Form.defaultProps
 Form.inputsByType = _Form.inputsByType
+Form.propTypes = Object.assign({
+  dispatch: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
+}, _Form.propTypes)
 
 export default Form

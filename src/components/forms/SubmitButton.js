@@ -25,7 +25,9 @@ class SubmitButton extends Component {
         {...otherProps}
         className={classnames(className, { 'is-loading': isLoading })}
         disabled={getDisabled()}
-        title={getTitle()}>
+        title={getTitle()}
+        type="button"
+      >
         {children}
       </button>
     )
