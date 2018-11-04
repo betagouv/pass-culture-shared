@@ -54,6 +54,7 @@ class _Form extends Component {
       this.handleHistoryBlock()
     }
     if (prevProps.location.key !== location.key) {
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ hasAtLeastOneTargetValue: false })
     }
 
@@ -232,6 +233,7 @@ class _Form extends Component {
         const formValue = get(formPatch, getKey)
         const baseValue = get(basePatch, getKey)
         const type = c.props.type || 'text'
+        // eslint-disable-next-line no-use-before-define
         const InputComponent = Form.inputsByType[type]
         if (!InputComponent)
           console.error('Component not found for type:', type)
@@ -255,12 +257,12 @@ class _Form extends Component {
           this.onMergeForm(newPatch, mergeConfig)
         }
 
-        const value =
-          typeof formValue !== 'undefined'
-            ? formValue
-            : typeof baseValue !== 'undefined'
-              ? baseValue
-              : ''
+        let value = ''
+        if (typeof formValue !== 'undefined') {
+          value = formValue
+        } else if (typeof baseValue !== 'undefined') {
+          value = baseValue
+        }
 
         const id = `${name}-${c.props.name}`
 
@@ -290,7 +292,6 @@ class _Form extends Component {
           c,
           Object.assign(
             {
-              isLoading,
               getDisabled: () => {
                 if (isEditing) {
                   return false
@@ -334,6 +335,7 @@ class _Form extends Component {
                   missingFields.length
                 )}&nbsp;:&nbsp;${missingText}`
               },
+              isLoading,
               name,
             },
             Tag !== 'form' || !onSubmit
@@ -439,6 +441,8 @@ _Form.defaultProps = {
   handleSuccess: null,
   handleSuccessNotification: null,
   handleSuccessRedirect: null,
+  normalizer: null,
+  onSubmit: null,
   successNotification: 'Formulaire non validé',
 }
 
@@ -447,13 +451,23 @@ _Form.propTypes = {
   action: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
+  dispatch: PropTypes.func,
+  errorsPatch: PropTypes.object,
+  formPatch: PropTypes.object,
+  formatPatch: PropTypes.func,
   handleFail: PropTypes.func,
   handleFailNotification: PropTypes.func,
   handleFailRedirect: PropTypes.func,
   handleSuccess: PropTypes.func,
   handleSuccessNotification: PropTypes.func,
   handleSuccessRedirect: PropTypes.func,
+  history: PropTypes.object,
+  isAutoSubmit: PropTypes.bool,
+  layout: PropTypes.string,
+  location: PropTypes.object,
   name: PropTypes.string.isRequired,
+  normalizer: PropTypes.object,
+  onSubmit: PropTypes.func,
   patch: PropTypes.object,
 }
 
@@ -473,12 +487,9 @@ const Form = compose(
 
 
 // WE NEED TO SHORT PASS THEM BECAUSE OF
-// THE compose withRouter, connect
+// compose withRouter, connect
 Form.defaultProps = _Form.defaultProps
 Form.inputsByType = _Form.inputsByType
-Form.propTypes = Object.assign({
-  dispatch: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired
-}, _Form.propTypes)
+Form.propTypes = _Form.propTypes
 
 export default Form

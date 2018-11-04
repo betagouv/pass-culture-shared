@@ -8,7 +8,7 @@ class FileInput extends PureComponent {
     }
   }
 
-  getFileName(input) {
+  static getFileName(input) {
     if (input.files.length === 0) {
       return ''
     }

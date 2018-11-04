@@ -175,7 +175,7 @@ Modal.defaultProps = {
 Modal.propTypes = {
   $modal: PropTypes.node,
   dispatch: PropTypes.func.isRequired,
-  fromDirection: PropTypes.bool,
+  fromDirection: PropTypes.string,
   fullscreen: PropTypes.bool,
   hasCloseButton: PropTypes.bool,
   isActive: PropTypes.bool,

@@ -11,7 +11,7 @@ class SelectInput extends Component {
 
   componentDidUpdate(prevProps) {
     const { options } = this.props
-    if (prevProps.options !== this.props.options) {
+    if (prevProps.options !== options) {
       this.handleSpecialOptions()
     }
   }

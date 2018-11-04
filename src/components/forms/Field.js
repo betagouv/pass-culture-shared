@@ -6,12 +6,6 @@ import React, { Component } from 'react'
 import { Icon } from '../Icon'
 
 class Field extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: '',
-    }
-  }
 
   componentDidMount() {
     const { value } = this.props
@@ -72,16 +66,16 @@ class Field extends Component {
   }
 
   renderInput = () => {
-    const { id, InputComponent, readOnly, required, value } = this.props
+    const { displayValue, id, InputComponent, readOnly, required, value } = this.props
 
-    const displayValue =
-      this.props.displayValue || get(InputComponent, 'displayValue')
+    const localOrParentDisplayValue = displayValue ||
+      get(InputComponent, 'displayValue')
 
     const inputProps = Object.assign({}, this.props, {
       'aria-describedby': `${id}-error`,
       onChange: this.onChange,
       required: required && !readOnly,
-      value: displayValue(value, this.props),
+      value: localOrParentDisplayValue(value, this.props),
     })
 
     return InputComponent && <InputComponent {...inputProps} />
@@ -95,7 +89,13 @@ class Field extends Component {
 
     return (
       <span className="has-text-weight-light is-size-7">
-        {get(value, 'length', 0)} / {maxLength} caractères
+        {get(value, 'length', 0)}
+        {' '}
+        /
+        {' '}
+        {maxLength}
+        {' '}
+        caractères
       </span>
     )
   }
@@ -129,16 +129,20 @@ class Field extends Component {
               readonly: readOnly,
             },
             className
-          )}>
+          )}
+        >
           {label && (
             <div
               className={classnames(`field-label is-${size}`, {
                 readonly: readOnly,
-              })}>
+              })}
+            >
               <label htmlFor={id} className="label">
                 <span
-                  className={`subtitle ${classnames({ required, readOnly })}`}>
-                  {label}&nbsp;:
+                  className={`subtitle ${classnames({ readOnly, required})}`}
+                >
+                  {label}
+                  &nbsp;:
                 </span>
               </label>
               {$displayLength}
@@ -148,7 +152,8 @@ class Field extends Component {
             <div
               className={classnames(`control control-${type}`, {
                 'is-expanded': isExpanded,
-              })}>
+              })}
+            >
               {$input}
               {sublabel && (
                 <p className="has-text-weight-light is-size-7">{sublabel}</p>
@@ -206,7 +211,7 @@ class Field extends Component {
   }
 }
 
-Field.defautProps = {
+Field.defaultProps = {
   displayValue: v => v || '',
   layout: 'horizontal',
   size: 'normal',
