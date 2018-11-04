@@ -38,9 +38,9 @@ const withLogin = (config = {}) => WrappedComponent => {
                 return
               }
               history.push(computedFailRedirect)
+              return
             }
-
-            // if the login failed and that the login
+            // if the login failed and we have no failRedirect and that the login
             // is not required we can still render what
             // is in the page
             if (!isRequired) {
@@ -59,13 +59,11 @@ const withLogin = (config = {}) => WrappedComponent => {
               history.push(computedSuccessRedirect)
               return
             }
-            history.push(computedSuccessRedirect)
-            return
-          }
-          this.setState({ canRenderChildren: true })
-        },
-        resolve: nextDatum => Object.assign({ isCurrent: true }, nextDatum)
-      }))
+            this.setState({ canRenderChildren: true })
+          },
+          resolve: userFromRequest => userFromRequest &&
+            Object.assign({ isCurrent: true }, userFromRequest)
+        }))
     }
 
     render() {
