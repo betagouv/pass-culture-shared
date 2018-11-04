@@ -7,5 +7,5 @@ const emptySearch = {}
 export default createCachedSelector(
   (state, search) => search,
 
-  search  => queryStringToObject(search) || emptySearch
+  search => queryStringToObject(search) || emptySearch
 )((state, search) => search || '')

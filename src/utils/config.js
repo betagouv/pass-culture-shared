@@ -1,6 +1,6 @@
-function getMobileOperatingSystem() {
+export function getMobileOperatingSystem() {
   if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
-    var userAgent = navigator.userAgent || navigator.vendor || window.opera
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera
 
     // Windows Phone must come first because its UA also contains "Android"
     if (/windows phone/i.test(userAgent)) {
@@ -17,11 +17,9 @@ function getMobileOperatingSystem() {
     }
     return 'unknown'
   }
+  return null
 }
 export const MOBILE_OS = getMobileOperatingSystem()
-
-
-
 
 let calculatedLocalhost
 if (typeof window !== 'undefined') {
@@ -36,18 +34,15 @@ if (typeof window !== 'undefined') {
 }
 export const IS_LOCALHOST = Boolean(calculatedLocalhost)
 
-
-
-
 let CALC_ROOT_PATH = ''
 if (typeof window !== 'undefined' && window.cordova) {
   document.body.className += ' cordova'
   if (MOBILE_OS === 'android') {
     CALC_ROOT_PATH = 'file:///android_asset/www'
     document.body.className += ' cordova-android'
-    //document.body.className += ' android-with-statusbar'
+    // document.body.className += ' android-with-statusbar'
   } else if (MOBILE_OS === 'ios') {
-    //TODO
+    // TODO
     document.body.className += ' cordova-ios'
     // CALC_ROOT_PATH = window.location.href.split('/').slice(0, 10).join('/')
     CALC_ROOT_PATH = window.location.href.match(/file:\/\/(.*)\/www/)[0]

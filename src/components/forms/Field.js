@@ -3,32 +3,15 @@ import get from 'lodash.get'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Icon from '../Icon'
+import { Icon } from '../Icon'
 
 class Field extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: '',
-    }
-  }
-
-  static defaultProps = {
-    layout: 'horizontal',
-    size: 'normal',
-    displayValue: v => v || '',
-    storeValue: v => v,
-  }
-
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-  }
 
   componentDidMount() {
     const { value } = this.props
-    typeof value !== 'undefined' &&
-      value !== '' &&
+    if (typeof value !== 'undefined' && value !== '') {
       this.onChange(value, { isMounting: true })
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -39,51 +22,40 @@ class Field extends Component {
   }
 
   onChange = (value, config) => {
+    const { InputComponent, onChange: formOnChange, storeValue, value: propsValue } = this.props
 
-    const { InputComponent, onChange: formOnChange } = this.props
+    const localOrParentStoreValue = get(InputComponent, 'storeValue', storeValue)
 
-    const storeValue = get(InputComponent, 'storeValue', this.props.storeValue)
+    const isValueChangedToEmptyString = value === '' && propsValue
 
-    const isValueChangedToEmptyString = value === '' && this.props.value
+    const newStoreValue = isValueChangedToEmptyString ? ' ' : value
 
-    const newStoreValue = isValueChangedToEmptyString
-      ? ' '
-      : value
-
-    const storedValue = storeValue(
-      newStoreValue,
-      this.props
-    )
+    const storedValue = localOrParentStoreValue(newStoreValue, this.props)
 
     formOnChange(storedValue, Object.assign({}, this.props, config))
   }
 
   renderErrors = () => {
-    const {
-      id,
-      errors,
-    } = this.props
+    const { id, errors } = this.props
 
     if (get(errors, 'length')) {
-      return errors.map((e, index) => (
+      return errors.map((error, index) => (
         <p
           className="help is-danger columns is-vcentered"
           id={`${id}-error`}
-          key={index}>
+          key={index}
+        >
           <span className="column is-narrow">
-            <Icon
-              svg="picto-warning"
-              alt="Attention"
-            />
+            <Icon svg="picto-warning" alt="Attention" />
           </span>
-          <span className="column is-paddingless is-narrow"> {e} </span>
+          <span className="column is-paddingless is-narrow">
+            {error}
+          </span>
         </p>
       ))
     }
     return (
-      <p
-        className="help is-danger columns"
-        id={`${id}-error`}>
+      <p className="help is-danger columns" id={`${id}-error`}>
         <Icon
           className="column is-1 is-invisible is-paddingless"
           svg="picto-warning"
@@ -94,34 +66,36 @@ class Field extends Component {
   }
 
   renderInput = () => {
-    const { id, InputComponent, readOnly, required, value } = this.props
+    const { displayValue, id, InputComponent, readOnly, required, value } = this.props
 
-    const displayValue =
-      this.props.displayValue || get(InputComponent, 'displayValue')
+    const localOrParentDisplayValue = displayValue ||
+      get(InputComponent, 'displayValue')
 
     const inputProps = Object.assign({}, this.props, {
       'aria-describedby': `${id}-error`,
       onChange: this.onChange,
       required: required && !readOnly,
-      value: displayValue(value, this.props),
+      value: localOrParentDisplayValue(value, this.props),
     })
 
     return InputComponent && <InputComponent {...inputProps} />
   }
 
   renderDisplayLength = () => {
-    const {
-      displayMaxLength,
-      maxLength,
-      value
-    } = this.props
+    const { displayMaxLength, maxLength, value } = this.props
     if (!displayMaxLength) {
-      return
+      return null
     }
 
     return (
-      <span className="has-text-weight-light is-size-7" >
-        {get(value, 'length', 0)} / {maxLength} caractères
+      <span className="has-text-weight-light is-size-7">
+        {get(value, 'length', 0)}
+        {' '}
+        /
+        {' '}
+        {maxLength}
+        {' '}
+        caractères
       </span>
     )
   }
@@ -148,17 +122,27 @@ class Field extends Component {
 
     if (layout === 'horizontal') {
       return (
-        <div className={classnames(`field field-${type} is-horizontal`, {
-          'readonly': readOnly
-        }, className)}>
+        <div
+          className={classnames(
+            `field field-${type} is-horizontal`,
+            {
+              readonly: readOnly,
+            },
+            className
+          )}
+        >
           {label && (
-            <div className={classnames(`field-label is-${size}`, {
-              'readonly': readOnly
-            })}>
+            <div
+              className={classnames(`field-label is-${size}`, {
+                readonly: readOnly,
+              })}
+            >
               <label htmlFor={id} className="label">
                 <span
-                  className={`subtitle ${classnames({ required, readOnly })}`}>
-                  {label}&nbsp;:
+                  className={`subtitle ${classnames({ readOnly, required})}`}
+                >
+                  {label}
+                  &nbsp;:
                 </span>
               </label>
               {$displayLength}
@@ -168,9 +152,12 @@ class Field extends Component {
             <div
               className={classnames(`control control-${type}`, {
                 'is-expanded': isExpanded,
-              })}>
+              })}
+            >
               {$input}
-              {sublabel && <p className="has-text-weight-light is-size-7">{sublabel}</p>}
+              {sublabel && (
+                <p className="has-text-weight-light is-size-7">{sublabel}</p>
+              )}
             </div>
             {$errors}
           </div>
@@ -181,7 +168,7 @@ class Field extends Component {
     if (layout === 'vertical') {
       if (type === 'checkbox') {
         return (
-          <div className={classnames("field field-checkbox", className)}>
+          <div className={classnames('field field-checkbox', className)}>
             <label className={classnames({ required })} htmlFor={id}>
               {$input}
               {label}
@@ -191,16 +178,22 @@ class Field extends Component {
         )
       }
 
-      const { sublabel } = this.props
       return (
         <div className={classnames(`field field-${type}`, className)}>
           {label && (
             <label className="label" htmlFor={id}>
               <h3
-                className={classnames({ required, 'with-subtitle': sublabel })}>
+                className={classnames({ required, 'with-subtitle': sublabel })}
+              >
                 {label}
               </h3>
-              {sublabel && <p>...&nbsp;{sublabel}&nbsp;:</p>}
+              {sublabel && (
+                <p>
+                  ...&nbsp;
+                  {sublabel}
+                  &nbsp;:
+                </p>
+              )}
             </label>
           )}
           <div className="control">{$input}</div>
@@ -216,6 +209,17 @@ class Field extends Component {
   render() {
     return this.renderLayout()
   }
+}
+
+Field.defaultProps = {
+  displayValue: v => v || '',
+  layout: 'horizontal',
+  size: 'normal',
+  storeValue: v => v,
+}
+
+Field.propTypes = {
+  name: PropTypes.string.isRequired,
 }
 
 // NEEDED FOR MINIFY BUILD TIME

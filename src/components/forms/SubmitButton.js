@@ -1,35 +1,41 @@
 import classnames from 'classnames'
-import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-class SubmitButton extends Component {
-  static defaultProps = {
-    requiredFields: [],
-    getDisabled: () => true,
-    getTitle: () => null,
-    type: 'submit',
-  }
+const SubmitButton = ({
+  children,
+  className,
+  isLoading,
+  getTitle,
+  getDisabled,
+  requiredFields,
+  ...otherProps
+}) => (
+  <button
+    {...otherProps}
+    className={classnames(className, { 'is-loading': isLoading })}
+    disabled={getDisabled()}
+    title={getTitle()}
+    type="button"
+  >
+    {children}
+  </button>
+)
 
-  render() {
-    const {
-      children,
-      className,
-      isLoading,
-      getTitle,
-      getDisabled,
-      requiredFields,
-      ...otherProps
-    } = this.props
+SubmitButton.defaultProps =  {
+  children: null,
+  getDisabled: () => true,
+  getTitle: () => null,
+  requiredFields: [],
+  type: 'submit',
+}
 
-    return (
-      <button
-        {...otherProps}
-        className={classnames(className, { 'is-loading': isLoading })}
-        disabled={getDisabled()}
-        title={getTitle()}>
-        {children}
-      </button>
-    )
-  }
+SubmitButton.propTypes = {
+  children: PropTypes.node,
+  getDisabled: PropTypes.func,
+  getTitle: PropTypes.func,
+  requiredFields: PropTypes.array,
+  type: PropTypes.string
 }
 
 // NEEDED FOR MINIFY BUILD TIME

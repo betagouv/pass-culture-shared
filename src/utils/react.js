@@ -15,3 +15,5 @@ export function recursiveMap(children, fn) {
     return fn(child)
   })
 }
+
+export default recursiveMap

@@ -1,4 +1,6 @@
-import { notification, closeNotification,
+import {
+  notification,
+  closeNotification,
   showNotification,
 } from '../notification'
 

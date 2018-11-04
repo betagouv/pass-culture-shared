@@ -1,7 +1,18 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 
-const CancelButton = ({ children, requiredFields, ...otherProps }) => {
-  return <button {...otherProps}>{children}</button>
+const CancelButton = ({ children, ...otherProps }) => (
+  <button {...otherProps} type="button">
+    {children}
+  </button>
+)
+
+CancelButton.defaultProps = {
+  children: null,
+}
+
+CancelButton.propTypes = {
+  children: PropTypes.node
 }
 
 // NEEDED FOR MINIFY BUILD TIME

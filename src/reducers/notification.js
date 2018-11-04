@@ -11,7 +11,7 @@ export function notification(state = initialState, action) {
       return initialState
     case SHOW_NOTIFICATION:
       scrollIt(0, 250, 'easeInOutQuad')
-      return action.notification
+      return action.patch
     default:
       return state
   }
@@ -23,9 +23,9 @@ export function closeNotification() {
   }
 }
 
-export function showNotification(notification) {
+export function showNotification(patch) {
   return {
+    patch,
     type: SHOW_NOTIFICATION,
-    notification,
   }
 }

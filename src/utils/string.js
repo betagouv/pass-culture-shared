@@ -7,7 +7,8 @@ export function removeWhitespaces(string) {
 }
 
 function pluralizeWord(string, number, pluralizeWith = 's') {
-  let singular, plural
+  let plural
+  let singular
   const lastLetter = string.slice(-1)[0]
   if (lastLetter === 's' || lastLetter === 'x') {
     singular = string.slice(0, -1)
@@ -42,10 +43,10 @@ export function queryStringToObject(string = '') {
       .split('&')
       .filter(el => el)
       .reduce((result, group) => {
-        let [key, value] = group.split('=')
+        const [key, value] = group.split('=')
         return Object.assign({}, result, { [key]: value })
-      }, {}))
-
+      }, {})
+  )
 }
 
 export function objectToQueryString(object = {}) {
@@ -70,14 +71,13 @@ export function updateQueryString(string, object) {
 
 export function getObjectWithMappedKeys(obj, keysMap) {
   const mappedObj = {}
-  Object.keys(obj)
-        .forEach(objKey => {
-          let mappedKey = objKey
-          if (keysMap[objKey]) {
-            mappedKey = keysMap[objKey]
-          }
-          mappedObj[mappedKey] = obj[objKey]
-        })
+  Object.keys(obj).forEach(objKey => {
+    let mappedKey = objKey
+    if (keysMap[objKey]) {
+      mappedKey = keysMap[objKey]
+    }
+    mappedObj[mappedKey] = obj[objKey]
+  })
   return mappedObj
 }
 
@@ -94,16 +94,20 @@ export function formatSiren(string) {
 
 export function getRequestErrorString(request) {
   if (request.errors instanceof Array) {
-    return request.errors.map(errors =>
-      Object.keys(errors).map(key => errors[key]).join(' ')
-    ).join(' ')
+    return request.errors
+      .map(errors =>
+        Object.keys(errors)
+          .map(key => errors[key])
+          .join(' ')
+      )
+      .join(' ')
   }
 
   if (request.errors instanceof Object) {
-    return Object.keys(request.errors).map(key =>
-      request.errors[key].map(error => error).join(' ')
-    ).join(' ')
+    return Object.keys(request.errors)
+      .map(key => request.errors[key].map(error => error).join(' '))
+      .join(' ')
   }
 
-  return '';
+  return ''
 }

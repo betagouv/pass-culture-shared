@@ -4,8 +4,8 @@ import { call, put, race, select, takeEvery } from 'redux-saga/effects'
 import { failData, successData } from '../reducers/data'
 import { fetchData } from '../utils/data'
 
-const fromWatchRequestDataActions = (extraConfig={}) =>
-  function* (action) {
+export const fromWatchRequestDataActions = (extraConfig = {}) =>
+  function *watchRequestDataActions(action) {
     // UNPACK
     const { method, path } = action
 
@@ -16,13 +16,13 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
 
     // DATA
     try {
-
       // RACE
-      let fetchResult, timeoutResult
+      let fetchResult
+      let timeoutResult
       if (timeout) {
         const raceResult = yield race({
           fetchResult: call(fetch, method, path, { body, encode, url }),
-          timeoutResult: call(delay, timeout)
+          timeoutResult: call(delay, timeout),
         })
         fetchResult = raceResult.fetchResult
         timeoutResult = raceResult.timeoutResult
@@ -32,7 +32,6 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
 
       // RESULT
       if (fetchResult) {
-
         // PASSING CONFIG
         const { ok, status } = fetchResult
         Object.assign(config, { ok, status })
@@ -44,19 +43,21 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
           console.error(fetchResult.errors)
           yield put(failData(method, path, fetchResult.errors, config))
         } else {
-          console.warn(`expected a fetched data or a errors from ${method} ${path}`)
+          console.warn(
+            `expected a fetched data or a errors from ${method} ${path}`
+          )
         }
       } else if (timeoutResult) {
         // TIMEOUT
-        const errors = [{
-          global: ['La connexion au serveur est trop faible'],
-        }]
+        const errors = [
+          {
+            global: ['La connexion au serveur est trop faible'],
+          },
+        ]
         console.error(errors)
         yield put(failData(method, path, errors, config))
       }
-
     } catch (error) {
-
       // catch is a normally a fail of the api
       Object.assign(config, { ok: false, status: 500 })
       const errors = [
@@ -64,25 +65,25 @@ const fromWatchRequestDataActions = (extraConfig={}) =>
           global: ['Erreur serveur. Tentez de rafraîchir la page.'],
         },
         {
-          data: [String(error)]
-        }
+          data: [String(error)],
+        },
       ]
       console.error(errors)
       yield put(failData(method, path, errors, config))
     }
   }
 
-function* fromWatchFailDataActions(action) {
+export function* fromWatchFailDataActions(action) {
   if (action.config.handleFail) {
-    const state = yield select(state => state)
-    yield call(action.config.handleFail, state, action)
+    const currentState = yield select(state => state)
+    yield call(action.config.handleFail, currentState, action)
   }
 }
 
-function* fromWatchSuccessDataActions(action) {
+export function* fromWatchSuccessDataActions(action) {
   if (action.config.handleSuccess) {
-    const state = yield select(state => state)
-    yield call(action.config.handleSuccess, state, action)
+    const currentState = yield select(state => state)
+    yield call(action.config.handleSuccess, currentState, action)
   }
 }
 

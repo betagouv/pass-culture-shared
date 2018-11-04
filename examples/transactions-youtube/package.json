@@ -34,7 +34,7 @@
     "lodash.has": "^4.5.2",
     "lodash.uniqby": "^4.7.0",
     "object-assign": "4.1.1",
-    "pass-culture-shared": "0.0.59",
+    "pass-culture-shared": "0.0.79",
     "pluralize": "^7.0.0",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",

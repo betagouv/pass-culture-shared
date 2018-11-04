@@ -10,7 +10,8 @@ class SelectInput extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.options !== this.props.options) {
+    const { options } = this.props
+    if (prevProps.options !== options) {
       this.handleSpecialOptions()
     }
   }
@@ -81,8 +82,8 @@ class SelectInput extends Component {
 }
 
 SelectInput.defaultProps = {
-  optionValue: 'id',
   optionLabel: 'name',
+  optionValue: 'id',
 }
 
 export default SelectInput

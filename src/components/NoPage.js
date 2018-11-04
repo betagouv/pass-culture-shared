@@ -5,14 +5,12 @@ import { Redirect } from 'react-router-dom'
 const renderRedirect = () => <Redirect to="/" />
 const renderRedirecting = () => (
   <span>
-    {'Redirecting...'}
+    Redirecting...
   </span>
 )
 
 const renderTimer = timing => (
-  <span>
-    {`You will be redirect in ${timing} seconds`}
-  </span>
+  <span>{`You will be redirect in ${timing} seconds`}</span>
 )
 
 class NoPage extends React.PureComponent {
@@ -40,9 +38,7 @@ class NoPage extends React.PureComponent {
     if (timing < 0) return renderRedirect()
     return (
       <div id="page-redirect">
-        <h3 className="title">
-          {`404 Not found ${location.pathname}`}
-        </h3>
+        <h3 className="title">{`404 Not found ${location.pathname}`}</h3>
         <p className="content">
           {timing > 0 && renderTimer(timing)}
           {timing === 0 && renderRedirecting()}

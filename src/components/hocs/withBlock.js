@@ -5,7 +5,6 @@ export const blockersByName = {}
 
 const withBlock = WrappedComponent => {
   class _withBlock extends Component {
-
     handleHistoryBlock = () => {
       const { history } = this.props
 
@@ -39,8 +38,10 @@ const withBlock = WrappedComponent => {
       }
     }
 
-    render () {
-      return <WrappedComponent {...this.props} blockersByName={blockersByName} />
+    render() {
+      return (
+        <WrappedComponent {...this.props} blockersByName={blockersByName} />
+      )
     }
   }
 

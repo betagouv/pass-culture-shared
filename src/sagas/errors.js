@@ -3,14 +3,12 @@ import { put, takeEvery } from 'redux-saga/effects'
 
 import { mergeErrors } from '../reducers/errors'
 
-function* fromWatchFailDataActions(action) {
+export function* fromWatchFailDataActionsMergeErrors(action) {
   const name = get(action, 'config.name') || action.path
   let patch = action.errors
   if (Array.isArray(action.errors)) {
     patch = {}
-    for (let error of action.errors) {
-      Object.assign(patch, error)
-    }
+    action.errors.forEach(error => Object.assign(patch, error))
   }
   yield put(mergeErrors(name, patch, action.config))
 }
@@ -18,6 +16,6 @@ function* fromWatchFailDataActions(action) {
 export function* watchErrorsActions() {
   yield takeEvery(
     ({ type }) => /FAIL_DATA_(.*)/.test(type),
-    fromWatchFailDataActions
+    fromWatchFailDataActionsMergeErrors
   )
 }

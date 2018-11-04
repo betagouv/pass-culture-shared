@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
@@ -5,22 +6,19 @@ import { compose } from 'redux'
 
 import { closeModal } from '../reducers/modal'
 
-const Block = ({
+export const Block = ({
+  cancelText,
+  confirmText,
   dispatch,
   history,
   nextLocation,
   text,
   unblock
 }) => {
-  const {
-    pathname,
-    search
-  } = nextLocation
+  const { pathname, search } = nextLocation
   return (
     <div>
-      <div className="subtitle">
-        {text}
-      </div>
+      <div className="subtitle">{text}</div>
       <div className="level">
         <button
           className="button is-primary level-item"
@@ -28,15 +26,19 @@ const Block = ({
             dispatch(closeModal())
             unblock()
             history.push(`${pathname}${search}`)
-          }}>
-          Oui
+          }}
+          type='button'
+        >
+          {confirmText}
         </button>
         <button
           className="button is-secondary level-item"
           onClick={() => {
             dispatch(closeModal())
-          }}>
-          Non
+          }}
+          type='button'
+        >
+          {cancelText}
         </button>
       </div>
     </div>
@@ -44,10 +46,19 @@ const Block = ({
 }
 
 Block.defaultProps = {
-  text: "Êtes vous surs de vouloir quitter la page ?"
+  cancelText: 'Non',
+  confirmText: 'Oui',
+  text: 'Êtes vous surs de vouloir quitter la page ?',
 }
 
-export default compose(
-  withRouter,
-  connect(),
-)(Block)
+Block.propTypes = {
+  cancelText: PropTypes.string,
+  confirmText: PropTypes.string,
+  dispatch: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  nextLocation: PropTypes.object.isRequired,
+  text: PropTypes.string,
+  unblock: PropTypes.func.isRequired
+}
+
+export default compose(withRouter, connect())(Block)

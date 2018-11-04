@@ -2,17 +2,12 @@ import React, { Component } from 'react'
 import Textarea from 'react-autosize-textarea'
 
 class TextareaInput extends Component {
-
   static defaultProps = {
-    rows: 1
+    rows: 1,
   }
 
-
   onChange = event => {
-    const {
-      maxLength,
-      onChange: fieldOnChange,
-    } = this.props
+    const { maxLength, onChange: fieldOnChange } = this.props
 
     if (maxLength && event.target.value.length > maxLength) {
       return
@@ -21,7 +16,7 @@ class TextareaInput extends Component {
     fieldOnChange(event.target.value, { event })
   }
 
-  render () {
+  render() {
     const {
       autoComplete,
       id,
@@ -31,7 +26,7 @@ class TextareaInput extends Component {
       rows,
       size,
       type,
-      value
+      value,
     } = this.props
 
     return (
