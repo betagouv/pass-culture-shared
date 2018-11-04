@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 
 import { closeModal } from '../reducers/modal'
-import { requestData } from '../reducers/data'
+import { requestData, resetData } from '../reducers/data'
 
 class SignoutButton extends Component {
 
@@ -23,10 +23,14 @@ class SignoutButton extends Component {
   }
 
   handleSuccess = () => {
-    const { handleSuccess, handleSuccessRedirect, history } = this.props
+    const { dispatch, handleSuccess, handleSuccessRedirect, history, noResetData } = this.props
     if (handleSuccess) {
       handleSuccess(this.props)
       return
+    }
+
+    if (!noResetData) {
+      dispatch(resetData())
     }
 
     const redirect = handleSuccessRedirect && handleSuccessRedirect()
