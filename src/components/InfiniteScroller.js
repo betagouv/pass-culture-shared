@@ -118,7 +118,7 @@ InfiniteScroller.propTypes = {
   renderErrors: PropTypes.func,
   renderFinished: PropTypes.func,
   renderLoading: PropTypes.func,
-  scrollingElement: PropTypes.node,
+  scrollingElement: PropTypes.instanceOf(Element),
 }
 
 export default InfiniteScroller
