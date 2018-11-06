@@ -18,6 +18,7 @@ const BasicInput = props => {
     value,
     min,
     step,
+    placeholder,
   } = props
 
   return (
@@ -37,6 +38,7 @@ const BasicInput = props => {
         value={value}
         min={min}
         step={step}
+        placeholder={placeholder}
       />
       {renderInfo && renderInfo()}
     </Fragment>
