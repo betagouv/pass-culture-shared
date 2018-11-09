@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "classnames": "2.2.5",
-    "eslint": "^5.8.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.1",
     "lodash.set": "^4.3.2",
@@ -43,6 +42,7 @@
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-15": "^1.1.0",
     "enzyme-adapter-react-16": "^1.5.0",
+    "eslint": "^5.8.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-flowtype": "^2.34.1",
@@ -66,6 +66,10 @@
   "main": "lib/index.js",
   "name": "pass-culture-shared",
   "private": false,
+  "engines": {
+    "node": "^10.13.0",
+    "yarn": "^1.12.3"
+  },
   "scripts": {
     "compile": "rm -rf lib && babel --plugins transform-class-properties,transform-object-rest-spread --presets env,react -d lib/ src/",
     "postinstall": "if [ -d \"src/\" ]; then npm run compile; fi",

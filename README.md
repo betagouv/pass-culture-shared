@@ -2,6 +2,11 @@
 
 Tous les objets javascript partagés entre l'application découverte et l'application pro
 
+## Requirements
+
+- NodeJS v10.13.0
+- Yarn v1.12.3
+
 ## Documentation
 
 **EN COURS DE CONSTRUCTION**
