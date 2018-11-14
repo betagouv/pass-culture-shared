@@ -130,6 +130,7 @@ export function getNextState(state, method, patch, config = {}) {
   }
 
   // LOOP OVER ALL THE KEYS
+  /* eslint-disable no-restricted-syntax */
   for (let key of Object.keys(patch)) {
     // PREVIOUS
     const previousData = state[key]
@@ -196,7 +197,18 @@ export function getNextState(state, method, patch, config = {}) {
             state,
             null,
             { [storeKey]: nextNormalizedData },
-            { nextState, normalizer: nextNormalizer }
+            {
+              isMergingDatum:
+                typeof normalizer[key].isMergingDatum !== 'undefined'
+                  ? normalizer[key].isMergingDatum
+                  : isMergingDatum,
+              isMutatingDatum:
+                typeof normalizer[key].isMutatingDatum !== 'undefined'
+                  ? normalizer[key].isMutatingDatum
+                  : isMutatingDatum,
+              nextState,
+              normalizer: nextNormalizer
+            }
           )
 
           // MERGE THE CHILD NORMALIZED DATA INTO THE
