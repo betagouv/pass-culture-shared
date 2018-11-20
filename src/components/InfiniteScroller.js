@@ -20,16 +20,24 @@ export class InfiniteScroller extends Component {
   }
 
   componentDidMount() {
-    const { scrollingElement } = this.props
-    scrollingElement.addEventListener('scroll', this.scrollWatch)
+    const { listeningScrollElement, scrollingElement } = this.props
+    if (!listeningScrollElement) {
+      window.addEventListener('scroll', this.scrollWatch)
+    } else {
+      listeningScrollElement.addEventListener('scroll', this.scrollWatch)
+    }
     this.setState({
       lastScrollTop: scrollingElement.scrollTop,
     })
   }
 
   componentWillUnmount() {
-    const { scrollingElement } = this.props
-    scrollingElement.removeEventListener('scroll', this.scrollWatch)
+    const { listeningScrollElement } = this.props
+    if (!listeningScrollElement) {
+      window.addEventListener('scroll', this.scrollWatch)
+    } else {
+      listeningScrollElement.removeEventListener('scroll', this.scrollWatch)
+    }
   }
 
   scrollWatch = () => {
@@ -97,6 +105,7 @@ InfiniteScroller.defaultProps = {
   Tag: 'ul',
   className: null,
   handleLoadMore: null,
+  listeningScrollElement: null,
   loadScrollRatio: 0.9,
   renderErrors: errors => (
     <li className="notification is-danger">
@@ -115,6 +124,7 @@ InfiniteScroller.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   handleLoadMore: PropTypes.func,
+  listeningScrollElement: PropTypes.instanceOf(Element),
   loadScrollRatio: PropTypes.number,
   renderErrors: PropTypes.func,
   renderFinished: PropTypes.func,
