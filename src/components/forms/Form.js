@@ -44,6 +44,7 @@ class _Form extends Component {
 
   componentDidMount() {
     this.handleHistoryBlock()
+    this.initKeyListeners()
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -112,6 +113,26 @@ class _Form extends Component {
     dispatch(removeErrors(name))
 
     dispatch(mergeForm(name, mergePatch, config))
+  }
+
+  initKeyListeners = () => {
+    if (this.props.onEnterKey !== null || this.props.onEscapeKey !== null) {
+      this.domNode.onkeyup = originalEvent => {
+        const customEvent = {
+          originalEvent,
+          form: this,
+          DOMNode: this.domNode
+        }
+
+        if (this.props.onEnterKey !== null && event.key === 'Enter') {
+          this.props.onEnterKey(customEvent);
+        }
+
+        if (this.props.onEscapeKey !== null && event.key === 'Escape') {
+          this.props.onEscapeKey(customEvent);
+        }
+      }
+    }
   }
 
   onSubmit = event => {
@@ -420,6 +441,7 @@ class _Form extends Component {
         id={name}
         method={method}
         onSubmit={this.onSubmit}
+        ref={node => this.domNode = node}
       >
         {this.childrenWithProps()}
       </Tag>
@@ -443,6 +465,8 @@ _Form.defaultProps = {
   handleSuccessRedirect: null,
   normalizer: null,
   onSubmit: null,
+  onEnterKey: null,
+  onEscapeKey: null,
   successNotification: 'Formulaire non validé',
 }
 
@@ -468,6 +492,8 @@ _Form.propTypes = {
   name: PropTypes.string.isRequired,
   normalizer: PropTypes.object,
   onSubmit: PropTypes.func,
+  onEnterKey: PropTypes.func,
+  onEscapeKey: PropTypes.func,
   patch: PropTypes.object,
 }
 
