@@ -21,14 +21,15 @@ export class InfiniteScroller extends Component {
 
   componentDidMount() {
     const { scrollingElement } = this.props
-    window.addEventListener('scroll', this.scrollWatch)
+    scrollingElement.addEventListener('scroll', this.scrollWatch)
     this.setState({
       lastScrollTop: scrollingElement.scrollTop,
     })
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.scrollWatch)
+    const { scrollingElement } = this.props
+    scrollingElement.removeEventListener('scroll', this.scrollWatch)
   }
 
   scrollWatch = () => {
