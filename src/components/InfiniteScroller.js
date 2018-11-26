@@ -34,7 +34,7 @@ export class InfiniteScroller extends Component {
   componentWillUnmount() {
     const { listeningScrollElement } = this.props
     if (!listeningScrollElement) {
-      window.addEventListener('scroll', this.scrollWatch)
+      window.removeEventListener('scroll', this.scrollWatch)
     } else {
       listeningScrollElement.removeEventListener('scroll', this.scrollWatch)
     }
