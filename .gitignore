@@ -6,3 +6,6 @@ node_modules/
 shared
 
 npm-debug.log
+
+.idea/
+*.iml
