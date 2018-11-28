@@ -1,23 +1,24 @@
 import get from 'lodash.get'
+import { parse, stringify } from 'query-string'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
 
 import { assignData } from '../../reducers/data'
-import searchSelector from '../../selectors/search'
-import { objectToQueryString } from '../../utils/string'
+import { selectSearchFromLocation } from '../../selectors'
 
-const withPagination = (config = {}) => WrappedComponent => {
+const withPaginationRouter = (config = {}) => WrappedComponent => {
+
   const { dataKey, windowToApiQuery } = config
   const defaultWindowQuery = config.defaultWindowQuery || {}
-  const defaultWindowQueryString = objectToQueryString(defaultWindowQuery)
+  const defaultWindowQueryString = parse(defaultWindowQuery)
   const defaultApiQuery = windowToApiQuery
     ? windowToApiQuery(defaultWindowQuery)
     : Object.assign({}, defaultWindowQuery)
-  const defaultApiSearch = objectToQueryString(defaultApiQuery)
+  const defaultApiSearch = parse(defaultApiQuery)
 
-  class _withPagination extends Component {
+  class _withPaginationRouter extends Component {
     constructor(props) {
       super()
 
@@ -33,11 +34,10 @@ const withPagination = (config = {}) => WrappedComponent => {
       const paginationMethods = {
         add: this.add,
         change: this.change,
-        goToNextPage: this.goToNextPage,
-        goToPage: this.goToPage,
         orderBy: this.orderBy,
         remove: this.remove,
         reverseOrder: this.reverseOrder,
+        setPage: this.setPage,
       }
 
       this.state = {
@@ -49,10 +49,7 @@ const withPagination = (config = {}) => WrappedComponent => {
     }
 
     componentDidMount() {
-      const { search } = this.props
       const { windowQuery } = this.state
-
-      const resetPage = search.page ? Number(search.page) : 1
 
       const mountWindowQuery = {}
       Object.keys(defaultWindowQuery).forEach(key => {
@@ -62,34 +59,26 @@ const withPagination = (config = {}) => WrappedComponent => {
             : defaultWindowQuery[key]
       })
 
-      console.log('RESET PAGE', resetPage)
-
-      this.change(mountWindowQuery, { page: resetPage })
-    }
-
-    componentDidUpdate() {
-      /*
-      const { search } = this.props
-      const { page } = this.state
-      if (!search.page && page && page !== 1) {
-        this.setState({ page: 1 })
-      }
-      */
+      this.change(mountWindowQuery)
     }
 
     static getDerivedStateFromProps(nextProps) {
+
+      const search = selectSearchFromLocation(nextProps.location)
+
       const windowQuery = {}
+
       Object.keys(defaultWindowQuery).forEach(key => {
-        windowQuery[key] = nextProps.search[key] || defaultWindowQuery[key]
+        windowQuery[key] = search[key] || defaultWindowQuery[key]
       })
-      const windowQueryString = objectToQueryString(
+      const windowQueryString = stringify(
         Object.assign({}, windowQuery)
       )
 
       const apiQuery = windowToApiQuery
         ? windowToApiQuery(windowQuery)
         : Object.assign({}, windowQuery)
-      const apiQueryString = objectToQueryString(apiQuery)
+      const apiQueryString = stringify(apiQuery)
 
       return {
         apiQuery,
@@ -99,15 +88,8 @@ const withPagination = (config = {}) => WrappedComponent => {
       }
     }
 
-    goToPage = page => {
-      console.log('GO TO PAGE', page)
+    setPage = page => {
       this.setState({ page })
-    }
-
-    goToNextPage = () => {
-      const { search } = this.props
-      const page = search.page ? Number(search.page) : 1
-      this.setState(() => ({ page: page + 1 }))
     }
 
     clear = () => {
@@ -170,7 +152,7 @@ const withPagination = (config = {}) => WrappedComponent => {
             ? newValue[key]
             : windowQuery[key]
       })
-      const newWindowSearch = objectToQueryString(newWindowQuery)
+      const newWindowSearch = stringify(newWindowQuery)
 
       const newPath = `${pathname}?${newWindowSearch}`
 
@@ -197,7 +179,7 @@ const withPagination = (config = {}) => WrappedComponent => {
         nextValue = args.join(',')
       } else if (typeof previousValue === 'undefined') {
         console.warn(
-          `Weird did you forget to mention this ${key} query param in your withPagination hoc ?`
+          `Weird did you forget to mention this ${key} query param in your withPaginationRouter hoc ?`
         )
       }
 
@@ -218,24 +200,17 @@ const withPagination = (config = {}) => WrappedComponent => {
         this.change({ [key]: nextValue })
       } else if (typeof previousValue === 'undefined') {
         console.warn(
-          `Weird did you forget to mention this ${key} query param in your withPagination hoc ?`
+          `Weird did you forget to mention this ${key} query param in your withPaginationRouter hoc ?`
         )
       }
     }
 
     render() {
-      console.log('THIS STATE PAGE', this.state.page)
       return <WrappedComponent {...this.props} pagination={this.state} />
     }
   }
 
-  function mapStateToProps(state, ownProps) {
-    return {
-      search: searchSelector(state, ownProps.location.search),
-    }
-  }
-
-  return compose(withRouter, connect(mapStateToProps))(_withPagination)
+  return compose(withRouter, connect())(_withPaginationRouter)
 }
 
-export default withPagination
+export default withPaginationRouter
