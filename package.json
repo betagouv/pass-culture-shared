@@ -10,6 +10,7 @@
     "moment-locale-fr": "^1.0.0",
     "moment-timezone": "^0.5.21",
     "prop-types": "^15.6.2",
+    "query-string": "^6.2.0",
     "re-reselect": "^2.1.0",
     "react": "^16.5.2",
     "react-autocomplete": "^1.8.1",
