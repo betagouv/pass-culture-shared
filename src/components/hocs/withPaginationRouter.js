@@ -1,31 +1,28 @@
 import get from 'lodash.get'
 import { parse, stringify } from 'query-string'
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { PureComponent } from 'react'
 import { withRouter } from 'react-router-dom'
-import { compose } from 'redux'
-
-import { assignData } from '../../reducers/data'
-import { selectSearchFromLocation } from '../../selectors'
 
 const withPaginationRouter = (config = {}) => WrappedComponent => {
 
-  const { dataKey, windowToApiQuery } = config
-  const defaultWindowQuery = config.defaultWindowQuery || {}
+  const { windowToApiQuery } = config
+  const defaultWindowQuery = Object.assign(
+    { page: "1" },
+    config.defaultWindowQuery,
+  )
   const defaultWindowQueryString = parse(defaultWindowQuery)
   const defaultApiQuery = windowToApiQuery
     ? windowToApiQuery(defaultWindowQuery)
     : Object.assign({}, defaultWindowQuery)
   const defaultApiSearch = parse(defaultApiQuery)
 
-  class _withPaginationRouter extends Component {
-    constructor(props) {
+  class _withPaginationRouter extends PureComponent {
+    constructor() {
       super()
 
       const paginationData = {
         apiQuery: defaultApiQuery,
         apiQueryString: defaultApiSearch,
-        page: 1,
         value: null,
         windowQuery: defaultWindowQuery,
         windowQueryString: defaultWindowQueryString,
@@ -44,8 +41,6 @@ const withPaginationRouter = (config = {}) => WrappedComponent => {
         ...paginationData,
         ...paginationMethods
       }
-
-      props.dispatch(assignData({ [dataKey]: [] }))
     }
 
     componentDidMount() {
@@ -59,17 +54,25 @@ const withPaginationRouter = (config = {}) => WrappedComponent => {
             : defaultWindowQuery[key]
       })
 
+      mountWindowQuery.page = null
+
       this.change(mountWindowQuery)
     }
 
     static getDerivedStateFromProps(nextProps) {
 
-      const search = selectSearchFromLocation(nextProps.location)
+      const search = parse(nextProps.location.search)
 
       const windowQuery = {}
 
       Object.keys(defaultWindowQuery).forEach(key => {
-        windowQuery[key] = search[key] || defaultWindowQuery[key]
+        if (search[key]) {
+          windowQuery[key] = search[key]
+          return
+        }
+        if (search[key]) {
+          windowQuery[key] = search[key]
+        }
       })
       const windowQueryString = stringify(
         Object.assign({}, windowQuery)
@@ -88,18 +91,15 @@ const withPaginationRouter = (config = {}) => WrappedComponent => {
       }
     }
 
-    setPage = page => {
-      this.setState({ page })
-    }
-
     clear = () => {
       const { history, location } = this.props
       this.setState({ windowQuery: defaultWindowQuery })
       history.push(location.pathname)
     }
 
-    reverseOrder = e => {
-      const orderBy = get(this, 'state.windowQuery.orderBy')
+    reverseOrder = () => {
+      const { windowQuery } = this.state
+      const { orderBy } = windowQuery || {}
       if (!orderBy) {
         console.warn('there is no orderBy in the window query')
         return
@@ -113,7 +113,8 @@ const withPaginationRouter = (config = {}) => WrappedComponent => {
     }
 
     orderBy = e => {
-      const orderBy = get(this, 'state.windowQuery.orderBy')
+      const { windowQuery } = this.state
+      const { orderBy } = windowQuery || {}
       if (!orderBy) {
         console.warn('there is no orderBy in the window query')
         return
@@ -125,12 +126,7 @@ const withPaginationRouter = (config = {}) => WrappedComponent => {
     }
 
     change = (newValue, changeConfig = {}) => {
-      const { dispatch, history, location } = this.props
-      const resetPage = changeConfig.page || 1
-      const isClearingData =
-        typeof changeConfig.isClearingData === 'undefined'
-          ? true
-          : changeConfig.isClearingData
+      const { history, location } = this.props
       const pathname = changeConfig.pathname || location.pathname
       const { windowQuery } = this.state
 
@@ -147,23 +143,23 @@ const withPaginationRouter = (config = {}) => WrappedComponent => {
 
       const newWindowQuery = {}
       Object.keys(defaultWindowQuery).forEach(key => {
-        newWindowQuery[key] =
-          typeof newValue[key] !== 'undefined'
-            ? newValue[key]
-            : windowQuery[key]
+        if (newValue[key]) {
+          newWindowQuery[key] = newValue[key]
+          return
+        }
+        if (newValue[key] !== null && windowQuery[key]) {
+          newWindowQuery[key] = windowQuery[key]
+        }
       })
       const newWindowSearch = stringify(newWindowQuery)
 
       const newPath = `${pathname}?${newWindowSearch}`
 
-      if (isClearingData) {
-        dispatch(assignData({ [dataKey]: [] }))
+      const nextState = {
+        value: newValue,
       }
 
-      this.setState({
-        value: newValue,
-        page: resetPage,
-      })
+      this.setState(nextState)
 
       history.push(newPath)
     }
@@ -210,7 +206,7 @@ const withPaginationRouter = (config = {}) => WrappedComponent => {
     }
   }
 
-  return compose(withRouter, connect())(_withPaginationRouter)
+  return withRouter(_withPaginationRouter)
 }
 
 export default withPaginationRouter
