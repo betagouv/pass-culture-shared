@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import get from 'lodash.get'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'

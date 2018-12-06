@@ -49,7 +49,7 @@ describe('src | reducers | notification  ', () => {
 })
 
 describe('src | actions  ', () => {
-  const notification = {
+  const patch = {
     text:
       'Votre structure a bien été enregistrée, elle est en cours de validation.',
     type: 'success',
@@ -59,14 +59,14 @@ describe('src | actions  ', () => {
     const expected = {
       type: CLOSE_NOTIFICATION,
     }
-    expect(closeNotification(notification)).toEqual(expected)
+    expect(closeNotification()).toEqual(expected)
   })
 
   describe('showNotification  ', () => {
     const expected = {
+      patch,
       type: SHOW_NOTIFICATION,
-      notification,
     }
-    expect(showNotification(notification)).toEqual(expected)
+    expect(showNotification(patch)).toEqual(expected)
   })
 })
