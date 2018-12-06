@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import React, { Component } from 'react'
 import { shallow } from 'enzyme'
 import renderer from 'react-test-renderer'
