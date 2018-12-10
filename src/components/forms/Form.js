@@ -124,11 +124,11 @@ class _Form extends Component {
           DOMNode: this.domNode
         }
 
-        if (this.props.onEnterKey !== null && event.key === 'Enter') {
+        if (this.props.onEnterKey !== null && originalEvent.key === 'Enter') {
           this.props.onEnterKey(customEvent);
         }
 
-        if (this.props.onEscapeKey !== null && event.key === 'Escape') {
+        if (this.props.onEscapeKey !== null && originalEvent.key === 'Escape') {
           this.props.onEscapeKey(customEvent);
         }
       }
