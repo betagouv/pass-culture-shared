@@ -1,6 +1,7 @@
 import { getNextState } from '../utils/data'
 
 export const ASSIGN_DATA = 'ASSIGN_DATA'
+export const MERGE_DATA = 'MERGE_DATA'
 export const RESET_DATA = 'RESET_DATA'
 
 export const createData = (initialState = {}) => (
@@ -9,6 +10,10 @@ export const createData = (initialState = {}) => (
 ) => {
   if (action.type === ASSIGN_DATA) {
     return Object.assign({}, state, action.patch)
+  }
+  if (action.type ===  MERGE_DATA) {
+    const nextState = getNextState(state, 'GET', action.patch, action.config)
+    return Object.assign({}, state, nextState)
   }
   if (action.type === RESET_DATA) {
     return initialState
@@ -48,6 +53,12 @@ export const createData = (initialState = {}) => (
 export const assignData = patch => ({
   patch,
   type: ASSIGN_DATA,
+})
+
+export const mergeData = (patch, config) => ({
+  config,
+  patch,
+  type: MERGE_DATA
 })
 
 export const failData = (method, path, errors, config) => ({
