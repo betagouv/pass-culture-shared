@@ -6,7 +6,11 @@ const { NAME, VERSION } = process.env
 const successStatusCodes = [200, 201, 202, 203, 205, 206, 207, 208, 210, 226]
 
 export async function fetchData(method, path, config = {}) {
-  const { body, token, url } = config
+  const {
+    body,
+    token,
+    url
+  } = config
 
   const init = {
     credentials: 'include',
@@ -114,9 +118,20 @@ export async function fetchData(method, path, config = {}) {
   return result
 }
 
+
+function getDefaultDatumIdValue (datum, index) {
+  return datum.id || index
+}
+
+function getDefaultDatumIdKey () {
+  return 'id'
+}
+
 export function getNextState(state, method, patch, config = {}) {
   // UNPACK
   const { normalizer, isMergingDatum, isMutatingDatum } = config
+  const getDatumIdKey = config.getDatumIdKey || getDefaultDatumIdKey
+  const getDatumIdValue = config.getDatumIdValue || getDefaultDatumIdValue
   const isMergingArray =
     typeof config.isMergingArray === 'undefined' ? true : config.isMergingArray
   const isMutatingArray =
@@ -129,23 +144,22 @@ export function getNextState(state, method, patch, config = {}) {
     return state
   }
 
-  // LOOP OVER ALL THE KEYS
-  /* eslint-disable no-restricted-syntax */
-  for (let key of Object.keys(patch)) {
+  Object.keys(patch).forEach(patchKey => {
     // PREVIOUS
-    const previousData = state[key]
+    const previousData = state[patchKey]
 
     // TREAT
-    const data = patch[key]
+    const data = patch[patchKey]
     if (!data) {
-      continue
+      return
     }
-    let nextData = uniqBy(
+
+    const nextData = uniqBy(
       data.map((datum, index) => {
         // CLONE
         let nextDatum = Object.assign(
           // FORCE TO GIVE AN ID
-          { id: index },
+          { [getDatumIdKey(datum)]: getDatumIdValue(datum, index) },
           datum
         )
 
@@ -158,23 +172,24 @@ export function getNextState(state, method, patch, config = {}) {
       }),
       // UNIFY BY ID
       // (BECAUSE DEEPEST NORMALIZED DATA CAN RETURN ARRAY OF SAME ELEMENTS)
-      datum => datum.id
+      getDatumIdValue
     )
 
     // NORMALIZER
     if (normalizer) {
-      Object.keys(normalizer).forEach(key => {
+      Object.keys(normalizer).forEach(normalizerKey => {
         let nextNormalizedData = []
         nextData.forEach(nextDatum => {
-          if (Array.isArray(nextDatum[key])) {
-            nextNormalizedData = nextNormalizedData.concat(nextDatum[key])
+          if (Array.isArray(nextDatum[normalizerKey])) {
+            nextNormalizedData = nextNormalizedData.concat(nextDatum[normalizerKey])
             // replace by an array of ids
-            nextDatum[`${key}Ids`] = nextDatum[key].map(d => d.id)
+            nextDatum[`${normalizerKey}Ids`] = nextDatum[normalizerKey]
+              .map(getDatumIdValue)
             // delete
-            delete nextDatum[key]
-          } else if (nextDatum[key]) {
-            nextNormalizedData.push(nextDatum[key])
-            delete nextDatum[key]
+            delete nextDatum[normalizerKey]
+          } else if (nextDatum[normalizerKey]) {
+            nextNormalizedData.push(nextDatum[normalizerKey])
+            delete nextDatum[normalizerKey]
           }
         })
 
@@ -185,11 +200,11 @@ export function getNextState(state, method, patch, config = {}) {
           // IN ORDER TO BE RECURSIVELY EXECUTED
           let nextNormalizer
           let storeKey
-          if (typeof normalizer[key] === 'string') {
-            storeKey = normalizer[key]
+          if (typeof normalizer[normalizerKey] === 'string') {
+            storeKey = normalizer[normalizerKey]
           } else {
-            storeKey = normalizer[key].key
-            nextNormalizer = normalizer[key].normalizer
+            storeKey = normalizer[normalizerKey].key
+            nextNormalizer = normalizer[normalizerKey].normalizer
           }
 
           // RECURSIVE CALL TO MERGE THE DEEPER NORMALIZED VALUE
@@ -199,12 +214,12 @@ export function getNextState(state, method, patch, config = {}) {
             { [storeKey]: nextNormalizedData },
             {
               isMergingDatum:
-                typeof normalizer[key].isMergingDatum !== 'undefined'
-                  ? normalizer[key].isMergingDatum
+                typeof normalizer[normalizerKey].isMergingDatum !== 'undefined'
+                  ? normalizer[normalizerKey].isMergingDatum
                   : isMergingDatum,
               isMutatingDatum:
-                typeof normalizer[key].isMutatingDatum !== 'undefined'
-                  ? normalizer[key].isMutatingDatum
+                typeof normalizer[normalizerKey].isMutatingDatum !== 'undefined'
+                  ? normalizer[normalizerKey].isMutatingDatum
                   : isMutatingDatum,
               nextState,
               normalizer: nextNormalizer
@@ -220,18 +235,18 @@ export function getNextState(state, method, patch, config = {}) {
 
     // no need to go further if no previous data
     if (!previousData) {
-      nextState[key] = nextData
-      continue
+      nextState[patchKey] = nextData
+      return
     }
 
     // DELETE CASE
     if (method === 'DELETE') {
-      const nextDataIds = nextData.map(nextDatum => nextDatum.id)
+      const nextDataIds = nextData.map(getDatumIdValue)
       const resolvedData = previousData.filter(
-        previousDatum => !nextDataIds.includes(previousDatum.id)
+        previousDatum => !nextDataIds.includes(getDatumIdValue(previousDatum))
       )
-      nextState[key] = resolvedData
-      continue
+      nextState[patchKey] = resolvedData
+      return
     }
 
     // GET POST PATCH
@@ -239,8 +254,8 @@ export function getNextState(state, method, patch, config = {}) {
     // no need to go further when we want just to trigger
     // a new fresh assign with nextData
     if (!isMergingArray) {
-      nextState[key] = nextData
-      continue
+      nextState[patchKey] = nextData
+      return
     }
 
     // Determine first if we are going to trigger a mutation of the array
@@ -250,27 +265,31 @@ export function getNextState(state, method, patch, config = {}) {
     // their right place in the resolved array
     nextData.forEach(nextDatum => {
       const previousIndex = previousData.findIndex(
-        previousDatum => previousDatum.id === nextDatum.id
+        previousDatum => getDatumIdValue(previousDatum) === getDatumIdValue(nextDatum)
       )
       const resolvedIndex =
         previousIndex === -1 ? resolvedData.length : previousIndex
-      const datum = isMutatingDatum
-        ? Object.assign(
+
+      let datum
+      if (isMutatingDatum) {
+        datum = Object.assign(
             {},
             isMergingDatum && previousData[previousIndex],
             nextDatum
           )
-        : isMergingDatum
-          ? previousIndex !== -1
-            ? Object.assign(previousData[previousIndex], nextDatum)
-            : nextDatum
+      } else if (isMergingDatum) {
+        datum = previousIndex !== -1
+          ? Object.assign(previousData[previousIndex], nextDatum)
           : nextDatum
+      } else {
+        datum = nextDatum
+      }
       resolvedData[resolvedIndex] = datum
     })
 
     // set
-    nextState[key] = resolvedData
-  }
+    nextState[patchKey] = resolvedData
+  })
 
   // return
   return nextState
