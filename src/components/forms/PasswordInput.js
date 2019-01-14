@@ -6,12 +6,15 @@ import BasicInput from './BasicInput'
 import { Icon } from '../Icon'
 
 const tooltipInfo = `
-<ul>Votre mot de passe doit contenir au moins :
-<li> - 12 caractères </li>
-<li> - une majuscule et une minuscule </li>
-<li> - un chiffre </li>
-<li> - un caractère spécial (signe de ponctuation, symbole monétaire ou mathématique) </li>
-</ul>
+<div>
+  Votre mot de passe doit contenir au moins :
+  <ul>
+    <li>12 caractères</li>
+    <li>une majuscule et une minuscule</li>
+    <li>un chiffre</li>
+    <li>un caractère spécial (signe de ponctuation, symbole monétaire ou mathématique)</li>
+  </ul>
+</div>
 `
 
 class PasswordInput extends Component {
