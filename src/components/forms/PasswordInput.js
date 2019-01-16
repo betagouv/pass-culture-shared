@@ -5,18 +5,6 @@ import React, { Component } from 'react'
 import BasicInput from './BasicInput'
 import { Icon } from '../Icon'
 
-const tooltipInfo = `
-<div>
-  Votre mot de passe doit contenir au moins :
-  <ul>
-    <li>12 caractères</li>
-    <li>une majuscule et une minuscule</li>
-    <li>un chiffre</li>
-    <li>un caractère spécial (signe de ponctuation, symbole monétaire ou mathématique)</li>
-  </ul>
-</div>
-`
-
 class PasswordInput extends Component {
   constructor(props) {
     super(props)
@@ -39,7 +27,7 @@ class PasswordInput extends Component {
   }
 
   render() {
-    const { noPasswordToggler, withInfo, ...otherProps } = this.props
+    const { noPasswordToggler, info, ...otherProps } = this.props
     const { isPasswordHidden } = this.state
 
     const input = (
@@ -65,11 +53,11 @@ class PasswordInput extends Component {
             &nbsp;
           </button>
         </div>
-        {withInfo && (
+        {info && (
           <span
             className='column is-2'
             data-place='bottom'
-            data-tip={tooltipInfo}
+            data-tip={info}
             data-type='info'
           >
             <Icon svg="picto-info" />
@@ -81,13 +69,13 @@ class PasswordInput extends Component {
 }
 
 PasswordInput.defaultProps = {
-  noPasswordToggler: false,
-  withInfo: false
+  info: null,
+  noPasswordToggler: false
 }
 
 PasswordInput.propTypes = {
-  noPasswordToggler: PropTypes.bool,
-  withInfo: PropTypes.bool
+  info: PropTypes.string,
+  noPasswordToggler: PropTypes.bool
 }
 
 export default PasswordInput
