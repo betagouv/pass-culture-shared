@@ -116,20 +116,21 @@ class _Form extends Component {
   }
 
   initKeyListeners = () => {
-    if (this.props.onEnterKey !== null || this.props.onEscapeKey !== null) {
+    const { onEnterKey, onEscapeKey } = this.props
+    if (onEnterKey !== null || onEscapeKey !== null) {
       this.domNode.onkeyup = originalEvent => {
         const customEvent = {
-          originalEvent,
+          DOMNode: this.domNode,
           form: this,
-          DOMNode: this.domNode
+          originalEvent
         }
 
-        if (this.props.onEnterKey !== null && originalEvent.key === 'Enter') {
-          this.props.onEnterKey(customEvent);
+        if (onEnterKey !== null && originalEvent.key === 'Enter') {
+          onEnterKey(customEvent);
         }
 
-        if (this.props.onEscapeKey !== null && originalEvent.key === 'Escape') {
-          this.props.onEscapeKey(customEvent);
+        if (onEscapeKey !== null && originalEvent.key === 'Escape') {
+          onEscapeKey(customEvent)
         }
       }
     }

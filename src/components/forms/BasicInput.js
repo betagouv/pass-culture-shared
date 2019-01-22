@@ -9,6 +9,7 @@ const BasicInput = props => {
     disabled,
     id,
     name,
+    onBlur,
     onChange,
     readOnly,
     renderInfo,
@@ -31,6 +32,7 @@ const BasicInput = props => {
         disabled={disabled}
         id={id}
         name={name}
+        onBlur={onBlur}
         onChange={onChange}
         required={required}
         readOnly={readOnly}
