@@ -20,7 +20,7 @@ import { pluralize } from '../../utils/string'
 
 export function forceNumberCastingInPatch (patch, formProps) {
   const { children } = formProps
-  const formatedPatch = {}
+  const formatedPatch = Object.assign({}, patch)
   recursiveMap(children, child => {
     const { props: childProps, type: childType } = child
     if (childType.displayName === 'Field') {
@@ -32,9 +32,7 @@ export function forceNumberCastingInPatch (patch, formProps) {
         typeof patchValue === 'string'
       ) {
         formatedPatch[name] = Number(patchValue.replace(',', '.'))
-        return
       }
-      formatedPatch[name] = patch[name]
     }
   })
   return formatedPatch
@@ -178,6 +176,7 @@ class _Form extends Component {
       isLoading: true,
     })
 
+    console.log('formPatch', formPatch)
     const numberCastPatch = forceNumberCastingInPatch(formPatch, this.props)
     console.log('numberCastPatch', numberCastPatch)
     const body = formatPatch(numberCastPatch)
