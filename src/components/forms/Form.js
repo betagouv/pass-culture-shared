@@ -18,6 +18,28 @@ import {
 import { recursiveMap } from '../../utils/react'
 import { pluralize } from '../../utils/string'
 
+export function forceNumberCastingInPatch (patch, formProps) {
+  const { children } = formProps
+  const formatedPatch = {}
+  recursiveMap(children, child => {
+    const { props: childProps, type: childType } = child
+    if (childType.displayName === 'Field') {
+      const { name, type } = childProps
+      const patchValue = patch[name]
+      if (
+        typeof patchValue !== 'undefined' &&
+        type === 'number' &&
+        typeof patchValue === 'string'
+      ) {
+        formatedPatch[name] = Number(patchValue.replace(',', '.'))
+        return
+      }
+      formatedPatch[name] = patch[name]
+    }
+  })
+  return formatedPatch
+}
+
 const defaultFormatPatch = patch => patch
 
 class _Form extends Component {
@@ -156,7 +178,10 @@ class _Form extends Component {
       isLoading: true,
     })
 
-    const body = formatPatch(formPatch)
+    const numberCastPatch = forceNumberCastingInPatch(formPatch, this.props)
+    console.log('numberCastPatch', numberCastPatch)
+    const body = formatPatch(numberCastPatch)
+    console.log('body', body)
 
     dispatch(requestData(method, action.replace(/^\//g, ''), {
       body,
@@ -246,15 +271,15 @@ class _Form extends Component {
 
     let requiredFields = []
 
-    return recursiveMap(children, c => {
-      if (c.type.displayName === 'Field') {
-        const patchKey = c.props.patchKey || c.props.name // name is unique, patchKey may not
-        const getKey = c.props.setKey
-          ? `${c.props.setKey}.${patchKey}`
+    return recursiveMap(children, child => {
+      if (child.type.displayName === 'Field') {
+        const patchKey = child.props.patchKey || child.props.name // name is unique, patchKey may not
+        const getKey = child.props.setKey
+          ? `${child.props.setKey}.${patchKey}`
           : patchKey
         const formValue = get(formPatch, getKey)
         const baseValue = get(basePatch, getKey)
-        const type = c.props.type || 'text'
+        const type = child.props.type || 'text'
         // eslint-disable-next-line no-use-before-define
         const InputComponent = Form.inputsByType[type]
         if (!InputComponent)
@@ -268,10 +293,10 @@ class _Form extends Component {
           const mergeConfig = Object.assign({}, config)
 
           // SPECIAL SET WITH SLUG KEY
-          if (c.props.setKey) {
+          if (child.props.setKey) {
             mergeConfig.isMergingObject = true
             newPatch = {}
-            set(newPatch, c.props.setKey, valuePatch)
+            set(newPatch, child.props.setKey, valuePatch)
           } else {
             newPatch = valuePatch
           }
@@ -286,18 +311,18 @@ class _Form extends Component {
           value = baseValue
         }
 
-        const id = `${name}-${c.props.name}`
+        const id = `${name}-${child.props.name}`
 
-        const newChild = React.cloneElement(c, {
+        const newChild = React.cloneElement(child, {
           InputComponent,
-          errors: get(errorsPatch, c.props.name),
+          errors: get(errorsPatch, child.props.name),
           formName: name,
           id,
           layout,
           onChange,
           onMergeForm: this.onMergeForm,
           patchKey,
-          readOnly: c.props.readOnly || readOnly,
+          readOnly: child.props.readOnly || readOnly,
           size,
           type,
           value,
@@ -309,9 +334,9 @@ class _Form extends Component {
 
         return newChild
       }
-      if (c.type.displayName === 'SubmitButton') {
+      if (child.type.displayName === 'SubmitButton') {
         return React.cloneElement(
-          c,
+          child,
           Object.assign(
             {
               getDisabled: () => {
@@ -338,18 +363,20 @@ class _Form extends Component {
               },
               getTitle: () => {
                 const missingFields = requiredFields.filter(
-                  f => !get(formPatch, f.props.patchKey)
+                  missingField => !get(formPatch, missingField.props.patchKey)
                 )
 
                 if (missingFields.length === 0) return null
 
                 const missingText = missingFields
-                  .map(f =>
-                    (typeof (f.props.label || f.props.title) !== 'string'
-                      ? f.props.name
-                      : f.props.label || f.props.title || ''
+                  .map(missingField => {
+                    const { props } = missingField
+                    const { label, name: fieldName, title } = props
+                    return (typeof (label || title) !== 'string'
+                      ? fieldName
+                      : label || title || ''
                     ).toLowerCase()
-                  )
+                  })
                   .join(', ')
 
                 return `Champs ${pluralize(
@@ -370,10 +397,10 @@ class _Form extends Component {
           )
         )
       }
-      if (c.type.displayName === 'CancelButton') {
-        return React.cloneElement(c, {
+      if (child.type.displayName === 'CancelButton') {
+        return React.cloneElement(child, {
           onClick: () => {
-            const { to } = c.props
+            const { to } = child.props
             if (to) {
               history.push(to)
             }
@@ -382,7 +409,7 @@ class _Form extends Component {
           type: 'button',
         })
       }
-      return c
+      return child
     })
   }
 
@@ -465,9 +492,9 @@ _Form.defaultProps = {
   handleSuccessNotification: null,
   handleSuccessRedirect: null,
   normalizer: null,
-  onSubmit: null,
   onEnterKey: null,
   onEscapeKey: null,
+  onSubmit: null,
   successNotification: 'Formulaire non validé',
 }
 
@@ -492,9 +519,9 @@ _Form.propTypes = {
   location: PropTypes.object,
   name: PropTypes.string.isRequired,
   normalizer: PropTypes.object,
-  onSubmit: PropTypes.func,
   onEnterKey: PropTypes.func,
   onEscapeKey: PropTypes.func,
+  onSubmit: PropTypes.func,
   patch: PropTypes.object,
 }
 
