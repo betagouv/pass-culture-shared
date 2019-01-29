@@ -176,11 +176,8 @@ class _Form extends Component {
       isLoading: true,
     })
 
-    console.log('formPatch', formPatch)
     const numberCastPatch = forceNumberCastingInPatch(formPatch, this.props)
-    console.log('numberCastPatch', numberCastPatch)
     const body = formatPatch(numberCastPatch)
-    console.log('body', body)
 
     dispatch(requestData(method, action.replace(/^\//g, ''), {
       body,

@@ -39,11 +39,11 @@ class Field extends Component {
     const { id, errors } = this.props
 
     if (get(errors, 'length')) {
-      return errors.map((error, index) => (
+      return errors.map(error => (
         <p
           className="help is-danger columns is-vcentered"
           id={`${id}-error`}
-          key={index}
+          key={error}
         >
           <span className="column is-narrow">
             <Icon svg="picto-warning" alt="Attention" />
@@ -71,11 +71,13 @@ class Field extends Component {
     const localOrParentDisplayValue = displayValue ||
       get(InputComponent, 'displayValue')
 
+    const displayedValue = localOrParentDisplayValue(value, this.props)
+
     const inputProps = Object.assign({}, this.props, {
       'aria-describedby': `${id}-error`,
       onChange: this.onChange,
       required: required && !readOnly,
-      value: localOrParentDisplayValue(value, this.props),
+      value: displayedValue,
     })
 
     return InputComponent && <InputComponent {...inputProps} />
@@ -219,7 +221,11 @@ Field.defaultProps = {
 }
 
 Field.propTypes = {
+  displayValue: PropTypes.func,
+  layout: PropTypes.string,
   name: PropTypes.string.isRequired,
+  size: PropTypes.string,
+  storeValue: PropTypes.func,
 }
 
 // NEEDED FOR MINIFY BUILD TIME
