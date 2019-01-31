@@ -1,3 +1,4 @@
+export const ASSIGN_MODAL_CONFIG = 'ASSIGN_MODAL_CONFIG'
 export const CLOSE_MODAL = 'CLOSE_MODAL'
 export const SHOW_MODAL = 'SHOW_MODAL'
 
@@ -13,15 +14,23 @@ export function modal(state = initialState, action) {
       return Object.assign({}, state, {
         isActive: false,
       })
+    case ASSIGN_MODAL_CONFIG:
+      return Object.assign({}, state, {
+        config: Object.assign({}, state.config, action.config)
+      })
     case SHOW_MODAL:
       return Object.assign({}, state, {
-        config: action.config,
         $modal: action.$modal,
+        config: action.config,
         isActive: true,
       })
     default:
       return state
   }
+}
+
+export function assignModalConfig(config) {
+  return { config, type: ASSIGN_MODAL_CONFIG }
 }
 
 export function closeModal() {
