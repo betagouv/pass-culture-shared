@@ -190,8 +190,10 @@ Modal.propTypes = {
   transitionDuration: PropTypes.number
 }
 
-function mapStateTopProps (state) {
-  const { modal: { config, $modal, isActive } } = state
+function mapStateTopProps (state, ownProps) {
+  const { name } = ownProps
+  const { modal } = state
+  const { config, $modal, isActive } = modal[name] || {}
   return Object.assign({ $modal, isActive }, config)
 }
 
