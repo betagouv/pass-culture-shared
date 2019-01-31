@@ -5,8 +5,8 @@
 }
 
 @keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal {
@@ -38,15 +38,17 @@
     will-change: transform, opacity;
     backface-visibility: hidden;
     background-color: $white;
+
     button.close {
       background-color: transparent;
+      border: none;
+      cursor: pointer;
+      position: absolute;
       top: 1rem;
       right: 1rem;
-      border: none;
-      position: absolute;
-      cursor: pointer;
       z-index: 10;
     }
+
     .modal-content {
       overflow: initial;
       width: auto;
