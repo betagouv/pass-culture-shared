@@ -112,6 +112,7 @@ class Modal extends Component {
 
   render() {
     const {
+      extraClassName,
       fullscreen,
       hasCloseButton,
       isUnclosable,
@@ -123,7 +124,7 @@ class Modal extends Component {
 
     return (
       <div
-        className={classnames('modal', {
+        className={classnames('modal', extraClassName, {
           active: display,
         })}
         role="dialog"
@@ -161,6 +162,7 @@ class Modal extends Component {
 
 Modal.defaultProps = {
   $modal: null,
+  extraClassName: null,
   fromDirection: 'bottom',
   fullscreen: false,
   hasCloseButton: true,
@@ -175,6 +177,7 @@ Modal.defaultProps = {
 Modal.propTypes = {
   $modal: PropTypes.node,
   dispatch: PropTypes.func.isRequired,
+  extraClassName: PropTypes.string,
   fromDirection: PropTypes.string,
   fullscreen: PropTypes.bool,
   hasCloseButton: PropTypes.bool,
