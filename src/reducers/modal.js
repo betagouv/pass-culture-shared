@@ -12,6 +12,7 @@ export function modal(state = initialState, action) {
   switch (action.type) {
     case CLOSE_MODAL:
       return Object.assign({}, state, {
+        $modal: action.keepComponentMounted ? state.$modal : null,
         isActive: false,
       })
     case ASSIGN_MODAL_CONFIG:
@@ -33,8 +34,8 @@ export function assignModalConfig(config) {
   return { config, type: ASSIGN_MODAL_CONFIG }
 }
 
-export function closeModal() {
-  return { type: CLOSE_MODAL }
+export function closeModal(keepComponentMounted) {
+  return { keepComponentMounted, type: CLOSE_MODAL }
 }
 
 export function showModal($modal, config) {
