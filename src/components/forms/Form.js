@@ -5,12 +5,12 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
+import { showModal } from 'redux-react-modals'
 
 import { blockersByName } from '../hocs/withBlock'
 import { requestData } from '../../reducers/data'
 import { removeErrors } from '../../reducers/errors'
 import { mergeForm } from '../../reducers/form'
-import { showModal } from '../../reducers/modal'
 import {
   closeNotification,
   showNotification,
@@ -405,7 +405,7 @@ class _Form extends Component {
   }
 
   handleHistoryBlock() {
-    const { BlockComponent } = this.props
+    const { blockModalName, BlockComponent } = this.props
 
     if (BlockComponent) {
       blockersByName.form = (nextLocation, unblock) => {
@@ -418,6 +418,7 @@ class _Form extends Component {
         }
 
         dispatch(showModal(
+          blockModalName,
           <BlockComponent nextLocation={nextLocation} unblock={unblock} />,
           { isUnclosable: true }
         ))
@@ -450,6 +451,7 @@ class _Form extends Component {
 }
 
 _Form.defaultProps = {
+  blockModalName: "main",
   BlockComponent: null,
   Tag: 'form',
   className: null,
@@ -473,6 +475,7 @@ _Form.defaultProps = {
 _Form.propTypes = {
   Tag: PropTypes.string,
   action: PropTypes.string.isRequired,
+  blockModalName: PropTypes.string,
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   dispatch: PropTypes.func,
