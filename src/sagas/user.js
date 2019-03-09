@@ -1,7 +1,7 @@
 import get from 'lodash.get'
 import { put, select, takeEvery } from 'redux-saga/effects'
+import { resetData } from 'redux-saga-data'
 
-import { resetData } from '../reducers/data'
 import { setUser } from '../reducers/user'
 
 export function* fromWatchRequestSignActions() {
@@ -17,17 +17,22 @@ export function* fromWatchSuccessGetSignoutActions() {
   yield put(setUser(null))
 }
 
-export function* fromWatchSuccessSignActions() {
-  const user = yield select(state => get(state, 'data.users[0]'))
+export function* fromWatchSuccessSignActions(action) {
+  const { payload } = action
+  const successUser = payload.datum
   const currentUser = yield select(state => state.user)
-  if (user && !currentUser) {
-    yield put(setUser(user))
-  } else if (!user) {
+  if (successUser && !currentUser) {
+    yield put(setUser(successUser))
+  } else if (!successUser) {
     yield put(setUser(false))
   }
 }
 
 export function* fromWatchSuccessPatchUsers(action) {
+  const { payload } = action
+  const successUser = payload.datum
+  const successUserId = successUser && successUser.id
+
   const loggedUserId = yield select(state => get(state, 'user.id'))
 
   if (!loggedUserId) {
@@ -35,8 +40,8 @@ export function* fromWatchSuccessPatchUsers(action) {
     return
   }
 
-  if (loggedUserId === get(action, 'data.id')) {
-    yield put(setUser(action.data))
+  if (loggedUserId === successUserId) {
+    yield put(setUser(successUser))
   }
 }
 

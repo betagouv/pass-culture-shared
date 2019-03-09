@@ -5,9 +5,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
+import { requestData } from 'redux-saga-data'
 
 import { blockersByName } from '../hocs/withBlock'
-import { requestData } from '../../reducers/data'
 import { removeErrors } from '../../reducers/errors'
 import { mergeForm } from '../../reducers/form'
 import { showModal } from '../../reducers/modal'
@@ -157,13 +157,17 @@ class _Form extends Component {
 
     const body = formatPatch(formPatch)
 
-    dispatch(requestData(method, action.replace(/^\//g, ''), {
+    const apiPath = action.replace(/^\//g, '')
+
+    dispatch(requestData({
+      apiPath,
       body,
       handleFail: this.handleFail,
       handleSuccess: this.handleSuccess,
-      key: storePath, // key is a reserved prop name
+      method,
       name,
       normalizer,
+      stateKey: storePath, // key is a reserved prop name
     }))
   }
 
@@ -464,9 +468,9 @@ _Form.defaultProps = {
   handleSuccessNotification: null,
   handleSuccessRedirect: null,
   normalizer: null,
-  onSubmit: null,
   onEnterKey: null,
   onEscapeKey: null,
+  onSubmit: null,
   successNotification: 'Formulaire non validé',
 }
 
@@ -491,9 +495,9 @@ _Form.propTypes = {
   location: PropTypes.object,
   name: PropTypes.string.isRequired,
   normalizer: PropTypes.object,
-  onSubmit: PropTypes.func,
   onEnterKey: PropTypes.func,
   onEscapeKey: PropTypes.func,
+  onSubmit: PropTypes.func,
   patch: PropTypes.object,
 }
 
