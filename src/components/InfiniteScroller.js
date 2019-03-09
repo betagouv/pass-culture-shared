@@ -65,7 +65,7 @@ export class InfiniteScroller extends Component {
   }
 
   loadSuccess = (state, action) => {
-    const { data } = action
+    const { payload: { data } } = action
     this.setState({
       isFinished: data.length === 0, // TODO consider action.data.length < perPage
       isLoading: false,
@@ -73,8 +73,9 @@ export class InfiniteScroller extends Component {
   }
 
   loadError = (state, action) => {
+    const { payload: { errors } } = action
     this.setState({
-      errors: action.errors,
+      errors,
       isLoading: false,
     })
   }

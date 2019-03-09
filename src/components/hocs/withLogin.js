@@ -3,9 +3,9 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
+import { requestData } from 'redux-saga-data'
 
 import { resolveCurrentUser, selectCurrentUser } from '../../selectors'
-import { requestData } from '../../reducers/data'
 
 const withLogin = (config = {}) => WrappedComponent => {
   const { failRedirect, isRequired, successRedirect } = config
@@ -27,7 +27,8 @@ const withLogin = (config = {}) => WrappedComponent => {
       }
 
       dispatch(
-        requestData("GET", "users/current", {
+        requestData({
+          apiPath: "/users/current",
           handleFail: () => {
             if (failRedirect) {
               let computedFailRedirect = failRedirect
@@ -80,6 +81,7 @@ const withLogin = (config = {}) => WrappedComponent => {
 
   _withLogin.propTypes = {
     currentUser: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+    dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
   }

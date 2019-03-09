@@ -1,16 +1,20 @@
-import get from 'lodash.get'
 import { put, takeEvery } from 'redux-saga/effects'
 
 import { mergeErrors } from '../reducers/errors'
 
 export function* fromWatchFailDataActionsMergeErrors(action) {
-  const name = get(action, 'config.name') || action.path
-  let patch = action.errors
-  if (Array.isArray(action.errors)) {
+  const { config: { apiPath, name }, payload: { errors } } = action
+  const errorsName = name || apiPath
+
+  let patch
+  if (Array.isArray(errors)) {
     patch = {}
-    action.errors.forEach(error => Object.assign(patch, error))
+    errors.forEach(error => Object.assign(patch, error))
+  } else {
+    patch = errors
   }
-  yield put(mergeErrors(name, patch, action.config))
+
+  yield put(mergeErrors(errorsName, patch))
 }
 
 export function* watchErrorsActions() {

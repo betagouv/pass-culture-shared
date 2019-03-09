@@ -92,20 +92,20 @@ export function formatSiren(string) {
   return `${formattedSiren} ${nic}`.trim()
 }
 
-export function getRequestErrorString(request) {
-  if (request.errors instanceof Array) {
-    return request.errors
-      .map(errors =>
-        Object.keys(errors)
-          .map(key => errors[key])
+export function getRequestErrorStringFromErrors(errors) {
+  if (errors instanceof Array) {
+    return errors
+      .map(error =>
+        Object.keys(error)
+          .map(key => error[key])
           .join(' ')
       )
       .join(' ')
   }
 
-  if (request.errors instanceof Object) {
-    return Object.keys(request.errors)
-      .map(key => request.errors[key].map(error => error).join(' '))
+  if (errors instanceof Object) {
+    return Object.keys(errors)
+      .map(key => errors[key].map(error => error).join(' '))
       .join(' ')
   }
 

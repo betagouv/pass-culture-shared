@@ -3,9 +3,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
+import { requestData, resetData } from 'redux-saga-data'
 
 import { closeModal } from '../reducers/modal'
-import { requestData, resetData } from '../reducers/data'
+
 
 class SignoutButton extends Component {
 
@@ -42,7 +43,8 @@ class SignoutButton extends Component {
   onSignoutClick = () => {
     const { dispatch } = this.props
     dispatch(
-      requestData('GET', 'users/signout', {
+      requestData({
+        apiPath: '/users/signout',
         handleFail: this.handleFail,
         handleSuccess: this.handleSuccess,
         name: 'signout',
@@ -70,6 +72,7 @@ SignoutButton.defaultProps = {
   handleFailRedirect: null,
   handleSuccess: null,
   handleSuccessRedirect: null,
+  noResetData: null
 }
 
 SignoutButton.propTypes = {
@@ -81,7 +84,8 @@ SignoutButton.propTypes = {
   handleFailRedirect: PropTypes.func,
   handleSuccess: PropTypes.func,
   handleSuccessRedirect: PropTypes.func,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  noResetData: PropTypes.bool,
 }
 
 export default compose(withRouter, connect())(SignoutButton)

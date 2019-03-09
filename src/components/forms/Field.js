@@ -213,13 +213,19 @@ class Field extends Component {
 
 Field.defaultProps = {
   displayValue: v => v || '',
+  errors: null,
   layout: 'horizontal',
   size: 'normal',
   storeValue: v => v,
 }
 
 Field.propTypes = {
+  displayValue: PropTypes.func,
+  errors: PropTypes.arrayOf(PropTypes.object),
+  layout: PropTypes.string,
   name: PropTypes.string.isRequired,
+  size: PropTypes.string,
+  storeValue: PropTypes.func
 }
 
 // NEEDED FOR MINIFY BUILD TIME
