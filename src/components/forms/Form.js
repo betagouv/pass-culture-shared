@@ -1,7 +1,7 @@
 import get from 'lodash.get'
 import set from 'lodash.set'
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import React, { cloneElement, Component, isValidElement } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
@@ -249,7 +249,7 @@ class _Form extends Component {
 
     let requiredFields = []
 
-    return recursiveMap(children, c => {
+    const parseFormChild = c => {
       if (c.type.displayName === 'Field') {
         const patchKey = c.props.patchKey || c.props.name // name is unique, patchKey may not
         const getKey = c.props.setKey
@@ -291,7 +291,7 @@ class _Form extends Component {
 
         const id = `${name}-${c.props.name}`
 
-        const newChild = React.cloneElement(c, {
+        const newChild = cloneElement(c, {
           InputComponent,
           errors: get(errorsPatch, c.props.name),
           formName: name,
@@ -313,7 +313,7 @@ class _Form extends Component {
         return newChild
       }
       if (c.type.displayName === 'SubmitButton') {
-        return React.cloneElement(
+        return cloneElement(
           c,
           Object.assign(
             {
@@ -374,7 +374,7 @@ class _Form extends Component {
         )
       }
       if (c.type.displayName === 'CancelButton') {
-        return React.cloneElement(c, {
+        return cloneElement(c, {
           onClick: () => {
             const { to } = c.props
             if (to) {
@@ -385,8 +385,21 @@ class _Form extends Component {
           type: 'button',
         })
       }
+
+      if (!isValidElement(c)) {
+        return c
+      }
+
+      if (c.type.isParsedByForm) {
+        return cloneElement(c, {
+          parseFormChild
+        })
+      }
+
       return c
-    })
+    }
+
+    return recursiveMap(children, parseFormChild)
   }
 
   resetPatch = () => {
