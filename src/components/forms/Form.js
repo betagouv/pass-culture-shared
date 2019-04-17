@@ -436,7 +436,7 @@ class _Form extends Component {
 
         dispatch(showModal(
           <BlockComponent nextLocation={nextLocation} unblock={unblock} />,
-          { isUnclosable: true, extraClassName:'confirm-change-' +  _this2.props.name }
+          { isUnclosable: true, extraClassName: `confirm-change-${this.props.name}` }
         ))
 
         return true
