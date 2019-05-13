@@ -2,6 +2,7 @@ import BasicInput from './BasicInput'
 import CancelButton from './CancelButton'
 import CheckboxInput from './CheckboxInput'
 import DateInput from './DateInput'
+import DurationInput from './DurationInput'
 import Field from './Field'
 import FileInput from './FileInput'
 import Form from './Form'
@@ -26,6 +27,7 @@ Form.inputsByType = {
   text: TextInput,
   textarea: TextareaInput,
   time: TimeInput,
+  duration: DurationInput
 }
 
 export {
@@ -33,6 +35,7 @@ export {
   CancelButton,
   CheckboxInput,
   DateInput,
+  DurationInput,
   Field,
   FileInput,
   Form,
