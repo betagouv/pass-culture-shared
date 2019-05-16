@@ -21,7 +21,7 @@ const testIsValid = [
     },
     {
         value: '44:12',
-        valid: false,
+        valid: true,
         text: 'is a valid hour'
     },
     {
@@ -30,9 +30,14 @@ const testIsValid = [
         text: 'is a valid hour'
     },
     {
-        value: '44:1',
-        valid: false,
-        text: 'is not a valid hour'
+        value: '44:2',
+        valid: true,
+        text: 'is a valid hour'
+    },
+    {
+        value: '56:1',
+        valid: true,
+        text: 'is a valid hour'
     },
     {
         value: '4',
@@ -72,19 +77,28 @@ const testIsValid = [
     {
         value: '2:59',
         valid: true,
-        text: 'is not a valid hour'
+        text: 'is a valid hour'
     },
     {
         value: ':21',
         valid: true,
-        text: 'is not a valid hour'
+        text: 'is a valid hour'
     },
     {
         value: '6:21',
         valid: true,
+        text: 'is a valid hour'
+    },
+    {
+        value: '1234',
+        valid: true,
+        text: 'is a valid hour'
+    },
+    {
+        value: '9999',
+        valid: false,
         text: 'is not a valid hour'
     }
-
 ]
 
 export default testIsValid

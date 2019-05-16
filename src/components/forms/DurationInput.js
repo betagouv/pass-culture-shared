@@ -6,14 +6,15 @@ class DateInput extends Component {
   onChange = duration => {
     const { onChange: fieldOnChange, getDurationInMinutes } = this.props
     const value = duration
-    let valueInHours
+    let valueInMinutes
 
     if (value && typeof value === 'string') {
-      valueInHours = getDurationInMinutes(value)
+      valueInMinutes = getDurationInMinutes(value)
     } else {
-      valueInHours = value
+      valueInMinutes = value
     }
-    fieldOnChange(value, valueInHours)
+
+    fieldOnChange(valueInMinutes)
   }
 
   render() {
@@ -29,8 +30,10 @@ class DateInput extends Component {
     } = this.props
 
     let valueInHours
+
     if (value && typeof value === 'number') {
       valueInHours = getDurationInHours(value)
+
     } else {
       valueInHours = value
     }
@@ -53,7 +56,6 @@ class DateInput extends Component {
           className="field-input field-duration"
           placeholder={placeholder}
           initTime={valueInHours}
-          // limitTimeInHours={limitTimeInHours ? limitTimeInHours : 24}
           limitTimeInHours={limitTimeInHours}
           onTimeChange={this.onChange}
         />

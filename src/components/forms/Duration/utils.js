@@ -1,43 +1,43 @@
 const isValid = (val, limitTimeInHours) => {
-    let valArr = []
-    const regexp = /^\d{0,2}?\:?\d{0,2}$/
 
-    const [hoursStr, minutesStr] = val.split(':')
+  var letterArr = val.split(':').join('').split(''),
+  regexp = /^\d{0,4}?\:?\d{0,2}$/,
+  valArr = []
 
-    if (!regexp.test(val)) {
-        return false
-    }
+  const [hoursStr, minutesStr] = val.split(':')
 
-    const hours = Number(hoursStr)
-    const minutes = Number(minutesStr)
+  if (!regexp.test(val)) {
+    return false
+  }
 
-    const isValidHour = (someHours) => Number.isInteger(someHours) && someHours >= 0 && someHours < limitTimeInHours
+  const hours = Number(hoursStr)
+  const minutes = Number(minutesStr)
 
-    const isValidMinutes = (someMinutes) => (Number.isInteger(someMinutes) && hours >= 0 && hours < limitTimeInHours) || Number.isNaN(minutes)
+  const isValidHour = (hour) => Number.isInteger(hour) && hour >= 0 && hour < limitTimeInHours
+  const isValidMinutes = (minute) => (Number.isInteger(minute) && hours >= 0 && hours < limitTimeInHours) || Number.isNaN(minutes)
+  if (!isValidHour(hours) || !isValidMinutes(minutes)) {
+    return false
+  }
 
+  if (minutes< 10 && Number(minutesStr[0]) > 5) {
+    return false
+  }
 
-    if (!isValidHour(hours) || !isValidMinutes(minutes)) {
-        return false
-    }
+  if (valArr.indexOf(':')) {
+    valArr = val.split(':')
+  } else {
+    valArr.push(val)
+  }
 
-    if (minutes< 10 && Number(minutesStr[0]) > 5) {
-        return false
-    }
+  if (valArr[0] && valArr[0].length && (parseInt(valArr[0], 10) < 0 || parseInt(valArr[0], 10) > limitTimeInHours)) {
+    return false
+  }
 
-    if (valArr.indexOf(':')) {
-        valArr = val.split(':')
-    } else {
-        valArr.push(val)
-    }
+  if (valArr[1] && valArr[1].length && (parseInt(valArr[1], 10) < 0 || parseInt(valArr[1], 10) > 59)) {
+    return false
+  }
 
-    if (valArr[0] && valArr[0].length && (parseInt(valArr[0], 10) < 0 || parseInt(valArr[0], 10) > 23)) {
-        return false
-    }
-
-    if (valArr[1] && valArr[1].length && (parseInt(valArr[1], 10) < 0 || parseInt(valArr[1], 10) > 59)) {
-        return false
-    }
-
-    return true
+  return true
 }
+
 export default isValid
