@@ -20,9 +20,9 @@ jobs:
       - run:
           name: Running Unit Tests
           command: |
-            export PATH=${PATH:44}
-            export NVM_BIN=/usr/bin/nodejs
-            export PATH=$NVM_BIN:$PATH
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use "$NODE_VERSION"
             cd ~/pass-culture-main/shared
             yarn install
             yarn test:unit
@@ -49,9 +49,9 @@ jobs:
       - run:
           name: Run Frontend Webapp (Prod version)
           command: |
-            export PATH=${PATH:44}
-            export NVM_BIN=/usr/bin/nodejs
-            export PATH=$NVM_BIN:$PATH
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use "$NODE_VERSION"
             cd ~/pass-culture-main/webapp
             git checkout staging
             yarn install
@@ -60,9 +60,9 @@ jobs:
       - run:
           name: Run Frontend Pro (Prod version)
           command: |
-            export PATH=${PATH:44}
-            export NVM_BIN=/usr/bin/nodejs
-            export PATH=$NVM_BIN:$PATH
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use "$NODE_VERSION"
             cd ~/pass-culture-main/pro
             git checkout staging
             dockerize -wait http://localhost:3000 -timeout 3m -wait-retry-interval 5s
@@ -78,11 +78,11 @@ jobs:
       - run:
           name: Running tests Pro
           command: |
-            export PATH=${PATH:44}
-            export NVM_BIN=/usr/bin/nodejs
-            export PATH=$NVM_BIN:$PATH
+           export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use "$NODE_VERSION"
             cd ~/pass-culture-main/pro
-            yarn testcafe
+            yarn test:cafe
       - run:
           name: Reset all data
           command: |
@@ -92,9 +92,9 @@ jobs:
       - run:
           name: Running tests Webapp
           command: |
-            export PATH=${PATH:44}
-            export NVM_BIN=/usr/bin/nodejs
-            export PATH=$NVM_BIN:$PATH
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use "$NODE_VERSION"
             cd ~/pass-culture-main/webapp
             yarn test:cafe
 
