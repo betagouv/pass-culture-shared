@@ -9,6 +9,9 @@ class RawDurationInput extends ReactTimeInput {
     const { limitTimeInHours } = this.props
     const { time } = this.state
 
+
+    let changingDuration = value
+
     if (value === time) {
       return;
     }
@@ -16,13 +19,28 @@ class RawDurationInput extends ReactTimeInput {
     if (!(isValid(value, limitTimeInHours))) {
       return
     }
+
+      if (value.length > 5) {
+          return
+      }
+
+      if (value.length === 2 && this.lastVal.length !== 3 && value.indexOf(':') === -1) {
+          changingDuration = `${value}:`
+      }
+
+      if (value.length === 2 && this.lastVal.length === 3) {
+          changingDuration = value.slice(0, 1)
+      }
+
       this.setState({
-        time: value
+        time: changingDuration
       })
 
-      const regexp = /^\d{0,4}(|\:\d{2})$/
-      if (regexp.test(value)) {
-        this.props.onTimeChange(value);
+
+      this.lastVal = changingDuration
+
+      if (value.length === 5) {
+          this.props.onTimeChange(value)
       }
     }
 }

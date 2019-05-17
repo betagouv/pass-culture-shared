@@ -30,7 +30,7 @@ const testIsValid = [
         text: 'is a valid hour'
     },
     {
-        value: '44:2',
+        value: '99:59',
         valid: true,
         text: 'is a valid hour'
     },
@@ -92,12 +92,7 @@ const testIsValid = [
     {
         value: '1234',
         valid: true,
-        text: 'is a valid hour'
-    },
-    {
-        value: '9999',
-        valid: false,
-        text: 'is not a valid hour'
+        text: 'is it not a valid hour'
     }
 ]
 

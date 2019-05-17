@@ -40,27 +40,22 @@ class DateInput extends Component {
 
     if (readOnly) {
       return (
-
         <input
-          className={`input is-${size}`}
-          readOnly
-          value={valueInHours}
+        className={`input is-${size}`}
+        readOnly
+        value={valueInHours}
         />
       )
     }
 
     return (
-      <div className={`input is-${size} duration`}>
-        <span>
-        <RawDurationInput
-          className="field-input field-duration"
-          placeholder={placeholder}
-          initTime={valueInHours}
-          limitTimeInHours={limitTimeInHours}
-          onTimeChange={this.onChange}
-        />
-        </span>
-      </div>
+      <RawDurationInput
+      className="field-input field-duration"
+      placeholder={placeholder}
+      initTime={valueInHours}
+      limitTimeInHours={limitTimeInHours}
+      onTimeChange={this.onChange}
+      />
     )
   }
 }
