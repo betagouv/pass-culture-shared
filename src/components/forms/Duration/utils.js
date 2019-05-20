@@ -33,7 +33,8 @@ const isValid = (val, limitTimeInHours) => {
     return false
   }
 
-  if (valArr[1] && valArr[1].length && (parseInt(valArr[1], 10) < 0 || parseInt(valArr[1], 10) > 59)) {
+
+  if (valArr[1] && valArr[1].length && (parseInt(valArr[1], 10) < 0 || parseInt(valArr[1], 10) > 59 || valArr[1] == '00')) {
     return false
   }
 

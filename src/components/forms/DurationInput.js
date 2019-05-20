@@ -8,7 +8,7 @@ class DateInput extends Component {
     const value = duration
     let valueInMinutes
 
-    if (value && typeof value === 'string') {
+    if (value.length >= 0 && typeof value === 'string') {
       valueInMinutes = getDurationInMinutes(value)
     } else {
       valueInMinutes = value
@@ -19,21 +19,17 @@ class DateInput extends Component {
 
   render() {
     const {
-      durationMinutes,
       getDurationInHours,
       limitTimeInHours,
       placeholder,
       readOnly,
       size,
       value,
-      limitTime
     } = this.props
 
     let valueInHours
-
     if (value && typeof value === 'number') {
       valueInHours = getDurationInHours(value)
-
     } else {
       valueInHours = value
     }
