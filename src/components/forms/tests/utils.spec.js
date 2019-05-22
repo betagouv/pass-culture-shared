@@ -1,4 +1,4 @@
-import isValid from './utils';
+import isValid from '../utils';
 import testIsValid from './isValidValues'
 
 
