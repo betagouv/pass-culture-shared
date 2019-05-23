@@ -41,4 +41,9 @@ const isValid = (val, limitTimeInHours) => {
   return true
 }
 
+
+export const getMinutesBelowTen = (value, minutesDozen) => {
+  return value.slice(0, 1)0${minutesDozen}``
+}
+
 export default isValid

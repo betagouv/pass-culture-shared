@@ -1,13 +1,18 @@
 import PropTypes from 'prop-types'
 import ReactTimeInput from 'react-time-input'
 
-import isValid from './Duration/utils'
+import isValid,{getMinutesBelowTen}  from './Duration/utils'
+
+
 
 class RawDurationInput extends ReactTimeInput {
 
+
+
+
   onChangeHandler(value) {
-    const { limitTimeInHours } = this.props
-    const { time } = this.state
+    const {limitTimeInHours} = this.props
+    const {time} = this.state
 
     let changingDuration = value
 
@@ -19,19 +24,39 @@ class RawDurationInput extends ReactTimeInput {
       return
     }
 
-      if (value.length > 5) {
-          return
-      }
+    if (value.length > 5) {
+      return
+    }
 
-      if (value.length === 2 && this.lastVal.length !== 3 && value.indexOf(':') === -1) {
-          changingDuration = `${value}:`
-      }
+    if (value.length === 2 && this.lastVal.length !== 3 && value.indexOf(':') === -1) {
+      changingDuration = `${value}:`
+    }
 
-      if (value.length === 2 && this.lastVal.length === 3) {
-        value = value.slice(0, 1);
-      }
+    if (value.length === 2 && this.lastVal.length === 3) {
+      console.log(' ****** indise value slice ', value)
+      value = value.slice(0, 1);
+    }
 
-      this.lastVal = changingDuration
+    const minutesDozen = value.charAt(3)
+
+    if (minutesDozen < 10) {
+      const toto = getMinutesBelowTen(value, minutesDozen)
+      log('toto >>> ', toto)
+    }
+
+    if (value.length === 4) {
+      console.log('value slice ', value.slice(4, 5))
+    }
+
+
+    this.lastVal = changingDuration
+
+
+    //   if(minutesDozen && value.length === 6 ) {
+    //  supprime le zéro et renvoie la valeur
+    // }
+
+      console.log('lastVal', this.lastVal)
 
       this.setState({
         time: changingDuration
