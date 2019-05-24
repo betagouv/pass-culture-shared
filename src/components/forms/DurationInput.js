@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { Component } from 'react'
-import RawDurationInput from './RawDurationInput'
+import PatchedReactTimeInput from './PatchedReactTimeInput'
 
 class DateInput extends Component {
   onChange = duration => {
@@ -45,7 +45,7 @@ class DateInput extends Component {
     }
 
     return (
-      <RawDurationInput
+      <PatchedReactTimeInput
       className="field-input field-duration"
       placeholder={placeholder}
       initTime={valueInHours}
