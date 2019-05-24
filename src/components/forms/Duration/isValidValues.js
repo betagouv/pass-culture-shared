@@ -88,6 +88,10 @@ const testIsValid = [
         value: '6:21',
         valid: true,
         text: 'is a valid hour'
+    },    {
+        value: '01:057',
+        valid: true,
+        text: 'is a valid hour'
     },
     {
         value: '1234',
