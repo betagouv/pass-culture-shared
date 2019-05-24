@@ -1,18 +1,15 @@
 import PropTypes from 'prop-types'
 import ReactTimeInput from 'react-time-input'
 
-import isValid,{getMinutesBelowTen}  from './Duration/utils'
+import isValid from './Duration/utils'
 
-
-
-class RawDurationInput extends ReactTimeInput {
-
-
+class PatchedReactTimeInput extends ReactTimeInput {
+  addTwoPoints = (value) => `${value}:`
 
 
   onChangeHandler(value) {
-    const {limitTimeInHours} = this.props
-    const {time} = this.state
+    const { limitTimeInHours } = this.props
+    const { time } = this.state
 
     let changingDuration = value
 
@@ -29,46 +26,30 @@ class RawDurationInput extends ReactTimeInput {
     }
 
     if (value.length === 2 && this.lastVal.length !== 3 && value.indexOf(':') === -1) {
-      changingDuration = `${value}:`
+      changingDuration = this.addTwoPoints(value)
     }
 
     if (value.length === 2 && this.lastVal.length === 3) {
-      console.log(' ****** indise value slice ', value)
       value = value.slice(0, 1);
     }
 
-    const minutesDozen = value.charAt(3)
-
-    if (minutesDozen < 10) {
-      const toto = getMinutesBelowTen(value, minutesDozen)
-      log('toto >>> ', toto)
-    }
-
-    if (value.length === 4) {
-      console.log('value slice ', value.slice(4, 5))
-    }
-
-
     this.lastVal = changingDuration
 
+    this.setState({
+      time: changingDuration
+    })
 
-    //   if(minutesDozen && value.length === 6 ) {
-    //  supprime le zéro et renvoie la valeur
-    // }
-
-      console.log('lastVal', this.lastVal)
-
-      this.setState({
-        time: changingDuration
-      })
-
-      if (value.length === 5) {
-          this.props.onTimeChange(value)
-      }
+    if(value === "" || value.length === 0) {
+      this.props.onTimeChange(value)
     }
+
+    if (value.length === 5) {
+      this.props.onTimeChange(value)
+    }
+  }
 }
 
-RawDurationInput.defaultProps = {
+PatchedReactTimeInput.defaultProps = {
   className: '',
   disabled: false,
   initTime: '',
@@ -79,7 +60,7 @@ RawDurationInput.defaultProps = {
   type: 'duration',
 }
 
-RawDurationInput.propTypes = {
+PatchedReactTimeInput.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool,
   initTime: PropTypes.string,
@@ -90,4 +71,4 @@ RawDurationInput.propTypes = {
   type: PropTypes.string
 }
 
-export default RawDurationInput
+export default PatchedReactTimeInput
