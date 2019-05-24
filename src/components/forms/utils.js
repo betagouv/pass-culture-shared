@@ -1,10 +1,15 @@
 const isValid = (val, limitTimeInHours) => {
 
+  console.log('value passed to isValied', val)
+
   var letterArr = val.split(':').join('').split(''),
-  regexp = /^\d{0,4}?\:?\d{0,2}$/,
+  regexp = /^\d{0,2}?\:?\d{0,3}$/,
   valArr = []
 
   const [hoursStr, minutesStr] = val.split(':')
+
+
+  console.log('value validate regexp', regexp.test(val))
 
   if (!regexp.test(val)) {
     return false
@@ -15,6 +20,9 @@ const isValid = (val, limitTimeInHours) => {
 
   const isValidHour = (hour) => Number.isInteger(hour) && hour >= 0 && hour < limitTimeInHours
   const isValidMinutes = (minute) => (Number.isInteger(minute) && hours >= 0 && hours < limitTimeInHours) || Number.isNaN(minutes)
+
+  console.log('wwwwwww isValidMinutes', isValidMinutes(minutes))
+
   if (!isValidHour(hours) || !isValidMinutes(minutes)) {
     return false
   }
@@ -26,6 +34,7 @@ const isValid = (val, limitTimeInHours) => {
   if (valArr.indexOf(':')) {
     valArr = val.split(':')
   } else {
+    console.log(' ??? inside push array')
     valArr.push(val)
   }
 
@@ -34,16 +43,20 @@ const isValid = (val, limitTimeInHours) => {
   }
 
 
-  if (valArr[1] && valArr[1].length && (parseInt(valArr[1], 10) < 0 || parseInt(valArr[1], 10) > 59 || valArr[1] == '00')) {
+  if (valArr[1] && valArr[1].length && (parseInt(valArr[1], 10) < 0 || parseInt(valArr[1], 10) > 59 || valArr[1] === '00')) {
+    console.log('59 %%%%%%% ', valArr[1])
     return false
   }
 
   return true
 }
 
-
-export const getMinutesBelowTen = (value, minutesDozen) => {
-  return value.slice(0, 1)0${minutesDozen}``
+export const addZeroToMinutesBelowTen = (value, minutesDozen) => {
+  const hours = value.slice(0, 2)
+  console.log('huours in getMinutesBelowTen')
+  return `${hours}:0${minutesDozen}`
 }
+
+export const removeZeroWhenOneUnityAdded = (value) => value.replace(':0', ':')
 
 export default isValid

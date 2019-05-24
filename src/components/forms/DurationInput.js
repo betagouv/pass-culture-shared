@@ -8,7 +8,7 @@ class DateInput extends Component {
     const value = duration
     let valueInMinutes
 
-    if (value.length >= 0 && typeof value === 'string') {
+    if (value.length >= 0 &&  typeof value === 'string') {
       valueInMinutes = getDurationInMinutes(value)
     } else {
       valueInMinutes = value
