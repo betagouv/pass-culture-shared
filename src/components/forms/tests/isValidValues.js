@@ -96,7 +96,27 @@ const testIsValid = [
     {
         value: '1234',
         valid: true,
-        text: 'is it not a valid hour'
+        text: 'is a valid hour'
+    },
+    {
+        value: '034:045',
+        valid: true,
+        text: 'is a valid hour'
+    },
+    {
+        value: '999:999',
+        valid: false,
+        text: 'is not a valid hour'
+    },
+    {
+        value: '12:',
+        valid: true,
+        text: 'is a valid hour'
+    },
+    {
+        value: '025:',
+        valid: true,
+        text: 'is a valid hour'
     }
 ]
 
