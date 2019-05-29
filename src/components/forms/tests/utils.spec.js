@@ -14,7 +14,7 @@ describe('src | components | form | duration | utils | isValid', () => {
 })
 
 describe('src | components | form | duration | utils | getMinutesBelowTen', () => {
-  it('should format minutes when XXXXXXXXXXXXXX POPILDGXGXJMLMJX', () => {
+  it('should add a zero when unit below zero', () => {
     // given
     const value = "11:1"
 
@@ -28,7 +28,7 @@ describe('src | components | form | duration | utils | getMinutesBelowTen', () =
 
 
 describe('src | components | form | duration | utils | removeZeroFromMinutesWhenOneUnityAdded', () => {
-  it('should format minutes when XXXXXXXXXXXXXX POPILDGXGXJMLMJX', () => {
+  it('should remove zero when one unit is added', () => {
     // given
     const value = "11:014"
 
@@ -41,7 +41,7 @@ describe('src | components | form | duration | utils | removeZeroFromMinutesWhen
 })
 
 describe('src | components | form | duration | utils | removeZeroFromHoursWhenOneUnityAdded', () => {
-  it('should remove zero at the beginning from string given and ', () => {
+  it('should remove zero at the beginning and transform it to hour', () => {
     // given
     const value = "O12"
 
@@ -65,7 +65,7 @@ describe('src | components | form | duration | utils | addZeroToHoursBelowTen', 
     // then
     expect(result).toEqual("07")
   })
-  it('should format hours when hour is zero', () => {
+  it('should add a zero', () => {
     // given
     const value = "0"
 
