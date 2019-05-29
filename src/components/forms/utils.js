@@ -19,14 +19,6 @@ const isValid = (val, limitTimeInHours) => {
     return false
   }
 
-  // ?? ça sert ?
-  if (minutes < 10 && Number(minutesStr[0]) > 5) {
-    // 34:78
-    console.log(' >>>> what the funk ? minutes <<<<<<', minutes);
-    console.log(' >>>> what the funk ? minutesStr <<<<<<', minutesStr[0]);
-    return false
-  }
-
   if (valArr.indexOf(':')) {
     valArr = val.split(':')
   } else {
