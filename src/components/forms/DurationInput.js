@@ -6,12 +6,10 @@ class DateInput extends Component {
   onChange = duration => {
     const { onChange: fieldOnChange, getDurationInMinutes } = this.props
     const value = duration
-    let valueInMinutes
+    let valueInMinutes = value
 
     if (value.length >= 0 &&  typeof value === 'string') {
       valueInMinutes = getDurationInMinutes(value)
-    } else {
-      valueInMinutes = value
     }
 
     fieldOnChange(valueInMinutes)
@@ -27,11 +25,9 @@ class DateInput extends Component {
       value,
     } = this.props
 
-    let valueInHours
+    let valueInHours = valueInHours
     if (value && typeof value === 'number') {
       valueInHours = getDurationInHours(value)
-    } else {
-      valueInHours = value
     }
 
     if (readOnly) {
