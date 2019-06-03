@@ -53,7 +53,7 @@ class PatchedReactTimeInput extends ReactTimeInput {
         changingDuration = addZeroToMinutesBelowTen(value, minutesDozen)
     }
 
-    // this.lastVal = changingDuration
+    this.lastVal = changingDuration
 
     this.setState({
       time: changingDuration
