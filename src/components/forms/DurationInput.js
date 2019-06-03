@@ -18,6 +18,7 @@ class DateInput extends Component {
   render() {
     const {
       getDurationInHours,
+      id,
       limitTimeInHours,
       placeholder,
       readOnly,
@@ -25,7 +26,7 @@ class DateInput extends Component {
       value,
     } = this.props
 
-    let valueInHours = valueInHours
+    let valueInHours = value
     if (value && typeof value === 'number') {
       valueInHours = getDurationInHours(value)
     }
@@ -42,7 +43,7 @@ class DateInput extends Component {
 
     return (
       <PatchedReactTimeInput
-      className="field-input field-duration"
+      className={`field-input field-duration ${id}`}
       placeholder={placeholder}
       initTime={valueInHours}
       limitTimeInHours={limitTimeInHours}
