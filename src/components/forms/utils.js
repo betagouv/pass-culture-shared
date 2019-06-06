@@ -45,11 +45,6 @@ export const addZeroToHoursBelowTen = (hoursDozen) =>  `0${hoursDozen}:`
 
 export const removeZeroFromMinutesWhenOneUnityAdded = (value) => value.replace(':0', ':')
 
-export const removeZeroFromHoursWhenOneUnityAdded = (value) => {
-  const hours = value.slice(1, 3)
-  return `${hours}:`
-}
-
 export const addMinutesToHours = (value) => {
   const hours = value.slice(1).replace(':', '')
   return `${hours}:`
