@@ -1,5 +1,5 @@
 import testIsValid from './isValidValues'
-import isValid, { addZeroToHoursBelowTen, addZeroToMinutesBelowTen, removeZeroFromMinutesWhenOneUnityAdded, removeZeroFromHoursWhenOneUnityAdded } from '../utils'
+import isValid, { addMinutesToHours, addZeroToHoursBelowTen, addZeroToMinutesBelowTen, removeZeroFromMinutesWhenOneUnityAdded, removeZeroFromHoursWhenOneUnityAdded } from '../utils'
 
 describe('src | components | form | duration | utils | isValid', () => {
   const limitTimeInHours = 2400
@@ -23,6 +23,19 @@ describe('src | components | form | duration | utils | getMinutesBelowTen', () =
 
     // then
     expect(result).toEqual("11:01")
+  })
+})
+
+describe('src | components | form | duration | utils | addMinutesToHours', () => {
+  it('should add a zero when unit below zero', () => {
+    // given
+    const value = "05:4"
+
+    // when
+    const result = addMinutesToHours(value)
+
+    // then
+    expect(result).toEqual("54:")
   })
 })
 
@@ -63,7 +76,7 @@ describe('src | components | form | duration | utils | addZeroToHoursBelowTen', 
     const result = addZeroToHoursBelowTen(value)
 
     // then
-    expect(result).toEqual("07")
+    expect(result).toEqual("07:")
   })
   it('should add a zero', () => {
     // given
@@ -73,6 +86,6 @@ describe('src | components | form | duration | utils | addZeroToHoursBelowTen', 
     const result = addZeroToHoursBelowTen(value)
 
     // then
-    expect(result).toEqual("00")
+    expect(result).toEqual("00:")
   })
 })
