@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import ReactTimeInput from 'react-time-input'
 
-import isValid, { addMinutesToHours, addZeroToHoursBelowTen, addZeroToMinutesBelowTen, removeZeroFromMinutesWhenOneUnityAdded, removeZeroFromHoursWhenOneUnityAdded } from './utils'
+import isValid, { addMinutesToHours, addZeroToHoursBelowTen, addZeroToMinutesBelowTen, removeZeroFromMinutesWhenOneUnityAdded } from './utils'
 
 class PatchedReactTimeInput extends ReactTimeInput {
   // onChangeHandler already existst in react-time-input
@@ -16,6 +16,10 @@ class PatchedReactTimeInput extends ReactTimeInput {
       return
     }
 
+    const lastValLength = this.state.time.length
+    const newValueLength = value.length
+
+    const userIsAddingChars = newValueLength > lastValLength
     if (!(isValid(value, limitTimeInHours))) {
       return
     }
@@ -34,46 +38,21 @@ class PatchedReactTimeInput extends ReactTimeInput {
       return
     }
 
-    console.log('VALUE : ', value);
-    console.log('VALUE  LENGHT: ', value.length);
-    console.log('this.state : ', this.state);
-    console.log('changingDuration : ', changingDuration);
-
-
     const durationFirstChar = value.charAt(0)
 
     // ------------- 3 becomes 03:-------------
     if (value.length === 1 && Number(durationFirstChar) < 10 && Number(durationFirstChar) > 0) {
-      console.log('  +++++++  2 addZeroToHoursBelowTen');
       changingDuration = addZeroToHoursBelowTen(durationFirstChar)
     }
-
-    // // ------------- XX becomes YY-------------
-    if (value.length === 3 && !isColon  && durationFirstChar !== '0') {
-      console.log('inside it value ', value);
-
-      changingDuration = removeZeroFromHoursWhenOneUnityAdded(value)
-
-      console.log(' >>>> 1 removeZeroFromHoursWhenOneUnityAdded', changingDuration);
-      this.props.onTimeChange(changingDuration)
-    }
-    const minutesDozen = Number(value.charAt(3))
-
     // ------------- 05:4 becomes 54: -------------- /
     if(value.length === 4 && durationFirstChar === '0' && time !== '') {
-      console.log('  +++++++  XXXXX addMinutesToHours')
-      console.log('  +++++++  XXXXX addMinutesToHours')
-      console.log('  +++++++  XXXXX addMinutesToHours')
-      console.log('  +++++++  XXXXX addMinutesToHours')
-      console.log('  +++++++  XXXXX addMinutesToHours')
-
-
-      console.log(' >>>>> HERE ', );
-
       changingDuration = addMinutesToHours(value)
     }
-    // user choose 01 by himself in hours
-    if(value.length === 2 && Number(value) < 9) {
+
+    const minutesDozen = Number(value.charAt(3))
+
+    // user choose hour by himself in hours 01 becomes 01:00
+    if(value.length === 2 && Number(value) < 9 && userIsAddingChars) {
       changingDuration = value + ':'
       if(Number(minutesDozen) < 10) {
         changingDuration = addZeroToMinutesBelowTen(value, minutesDozen)

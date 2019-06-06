@@ -1,5 +1,5 @@
 import testIsValid from './isValidValues'
-import isValid, { addMinutesToHours, addZeroToHoursBelowTen, addZeroToMinutesBelowTen, removeZeroFromMinutesWhenOneUnityAdded, removeZeroFromHoursWhenOneUnityAdded } from '../utils'
+import isValid, { addMinutesToHours, addZeroToHoursBelowTen, addZeroToMinutesBelowTen, removeZeroFromMinutesWhenOneUnityAdded } from '../utils'
 
 describe('src | components | form | duration | utils | isValid', () => {
   const limitTimeInHours = 2400
@@ -52,20 +52,6 @@ describe('src | components | form | duration | utils | removeZeroFromMinutesWhen
     expect(result).toEqual("11:14")
   })
 })
-
-describe('src | components | form | duration | utils | removeZeroFromHoursWhenOneUnityAdded', () => {
-  it('should remove zero at the beginning and transform it to hour', () => {
-    // given
-    const value = "O12"
-
-    // when
-    const result = removeZeroFromHoursWhenOneUnityAdded(value)
-
-    // then
-    expect(result).toEqual("12:")
-  })
-})
-
 
 describe('src | components | form | duration | utils | addZeroToHoursBelowTen', () => {
   it('should add one zero as dozen', () => {
