@@ -18,41 +18,25 @@ describe('src | components | forms | PatchedReactTimeInput', () => {
     const props = {
       onTimeChange: onTimeChangeMock
     }
-
-    it('should  XXX when YYY is given', () => {
+    it('should return empty string when empty string given', () => {
       const wrapper = shallow(<PatchedReactTimeInput {...props} />)
       wrapper.instance().onChangeHandler('')
       expect(wrapper.state().time).toEqual('')
     })
-
-    it('should  XXX when YYY is given', () => {
+    it('should not add a zero when zero is given', () => {
       const wrapper = shallow(<PatchedReactTimeInput {...props} />)
       wrapper.instance().onChangeHandler('0')
-      expect(wrapper.state().time).toEqual('00:')
+      expect(wrapper.state().time).toEqual('0')
     })
-
-    it('should  XXX when YYY is given', () => {
+    it('should return one hour when 1 is given', () => {
       const wrapper = shallow(<PatchedReactTimeInput {...props} />)
       wrapper.instance().onChangeHandler('1')
       expect(wrapper.state().time).toEqual('01:')
     })
-
-    it('should  XXX when YYY is given', () => {
+    it("should return one hour when '01' is given", () => {
       const wrapper = shallow(<PatchedReactTimeInput {...props} />)
       wrapper.instance().onChangeHandler('01')
       expect(wrapper.state().time).toEqual('01:00')
-    })
-
-    it('should  XXX when YYY is given', () => {
-      const wrapper = shallow(<PatchedReactTimeInput {...props} />)
-      wrapper.instance().onChangeHandler('01:2')
-      expect(wrapper.state().time).toEqual('01:02')
-    })
-
-    it('should XXX when YYY is given', () => {
-      const wrapper = shallow(<PatchedReactTimeInput {...props} />)
-      wrapper.instance().onChangeHandler('')
-      expect(wrapper.state().time).toEqual('')
     })
   })
 })
