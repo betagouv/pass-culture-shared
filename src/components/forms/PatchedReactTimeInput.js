@@ -24,8 +24,6 @@ class PatchedReactTimeInput extends ReactTimeInput {
       return
     }
 
-    const isColon = value.indexOf(':') === 2
-
     // ------------- 12:014 becomes 12:14-------------- /
     const areHoursGivenRegexp = /^\d{2}?\:0/
 
@@ -53,15 +51,15 @@ class PatchedReactTimeInput extends ReactTimeInput {
 
     // user choose hour by himself in hours 01 becomes 01:00
     if(value.length === 2 && Number(value) < 9 && userIsAddingChars) {
-      changingDuration = value + ':'
+      changingDuration = `${value}:`
       if(Number(minutesDozen) < 10) {
         changingDuration = addZeroToMinutesBelowTen(value, minutesDozen)
       }
     }
 
     // ------------- 12:3 becomes 12:03-------------- /
-    if (value.length === 4 && minutesDozen < 10 && minutesDozen > 0 && isColon && durationFirstChar != '0' ) {
-      console.log('  *******3 addZeroToMinutesBelowTen')
+    const isColon = value.indexOf(':') === 2
+    if (value.length === 4 && minutesDozen < 10 && minutesDozen > 0 && isColon && durationFirstChar !== '0' ) {
         changingDuration = addZeroToMinutesBelowTen(value, minutesDozen)
     }
 
