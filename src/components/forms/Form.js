@@ -423,14 +423,14 @@ class _Form extends Component {
 
   handleHistoryBlock() {
     const { BlockComponent } = this.props
-
     if (BlockComponent) {
-      blockersByName.form = (nextLocation, unblock) => {
-        const { dispatch, readOnly } = this.props
-        const { hasAtLeastOneTargetValue } = this.state
 
+      blockersByName.form = (nextLocation, unblock) => {
+        const { dispatch, location, readOnly } = this.props
+        const { hasAtLeastOneTargetValue } = this.state
         // NO NEED TO BLOCK IF THE FORM IS READONLY OR WITH NO INTERACTION FROM USER
-        if (readOnly || !hasAtLeastOneTargetValue) {
+
+        if (readOnly || !hasAtLeastOneTargetValue || location.pathname === nextLocation.pathname) {
           return false
         }
 
