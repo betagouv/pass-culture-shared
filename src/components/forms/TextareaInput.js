@@ -7,11 +7,7 @@ class TextareaInput extends Component {
   }
 
   onChange = event => {
-    const { maxLength, onChange: fieldOnChange } = this.props
-
-    if (maxLength && event.target.value.length > maxLength) {
-      return
-    }
+    const { onChange: fieldOnChange } = this.props
 
     fieldOnChange(event.target.value, { event })
   }
@@ -20,6 +16,7 @@ class TextareaInput extends Component {
     const {
       autoComplete,
       id,
+      maxLength,
       name,
       required,
       readOnly,
@@ -35,6 +32,7 @@ class TextareaInput extends Component {
         autoComplete={autoComplete}
         className={`textarea is-${size}`}
         id={id}
+        maxlength={maxLength}
         name={name}
         onChange={this.onChange}
         required={required}
