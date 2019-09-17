@@ -5,9 +5,9 @@ jobs:
     machine:
       image: circleci/classic:latest
     working_directory: ~/
-    steps: # a collection of executable commands
+    steps:
       - run:
-          name: Init env
+          name: Initialization environment
           command: |
             git clone https://github.com/betagouv/pass-culture-main.git
             cd pass-culture-main
@@ -18,12 +18,21 @@ jobs:
       - checkout:
           path: ~/pass-culture-main/shared
       - run:
-          name: Running Unit Tests
+          name: Running Unit Tests Pro
           command: |
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use "$NODE_VERSION"
-            cd ~/pass-culture-main/shared
+            cd ~/pass-culture-main/pro
+            yarn install
+            yarn test:unit
+      - run:
+          name: Running Unit Tests Webapp
+          command: |
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use "$NODE_VERSION"
+            cd ~/pass-culture-main/webapp
             yarn install
             yarn test:unit
       - run:
@@ -35,16 +44,10 @@ jobs:
           environment:
             DOCKERIZE_VERSION: v0.6.1
       - run:
-          name: Running API server
+          name: Run API server
           command: |
-            export PC_GPG_PRIVATE=$PASS_PRIVATE
-            cd ~/pass-culture-main/api
-            rm -rf private
-            gpg --passphrase $PC_GPG_PRIVATE --batch --output private.tar.gz -d private.tar.gz.gpg
-            tar xf private.tar.gz
-            rm private.tar.gz
             cd ~/pass-culture-main
-            ./pc start-backend
+            docker-compose up
           background: true
       - run:
           name: Run Frontend Webapp (Prod version)
@@ -53,7 +56,6 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use "$NODE_VERSION"
             cd ~/pass-culture-main/webapp
-            git checkout staging
             yarn install
             yarn start
           background: true
@@ -64,7 +66,6 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use "$NODE_VERSION"
             cd ~/pass-culture-main/pro
-            git checkout staging
             dockerize -wait http://localhost:3000 -timeout 3m -wait-retry-interval 5s
             yarn install
             yarn start
