@@ -21,8 +21,8 @@ function registerValidSW(swUrl) {
             if (navigator.serviceWorker.controller) {
               if (
                 window.location.pathname === '/acceuil' ||
-                window.confirm(
-                  "Une nouvelle version a été téléchargée. Redémarrer pour l'utiliser ?"
+                window.alert(
+                  'Nous avons mis à jour le pass Culture ! L‘application va maintenant se relancer pour appliquer les changements.'
                 )
               ) {
                 window.location.reload()
