@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
-import { requestData, resetData } from 'redux-saga-data'
+import { requestData, reinitializeData } from 'redux-saga-data'
 
 import { closeModal } from '../reducers/modal'
 
@@ -24,14 +24,14 @@ class SignoutButton extends Component {
   }
 
   handleSuccess = () => {
-    const { dispatch, handleSuccess, handleSuccessRedirect, history, noResetData } = this.props
+    const { dispatch, handleSuccess, handleSuccessRedirect, history, noreinitializeData } = this.props
     if (handleSuccess) {
       handleSuccess(this.props)
       return
     }
 
-    if (!noResetData) {
-      dispatch(resetData())
+    if (!noreinitializeData) {
+      dispatch(reinitializeData())
     }
 
     const redirect = handleSuccessRedirect && handleSuccessRedirect()
@@ -72,7 +72,7 @@ SignoutButton.defaultProps = {
   handleFailRedirect: null,
   handleSuccess: null,
   handleSuccessRedirect: null,
-  noResetData: null
+  noreinitializeData: null
 }
 
 SignoutButton.propTypes = {
@@ -85,7 +85,7 @@ SignoutButton.propTypes = {
   handleSuccess: PropTypes.func,
   handleSuccessRedirect: PropTypes.func,
   history: PropTypes.object.isRequired,
-  noResetData: PropTypes.bool,
+  noreinitializeData: PropTypes.bool,
 }
 
 export default compose(withRouter, connect())(SignoutButton)

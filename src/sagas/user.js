@@ -1,6 +1,6 @@
 import get from 'lodash.get'
 import { put, select, takeEvery } from 'redux-saga/effects'
-import { resetData } from 'redux-saga-data'
+import { reinitializeData } from 'redux-saga-data'
 
 import { setUser } from '../reducers/user'
 
@@ -13,7 +13,7 @@ export function* fromWatchFailSignActions() {
 }
 
 export function* fromWatchSuccessGetSignoutActions() {
-  yield put(resetData())
+  yield put(reinitializeData())
   yield put(setUser(null))
 }
 
