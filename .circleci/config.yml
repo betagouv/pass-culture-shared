@@ -12,7 +12,6 @@ jobs:
             git clone https://github.com/betagouv/pass-culture-main.git
             cd pass-culture-main
             git clone https://github.com/betagouv/pass-culture-api.git api
-            git clone https://github.com/betagouv/pass-culture-browser.git webapp
             git clone https://github.com/betagouv/pass-culture-pro.git pro
             ./install_lib_ci.sh
       - checkout:
@@ -24,15 +23,6 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use "$NODE_VERSION"
             cd ~/pass-culture-main/pro
-            yarn install
-            yarn test:unit
-      - run:
-          name: Running Unit Tests Webapp
-          command: |
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm use "$NODE_VERSION"
-            cd ~/pass-culture-main/webapp
             yarn install
             yarn test:unit
       - run:
@@ -48,16 +38,6 @@ jobs:
           command: |
             cd ~/pass-culture-main
             docker-compose up
-          background: true
-      - run:
-          name: Run Frontend Webapp (Prod version)
-          command: |
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm use "$NODE_VERSION"
-            cd ~/pass-culture-main/webapp
-            yarn install
-            yarn start
           background: true
       - run:
           name: Run Frontend Pro (Prod version)
@@ -90,14 +70,6 @@ jobs:
             cd ~/pass-culture-main
             ./pc reset-all-db
             ./pc sandbox --name=industrial
-      - run:
-          name: Running tests Webapp
-          command: |
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm use "$NODE_VERSION"
-            cd ~/pass-culture-main/webapp
-            yarn test:cafe
 
 workflows:
   version: 2
