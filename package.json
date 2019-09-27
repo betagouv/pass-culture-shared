@@ -22,7 +22,7 @@
     "react-time-input": "^0.0.19",
     "redux": "^4.0.0",
     "redux-saga": "1.1.1",
-    "redux-saga-data": "3.1.10",
+    "redux-saga-data": "3.2.0",
     "reselect": "^3.0.1",
     "uuid": "^3.3.2"
   },
