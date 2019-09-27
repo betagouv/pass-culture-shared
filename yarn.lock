@@ -6131,10 +6131,10 @@ redent@^2.0.0:
     indent-string "^3.0.0"
     strip-indent "^2.0.0"
 
-redux-saga-data@3.1.10:
-  version "3.1.10"
-  resolved "https://registry.yarnpkg.com/redux-saga-data/-/redux-saga-data-3.1.10.tgz#e499f026751f56e523ebba836f6248736d9d19a8"
-  integrity sha512-h5m7aOjtIpyN0VvlSnQGKgqicu9Glp75YIup0hHgEutO6n48qboeZNo4SBGReZMwXJ+URdSQ/B+4FSUaN2Flng==
+redux-saga-data@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/redux-saga-data/-/redux-saga-data-3.2.0.tgz#c8b55cab8655301496df9d67338f39190870e084"
+  integrity sha512-dAAtluG0XDTQJkW0VnfgbLmAwakWjnqXpG2AWrus9fRPBNUyuSaLxlCGBd6fQtaEobPOXtg54tMRmaje08pGeg==
   dependencies:
     fetch-normalize-data "1.8.4"
     redux-saga "^1.1.1"
