@@ -46,7 +46,6 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use "$NODE_VERSION"
             cd ~/pass-culture-main/pro
-            dockerize -wait http://localhost:3000 -timeout 3m -wait-retry-interval 5s
             yarn install
             yarn start
           background: true
