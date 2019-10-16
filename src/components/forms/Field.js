@@ -104,6 +104,7 @@ class Field extends Component {
     const {
       className,
       id,
+      info,
       isExpanded,
       label,
       layout,
@@ -137,13 +138,30 @@ class Field extends Component {
                 readonly: readOnly,
               })}
             >
-              <label htmlFor={id} className="label">
+              <label
+                className="label"
+                htmlFor={id}
+              >
                 <span
                   className={`subtitle ${classnames({ readOnly, required})}`}
                 >
                   {label}
                   &nbsp;:
                 </span>
+                {info &&(
+                  <span
+                    className="tip-icon"
+                    data-place="bottom"
+                    data-tip={info}
+                    data-type="info"
+                  >
+                    <Icon
+                      alt="image d’aide à l’information"
+                      svg="picto-info"
+                    />
+                    &nbsp;
+                  </span>
+                )}
               </label>
               {$displayLength}
             </div>
