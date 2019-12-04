@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { getStateKeyFromApiPath, getStateKeyFromUrl } from 'redux-saga-data'
+import { getStateKeyFromApiPath, getStateKeyFromUrl } from 'redux-thunk-data'
 
 const initialState = {}
 

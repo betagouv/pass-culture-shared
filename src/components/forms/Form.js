@@ -5,7 +5,7 @@ import React, { cloneElement, Component, isValidElement } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
-import { requestData } from 'redux-saga-data'
+import { requestData } from 'redux-thunk-data'
 
 import { blockersByName } from '../hocs/withBlock'
 import { removeErrors } from '../../reducers/errors'
