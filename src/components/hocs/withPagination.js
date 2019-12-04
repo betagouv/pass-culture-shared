@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
-import { assignData } from 'redux-saga-data'
+import { assignData } from 'redux-thunk-data'
 
 import searchSelector from '../../selectors/search'
 import { objectToQueryString } from '../../utils/string'

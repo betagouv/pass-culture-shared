@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'redux'
-import { requestData, reinitializeData } from 'redux-saga-data'
+import { requestData, reinitializeData } from 'redux-thunk-data'
 
 import { closeModal } from '../reducers/modal'
 

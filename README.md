@@ -9,7 +9,7 @@ exportées dans des librairies npm indépendantes hostés sur betagouv, voir:
 - [react-final-form-utils](https://github.com/betagouv/react-final-form-utils)
 - [react-loading-infinite-scroller](https://github.com/betagouv/react-loading-infinite-scroller)
 - [redux-react-modals](https://github.com/betagouv/redux-react-modals)
-- [redux-saga-data](https://github.com/betagouv/redux-saga-data)
+- [redux-thunk-data](https://github.com/betagouv/redux-thunk-data)
 - [with-login](https://github.com/betagouv/with-login)
 - [with-query-router](https://github.com/betagouv/with-query-router)
 
