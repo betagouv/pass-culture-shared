@@ -6080,10 +6080,10 @@ redent@^2.0.0:
     indent-string "^3.0.0"
     strip-indent "^2.0.0"
 
-redux-thunk-data@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/redux-thunk-data/-/redux-thunk-data-1.8.0.tgz#80a52f18bb74076ef3b2323187f1c5b91fc23ef1"
-  integrity sha512-IMsZJCsw1ygSPD+4r+R7aHCQVUi4y8MpiHN8ijphL6/NLfyzabI4UCNG+rLrFV3S0ob0Hom7s4okhhiLB4vhMg==
+redux-thunk-data@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/redux-thunk-data/-/redux-thunk-data-1.9.0.tgz#1898a0d718d6ddcb37db5dd77a23a44f662f38ec"
+  integrity sha512-01dkttbJPAW/SF2Lqm8/rQ+6j7ZsY8wQE6ofaDCW+DM31kriFTcFUziWlTxNTiY3GktA8G+4UtyaqFmfJidWOA==
   dependencies:
     fetch-normalize-data "1.9.0"
 
