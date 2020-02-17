@@ -1,4 +1,8 @@
-# pass-culture-shared
+# [DEPRECATED] pass-culture-shared
+
+:warning: : Cette librairie partagée n'est plus utilisée que par pro, lorsque vous avez besoin de faire évoluer un des composants de la lib, 
+réintégrez-le directement sur pro.
+Lorsque le nombre de dépendance sera suffisement faible, on pourra supprimer complètement pass-culture-shared.
 
 Tous les objets javascript partagés entre l'application découverte et l'application pro.
 Cependant, ce repo est voué à disparaître car les différentes fonctionnalités sont en train d'être
